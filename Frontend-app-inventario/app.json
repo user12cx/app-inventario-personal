@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "app-inventario",
+    "slug": "app-inventario",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/logoCarga.jpg",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "black",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#5A8FCA"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/auth.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#5A8FCA"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
