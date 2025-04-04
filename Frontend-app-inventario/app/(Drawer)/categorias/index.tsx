@@ -1,15 +1,15 @@
-import { View, Text, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import ModalCat from '../../../components/shared/ModalCat'
-import ListCategorias from '../../../components/shared/Table'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getCategorias } from '@/service/categoriaService'
+import { View, Text, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import ModalCat from '../../../components/shared/ModalCat';
+import ListCategorias from '../../../components/shared/Table';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getCategorias, gestionarCategoria } from '@/service/categoriaService';
 
 const Categorías = () => {
-  const [categorias, setCategorias] = useState<any[]>([]); // Usar tipo adecuado en lugar de 'any'
-  const [loading, setLoading] = useState<boolean>(true); // Estado para controlar la carga
-  const [error, setError] = useState<string | null>(null); // Estado para manejar errores
-  const [refreshingActive, setRefreshingActive] = useState(false)
+  const [categorias, setCategorias] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshingActive, setRefreshingActive] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -33,22 +33,41 @@ const Categorías = () => {
     }
   };
 
+  const handleEliminar = async (categoriaId) => {
+    try {
+      const usuarioId = await AsyncStorage.getItem('usuario_id');
+      if (!usuarioId) {
+        setError('No se encontró el usuario.');
+        return;
+      }
+      const result = await gestionarCategoria(3, parseInt(usuarioId, 10), categoriaId);
+      setCategorias(categorias.filter((cat) => cat.idCategoria !== categoriaId));
+      setError(null); // Limpiar error si la eliminación es exitosa
+    } catch (error) {
+      setError('Error al eliminar la categoría');
+      console.log(error);
+    }
+  };
+
+  const handleEditar = (categoriaId) => {
+    // Lógica para editar (puedes abrir el modal aquí con el idCategoria)
+    console.log(`Editar categoría con ID: ${categoriaId}`);
+  };
+
   useEffect(() => {
-    fetchData(); // Llamar a fetchData solo una vez al montar el componente
+    fetchData();
   }, []);
 
   const handleRefresh = async () => {
-    setRefreshingActive(true); // Activar el indicador de refresco
-    await fetchData(); // Refrescar los datos
-    setRefreshingActive(false); // Desactivar el indicador de refresco
+    setRefreshingActive(true);
+    await fetchData();
+    setRefreshingActive(false);
   };
 
   return (
     <ScrollView
       className="flex-1 p-4"
-      refreshControl={
-        <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
-      }
+      refreshControl={<RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />}
     >
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -57,12 +76,16 @@ const Categorías = () => {
       ) : (
         <View>
           <Text className="text-lg text-center mb-4">Categorías Disponibles</Text>
-          <ListCategorias categorias={categorias} />
+          <ListCategorias
+            categorias={categorias}
+            handleEliminar={handleEliminar}
+            handleEditar={handleEditar}
+          />
         </View>
       )}
       <ModalCat />
     </ScrollView>
-  )
-}
+  );
+};
 
 export default Categorías;
