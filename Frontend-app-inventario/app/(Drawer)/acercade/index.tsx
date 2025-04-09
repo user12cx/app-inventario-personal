@@ -50,7 +50,7 @@ const AcercaDe = () => {
           <Text className="text-blue-500 underline">Ver detalles</Text>
         </TouchableOpacity>
       </View>
-
+      
       {/* Pie de página */}
       <Text className="text-gray-500 text-center mt-5">
         © {new Date().getFullYear()} Inventario Personal. Todos los derechos reservados.

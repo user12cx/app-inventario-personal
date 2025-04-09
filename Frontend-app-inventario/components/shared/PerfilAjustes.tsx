@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TextInput, Alert, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
+
 const AjuesteScrenn = () => {
 
   const validationSchema = yup.object().shape({
@@ -88,7 +89,7 @@ const AjuesteScrenn = () => {
           {/* Apellido */}
           <TextInput
             className="border-b border-gray-300 py-2 text-lg mb-2"
-            placeholder="Apellido"
+            placeholder="Apellidos"
             value={values.lastName}
             onChangeText={handleChange("lastName")}
             onBlur={handleBlur("lastName")}
@@ -98,7 +99,7 @@ const AjuesteScrenn = () => {
           {/* Teléfono */}
           <TextInput
             className="border-b border-gray-300 py-2 text-lg mb-2"
-            placeholder="Teléfono (123-456-7890)"
+            placeholder="Teléfono"
             keyboardType="phone-pad"
             value={values.phone}
             onChangeText={handleChange("phone")}
@@ -109,7 +110,7 @@ const AjuesteScrenn = () => {
           {/* Empresa */}
           <TextInput
             className="border-b border-gray-300 py-2 text-lg mb-5"
-            placeholder="Empresa"
+            placeholder="Empresa o lugar de trabajo"
             value={values.company}
             onChangeText={handleChange("company")}
             onBlur={handleBlur("company")}

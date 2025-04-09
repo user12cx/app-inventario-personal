@@ -1,3 +1,5 @@
+import 'react-native-reanimated';
+
 import { Drawer } from 'expo-router/drawer';
 import CustomDrawerContent from '@/components/shared/CustomDrawerContent'; // Importa tu componente personalizado
 import { Ionicons } from '@expo/vector-icons';

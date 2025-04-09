@@ -1,6 +1,6 @@
 import { instance } from "./api";
 
-interface LoginResponse {
+interface LoginResponse { 
   success: boolean;
   token: string;
   user: {

@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 
 interface CartItemProps {
   key:number,
@@ -9,11 +10,13 @@ interface CartItemProps {
   subtitle: string
   price: string
 }
-
-const CartItem: React.FC<CartItemProps> = ({ title, subtitle, price,key }) => {
+const onpressCart=()=>{
+  router.push("/(Drawer)/targetas")
+}
+const CartItem: React.FC<CartItemProps> = ({ title, subtitle, price }) => {
   return (
 
-    <TouchableOpacity className="w-[170px] h-[105px] shadow-lg rounded-xl overflow-hidden">
+    <TouchableOpacity  onPress={onpressCart} className="w-[170px] h-[105px] shadow-lg rounded-xl overflow-hidden">
       <LinearGradient
         colors={['#002661', '#0074C1']}
         start={{ x: 0, y: 0 }}
