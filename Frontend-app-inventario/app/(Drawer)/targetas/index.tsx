@@ -71,12 +71,15 @@ const Index = () => {
       <FlatList
         data={Array.isArray(datos) ? datos : []}
         renderItem={({ item }) => (
-          <TouchableOpacity className="p-4 mb-2 shadow-xl m-4">
+          <TouchableOpacity
+            onPress={handleOpenSheet}
+            className="p-4 mb-2 shadow-xl m-2 bg-gray-100">
+
             <View className="flex-row justify-between">
               <Text className="text-xl">{item.nombre}</Text>
               <Text className="text-green-700 text-base">{`$ ${item.saldo}`}</Text>
             </View>
-            <Text className="text-green-400">{item.estado}</Text>
+            <Text className="text-amber-500">{item.estado}</Text>
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.idCuenta}

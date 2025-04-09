@@ -1,90 +1,187 @@
-import { View, Text, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import ModalCat from '../../../components/shared/ModalCat';
+import React, { useRef, useMemo, useState } from 'react';
+import { View, Text, ActivityIndicator, ScrollView, RefreshControl, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Alert } from 'react-native';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import ListCategorias from '../../../components/shared/Table';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getCategorias, gestionarCategoria } from '@/service/categoriaService';
+import { useHookCategorias } from '@/hook/usehookCategorias';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 const Categorías = () => {
-  const [categorias, setCategorias] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [refreshingActive, setRefreshingActive] = useState(false);
+  const {
+    categorias,
+    loading,
+    error,
+    refreshing,
+    eliminarCategoria,
+    editarCategoria,
+    agregarCategoria, // Traemos la función agregarCategoria del hook
+    onRefresh,
+    message, // Mensaje de éxito/error
+  } = useHookCategorias();
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const usuario_id = await AsyncStorage.getItem("usuario_id");
-      if (usuario_id) {
-        const response = await getCategorias(parseInt(usuario_id, 10));
-        if (response && Array.isArray(response.result)) {
-          setCategorias(response.result);
-        } else {
-          setError("No se encontraron categorías.");
-        }
-      } else {
-        setError("No se encontró usuario_id.");
-      }
-    } catch (error) {
-      console.error(error);
-      setError("Error al obtener las categorías.");
-    } finally {
-      setLoading(false);
-    }
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => ['40%'], []);
+  const [showModal, setShowModal] = useState(false);
+
+  const [nombre, setNombre] = useState('');
+  const [tipo, setTipo] = useState('Ingreso');
+
+  const handleOpenSheet = () => {
+    setShowModal(true);
+    bottomSheetRef.current?.expand();
   };
 
-  const handleEliminar = async (categoriaId) => {
-    try {
-      const usuarioId = await AsyncStorage.getItem('usuario_id');
-      if (!usuarioId) {
-        setError('No se encontró el usuario.');
-        return;
-      }
-      const result = await gestionarCategoria(3, parseInt(usuarioId, 10), categoriaId);
-      setCategorias(categorias.filter((cat) => cat.idCategoria !== categoriaId));
-      setError(null); // Limpiar error si la eliminación es exitosa
-    } catch (error) {
-      setError('Error al eliminar la categoría');
-      console.log(error);
-    }
+  const handleCloseSheet = () => {
+    setShowModal(false);
+    bottomSheetRef.current?.close();
   };
 
-  const handleEditar = (categoriaId) => {
-    // Lógica para editar (puedes abrir el modal aquí con el idCategoria)
-    console.log(`Editar categoría con ID: ${categoriaId}`);
+  const handleGuardar = () => {
+    agregarCategoria(nombre, tipo); // Llamamos a la función para agregar la categoría
+    setTimeout(() => {
+      setNombre('');
+      setTipo('Ingreso');
+      handleCloseSheet();
+    }, 1500);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const handleEliminarCategoria = (categoriaId: number) => {
+    // Mostrar la alerta de confirmación
+    Alert.alert(
+      'Confirmar Eliminación',
+      '¿Estás seguro de que deseas eliminar esta categoría?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: async () => {
+            try {
+              // Eliminar la categoría
+              await eliminarCategoria(categoriaId);
 
-  const handleRefresh = async () => {
-    setRefreshingActive(true);
-    await fetchData();
-    setRefreshingActive(false);
+              // Mostrar mensaje de éxito después de eliminar
+              showMessage({
+                message: 'Categoría eliminada con éxito.',
+                type: 'success',
+                icon: 'success',
+                duration: 500,
+                floating: true,
+                position: 'top',
+                backgroundColor: '#DFF2BF', // Fondo claro
+                color: '#4F8A10', // Texto verde
+                style: {
+                  borderRadius: 6,
+                  borderWidth: 1,
+                  borderColor: '#38761A', // Borde más oscuro (verde oscuro)
+                },
+              });
+            } catch (error) {
+              // Si hay un error, muestra un mensaje de error
+              showMessage({
+                message: 'Error al eliminar la categoría.',
+                type: 'danger',
+                icon: 'auto',
+                duration: 1000,
+                floating: true,
+                position: 'top',
+                backgroundColor: '#FFBABA', // Fondo rojo
+                color: '#D8000C', // Texto rojo
+                style: { borderRadius: 6 },
+              });
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
-    <ScrollView
-      className="flex-1 p-4"
-      refreshControl={<RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />}
-    >
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : error ? (
-        <Text className="text-red-500 text-center mt-4">{`Error: ${error}`}</Text>
-      ) : (
-        <View>
-          <Text className="text-lg text-center mb-4">Categorías Disponibles</Text>
-          <ListCategorias
-            categorias={categorias}
-            handleEliminar={handleEliminar}
-            handleEditar={handleEditar}
-          />
-        </View>
+    <>
+      <ScrollView
+        className="flex-1 p-4"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : error ? (
+          <Text className="text-red-500 text-center mt-4">{`Error: ${error}`}</Text>
+        ) : (
+          <View>
+            <Text className="text-lg text-center mb-4">Categorías Disponibles</Text>
+            <ListCategorias
+              categorias={categorias}
+              handleEliminar={handleEliminarCategoria} // Usamos el nuevo manejador
+              handleEditar={editarCategoria}
+            />
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Botón flotante */}
+      <TouchableOpacity
+        className="bg-blue-500 w-14 h-14 rounded-full flex items-center justify-center absolute bottom-10 right-10 z-10"
+        onPress={handleOpenSheet}
+      >
+        <Text className="text-white text-4xl">+</Text>
+      </TouchableOpacity>
+
+      {/* Fondo transparente que cierra el BottomSheet cuando se toca */}
+      {showModal && (
+        <TouchableWithoutFeedback onPress={handleCloseSheet}>
+          <View style={{ flex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.3)' }} />
+        </TouchableWithoutFeedback>
       )}
-      <ModalCat />
-    </ScrollView>
+
+      {/* BottomSheet Modal */}
+      <BottomSheet
+        ref={bottomSheetRef}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}
+        onClose={() => setShowModal(false)}
+      >
+        <BottomSheetView style={{ flex: 1 }}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+          >
+            <ScrollView contentContainerStyle={{ padding: 16 }}>
+              <Text className="text-lg font-bold mb-4 text-center">Agregar Categoría</Text>
+
+              <TextInput
+                placeholder="Nombre"
+                value={nombre}
+                onChangeText={setNombre}
+                className="border border-blue-500 rounded px-3 p-4 mb-3"
+              />
+
+              <TextInput
+                placeholder="Tipo (Ingreso o Gasto)"
+                value={tipo}
+                onChangeText={setTipo}
+                className="border border-blue-500 rounded px-3 p-4 mb-3"
+              />
+
+              <TouchableOpacity
+                className="bg-blue-500 py-3 rounded items-center"
+                onPress={handleGuardar}
+              >
+                <Text className="text-white font-bold">Guardar</Text>
+              </TouchableOpacity>
+
+              {message && (
+                <Text className="text-center mt-4 text-green-500">{message}</Text>
+              )}
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </BottomSheetView>
+      </BottomSheet>
+
+      {/* FlashMessage */}
+      <FlashMessage position="top" />
+    </>
   );
 };
 

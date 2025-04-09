@@ -9,6 +9,7 @@ export const usehookCuentas = () => {
   const [error, setError] = useState<string | undefined>('');
 
   useEffect(() => {
+    
     const fetchData = async () => {
       setLoading(true);
       try {

@@ -18,14 +18,14 @@ const CartItem: React.FC<CartItemProps> = ({ title, subtitle, price }) => {
 
     <TouchableOpacity  onPress={onpressCart} className="w-[170px] h-[105px] shadow-lg rounded-xl overflow-hidden">
       <LinearGradient
-        colors={['#002661', '#0074C1']}
+        colors={['#1a535c', '#4ecdc4']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="flex-1 p-4 justify-between"
       >
         <View className="flex-row justify-between items-center">
           <Text className="text-white text-lg font-bold">{title}</Text>
-          <Ionicons name="card-sharp" size={24} color="#FFD700" />
+          <Ionicons name="card-sharp" size={24} color="#595959" />
         </View>
 
         <Text className="text-white text-sm opacity-80">{subtitle}</Text>

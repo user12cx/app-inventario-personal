@@ -21,6 +21,7 @@ const register = require("./routers/loginRouter");
 const getTopGastos = require("./routers/transaccionesRouter");
 const getTransaccionesPaginadas = require("./routers/transaccionesRouter");
 const gestionarCategorias = require("./routers/categoriaRouter");
+const getGastosPorMes = require("./routers/graficaRouter");
 
 
 
@@ -30,6 +31,8 @@ app.use("/api/gestionarCategorias", gestionarCategorias);
 app.use("/api/cuentas", cuentaRouter);
 
 app.use("/api/objetivos", objetivoRouter);
+
+app.use("/api/getGastosPorMes", getGastosPorMes);
 
 app.use("/api/login", login);
 app.use("/api/register", register);

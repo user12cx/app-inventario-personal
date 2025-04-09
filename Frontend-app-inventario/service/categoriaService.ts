@@ -1,10 +1,30 @@
 import { instance } from "./api";
 
+// Tipos para las categorías
+export interface Categoria {
+  idCategoria: number;
+  nombre: string;
+  tipo: string;
+}
+
+export interface GetCategoriasResponse {
+  success: boolean;
+  result: Categoria[];
+  message?: string;
+  error?: string;
+}
+
+export interface GestionarCategoriaResponse {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
 // Obtener todas las categorías
-export const getCategorias = async (usuario_id) => {
+export const getCategorias = async (usuario_id: number): Promise<GetCategoriasResponse> => {
   try {
-    const response = await instance.get("/categorias/getCategoria", {
-      params: { usuario_id }, // Enviar usuario_id como parámetro
+    const response = await instance.get<GetCategoriasResponse>("/categorias/getCategoria", {
+      params: { usuario_id },
     });
     return response.data;
   } catch (error) {
@@ -14,30 +34,36 @@ export const getCategorias = async (usuario_id) => {
 };
 
 // Gestionar Categorías: Agregar, Editar o Eliminar
-export const gestionarCategoria = async (accion, usuario_id, categoria_id, nombre, tipo ) => {
+export const gestionarCategoria = async (
+  accion: 1 | 2 | 3, // 1 = Agregar, 2 = Editar, 3 = Eliminar
+  usuario_id: number,
+  categoria_id?: number,
+  nombre?: string,
+  tipo?: string
+): Promise<string> => {
   try {
-    // Definir los datos a enviar en el cuerpo de la solicitud
-    const response = await instance.post("/gestionarCategorias/gestionarCategorias", {
-      accion,          // 1 = Agregar, 2 = Editar, 3 = Eliminar
+    const payload = {
+      accion,
       usuario_id,
       categoria_id,
       nombre,
-      tipo
-    });
+      tipo,
+    };
 
-    // Verificar el éxito de la operación
+    const response = await instance.post<GestionarCategoriaResponse>(
+      "/gestionarCategorias/gestionarCategorias",
+      payload
+    );
+
     if (response.data.success) {
-      console.log(response.data.message);  // Mostrar el mensaje de éxito
-      return response.data.message; // Devuelve el mensaje si la operación fue exitosa
+      console.log(response.data.message);
+      return response.data.message || "Operación exitosa";
     } else {
-      console.error(response.data.error);  // Mostrar el error si la operación no fue exitosa
-      return response.data.error; // Devuelve el mensaje de error si algo salió mal
+      console.error(response.data.error);
+      return response.data.error || "Error desconocido";
     }
   } catch (error) {
     console.error("Error al gestionar categoría:", error);
     throw error;
   }
 };
-
-
-
