@@ -5,6 +5,8 @@ import {
   SectionList,
   RefreshControl,
   Dimensions,
+  BackHandler,
+  Alert,
 } from "react-native";
 import CustomCardHome from "@/components/shared/CutsomCardHome";
 import { LineChart } from "react-native-chart-kit";
@@ -16,13 +18,14 @@ import HistorialModal from "../../../components/shared/HistorialModal";
 import { usehookCuentas } from "@/hook/usehookCuentas";
 import { usehookTransacciones } from "@/hook/usehookTransacciones";
 import { usehookGastos } from "@/hook/usehookgrafica";
+import useExitApp from "@/hook/useExitApp";
 
 const screenWidth = Dimensions.get("window").width;
 
 const chartConfig = {
-  backgroundColor: "#ffffff",
-  backgroundGradientFrom: "#ffffff",
-  backgroundGradientTo: "#ffffff",
+  backgroundColor: "#F4F4F4",
+  backgroundGradientFrom: "#F4F4F4",
+  backgroundGradientTo: "#F4F4F4",
   decimalPlaces: 2,
   color: () => `#5e94c2`,
   labelColor: () => `#5e94c2`,
@@ -42,6 +45,10 @@ const chartConfig = {
 };
 
 const HomeScreen = () => {
+
+  useExitApp();
+
+
   const [refreshingActive, setRefreshingActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -62,7 +69,7 @@ const HomeScreen = () => {
       refreshControl={<RefreshControl refreshing={refreshingActive} />}
       className="flex-1"
     >
-      <View className="gap-4 bg-white flex-1">
+      <View className="gap-4 flex-1">
         <Text className="text-stone-400 text-center text-2xl mt-2 font-serif">
           Navegate Dashboard
         </Text>
@@ -78,19 +85,18 @@ const HomeScreen = () => {
         </View>
 
         {/* Gráfico */}
-        <View className="p-2 bg-white">
+        <View className="p-2">
           <Text className="text-[20px] font-bold mb-2 text-neutral-600">Gastos Mensuales</Text>
           {loadingGastos ? (
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorGastos ? (
             <Text className="text-red-500">{errorGastos}</Text>
           ) : (
             <LineChart
               data={chartData}
-              width={screenWidth - 30}
+              width={screenWidth - 20}
               height={200}
-              yAxisLabel="$"
-              yAxisSuffix="k"
+              yAxisLabel="$ "
               yAxisInterval={1}
               chartConfig={chartConfig}
               bezier
@@ -112,7 +118,7 @@ const HomeScreen = () => {
           >
             <View className="flex-row gap-3">
               {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color="#5A8FCA" />
               ) : datos.length > 0 ? (
                 datos.map((item) => (
                   <CartItem
@@ -133,7 +139,7 @@ const HomeScreen = () => {
         <View>
           <Text className="text-[20px] ml-3 mb-3 text-neutral-600">Últimas Acciones</Text>
           {loadingTop ? (
-            <Text className="text-center text-gray-500">Cargando...</Text>
+            <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorTop ? (
             <Text className="text-center text-red-500">{errorTop}</Text>
           ) : (
@@ -146,7 +152,7 @@ const HomeScreen = () => {
           <Text className="text-amber-500 text-xl" onPress={handleHistory}>
             Ver Más +
           </Text>
-          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
         </View>
       </View>
     </ScrollView>

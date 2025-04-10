@@ -100,7 +100,7 @@ const RegisterScreen = () => {
             {/* Enlace de retorno */}
             <Text className="text-center mt-4">
               <Text className="text-blue-600 font-bold" onPress={() => router.push('/(Stack)/Login')}>
-                Return to Login
+                Volver al Login
               </Text>
             </Text>
           </View>

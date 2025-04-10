@@ -101,7 +101,7 @@ export default function Layout() {
           name="ajustes/index"
           options={{
             drawerIcon: ({ color, size }) => (
-              <Ionicons name="accessibility" size={size} color={color} />
+              <Ionicons name="accessibility-outline" size={size} color={color} />
             ),
             drawerLabel: 'Ajustes',
             title: 'Ajustar Perfil',
@@ -111,13 +111,12 @@ export default function Layout() {
           name="acercade/index"
           options={{
             drawerIcon: ({ color, size }) => (
-              <Ionicons name="apps" size={size} color={color} />
+              <Ionicons name="apps-outline" size={size} color={color} />
             ),
             drawerLabel: 'Acerca De  ?',
             title: 'App',
           }}
         />
-
 
       </Drawer>
     </>

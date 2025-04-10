@@ -68,14 +68,14 @@ export const useHookCategorias = () => {
       }
 
       const usuario_id = parseInt(usuarioIdStr, 10);
-      const result = await gestionarCategoria(1, usuario_id, null, nombre, tipo);
+      const result = await gestionarCategoria(1, usuario_id, nombre, tipo);
 
-      if (result.success) {
+      if (result) {
         setMessage("Categoría agregada con éxito.");
         // Recargamos las categorías para mostrar la nueva
         fetchCategorias();
       } else {
-        setMessage(result.error || "Error al agregar la categoría");
+        setMessage(result || "Error al agregar la categoría");
       }
     } catch (error) {
       setMessage("Categoria Agregada");

@@ -4,8 +4,8 @@ import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import AjuesteScrenn from '@/components/shared/PerfilAjustes';
 import * as ImagePicker from "expo-image-picker";
-import Idiomas from './idiomas';
 import LanguageModal from '../../../components/shared/modalidioma';
+import Cerra_Sesion from '@/components/shared/Cerrar_sesion';
 
 
 const ajustes = () => {
@@ -96,6 +96,9 @@ const ajustes = () => {
           {/* 🔽 Solo se muestra si el estado es true */}
           {mostrarAjustes && <AjuesteScrenn />}
         </View>
+
+        <Cerra_Sesion/>
+        
       </ScrollView>
 
 
