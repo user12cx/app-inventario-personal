@@ -28,7 +28,7 @@ const ListCategorias: React.FC<ListCategoriasProps> = ({ categorias, handleElimi
 
           <View className="flex-row">
             <TouchableOpacity
-              className="bg-blue-500 p-2 rounded-lg mr-2"
+              className="bg-[#5A8FCA] p-2 rounded-lg mr-2"
               onPress={() => handleEditar(item.idCategoria)}
             >
               <Text className="text-white text-sm">Editar</Text>

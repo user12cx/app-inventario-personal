@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import ListCategorias from '../../../components/shared/Table';
 import { useHookCategorias } from '@/hook/usehookCategorias';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
+import { AntDesign } from '@expo/vector-icons';
 
 const Categorías = () => {
   const {
@@ -110,7 +111,18 @@ const Categorías = () => {
           <Text className="text-red-500 text-center mt-4">{`Error: ${error}`}</Text>
         ) : (
           <View>
-            <Text className="text-lg text-center mb-4">Categorías Disponibles</Text>
+
+            <View className="flex-row justify-between p-4 items-center">
+              <Text className="text-xl font-bold mb-4">Categorías Disponibles</Text>
+              {/* Botón flotante */}
+              <TouchableOpacity
+                className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
+                onPress={handleOpenSheet}
+              >
+                <AntDesign name="addfile" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+
             <ListCategorias
               categorias={categorias}
               handleEliminar={handleEliminarCategoria} // Usamos el nuevo manejador
@@ -119,14 +131,6 @@ const Categorías = () => {
           </View>
         )}
       </ScrollView>
-
-      {/* Botón flotante */}
-      <TouchableOpacity
-        className="bg-blue-500 w-14 h-14 rounded-full flex items-center justify-center absolute bottom-10 right-10 z-10"
-        onPress={handleOpenSheet}
-      >
-        <Text className="text-white text-4xl">+</Text>
-      </TouchableOpacity>
 
       {/* Fondo transparente que cierra el BottomSheet cuando se toca */}
       {showModal && (
@@ -154,18 +158,18 @@ const Categorías = () => {
                 placeholder="Nombre"
                 value={nombre}
                 onChangeText={setNombre}
-                className="border border-blue-500 rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
               />
 
               <TextInput
                 placeholder="Tipo (Ingreso o Gasto)"
                 value={tipo}
                 onChangeText={setTipo}
-                className="border border-blue-500 rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
               />
 
               <TouchableOpacity
-                className="bg-blue-500 py-3 rounded items-center"
+                className="bg-[#5A8FCA] py-3 rounded items-center"
                 onPress={handleGuardar}
               >
                 <Text className="text-white font-bold">Guardar</Text>

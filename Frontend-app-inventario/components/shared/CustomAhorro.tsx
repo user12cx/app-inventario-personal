@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from 'react';
 import { ProgressBar } from 'react-native-paper';
-import { LinearGradient } from 'expo-linear-gradient';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
-// Definimos la interfaz para las props del componente
 interface MetasItems {
     title: string;
     montoActual: number;
@@ -14,63 +13,101 @@ interface MetasItems {
 
 const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLimite, onAportar }) => {
     const progress = Math.max(0, Math.min(1, montoActual / (meta || 1)));
+    const [mostrarInput, setMostrarInput] = useState(false);
+    const [texto, setTexto] = useState('');
+
+    const handleAceptar = () => {
+        // Aquí puedes hacer algo con el valor de `texto`, por ejemplo:
+        console.log("Valor aportado:", texto);
+        setMostrarInput(false);
+        setTexto('');
+        // También podrías llamar a `onAportar` si aplica
+    };
+
+    const handleCancelar = () => {
+        setMostrarInput(false);
+        setTexto('');
+    };
 
     return (
-        <LinearGradient 
-            colors={['#D4E7FD', '#EDE7F6']} // Azul claro → Violeta claro
-            start={{ x: 0, y: 0 }} 
-            end={{ x: 1, y: 1 }}
-            className="p-4 rounded-lg shadow-md border border-gray-200 m-2"
-        >
-            <Text className="text-xl font-semibold text-gray-800">{title}</Text>
+        <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white">
+            <Text className="text-2xl font-bold font-sans text-[#5A8FCA]">{title}</Text>
 
             <View className='flex-row gap-3'>
                 <View className='w-[350px]'>
-                    {/* Datos de ahorro */}
-                    <View className="mt-2 flex-row justify-between">
-                        <Text className="text-gray-600 text-lg">DISPONIBLE: <Text className="font-bold text-lime-600">${montoActual}</Text></Text>
-                        <Text className="text-gray-600 text-lg">META: <Text className="font-bold text-red-600">${meta}</Text></Text>
-                        <Text className="text-gray-600 text-lg">FECHA LÍMITE: <Text className="font-bold text-violet-800">{fechaLimite}</Text></Text>
+                    <View className="mt-2 flex-row justify-between gap-1">
+                        <Text className="text-gray-600 text-base font-sans">OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans">META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans">LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text></Text>
                     </View>
 
-                    {/* Barra de progreso */}
                     <View className="mt-2">
                         {(() => {
-                            let progressColor = "#EF4444"; // Rojo (Menos del 25%)
-                            if (progress >= 0.75) progressColor = "#22C55E"; // Verde (75%-100%)
-                            else if (progress >= 0.5) progressColor = "#3B82F6"; // Azul (50%-74%)
-                            else if (progress >= 0.25) progressColor = "#EAB308"; // Amarillo (25%-49%)
+                            let progressColor = "#EF4444";
+                            if (progress >= 0.75) progressColor = "#22C55E";
+                            else if (progress >= 0.5) progressColor = "#3B82F6";
+                            else if (progress >= 0.25) progressColor = "#EAB308";
 
                             return (
                                 <>
-                                    <ProgressBar progress={progress} color={progressColor} className="h-2 rounded-full" />
+                                    <ProgressBar progress={progress} color={progressColor} />
                                     <Text className="text-base mt-1 text-gray-700 font-medium">
-                                        <Text style={{ color: progressColor }}>{(progress * 100).toFixed()}%</Text> completado
+                                        <Text style={{ color: progressColor }}>{(progress * 100).toFixed()} % </Text> completado
                                     </Text>
                                 </>
                             );
                         })()}
                     </View>
+
+                    <View >
+                        {mostrarInput && (
+                            <View className="gap-4 flex-row">
+                                <TextInput
+                                    placeholder="Escribe aquí..."
+                                    value={texto}
+                                    onChangeText={setTexto}
+                                    className="border border-[#5A8FCA] rounded px-2 py-1 w-[220px]"
+                                    keyboardType="numeric"
+                                />
+
+                                <TouchableOpacity
+                                    onPress={handleAceptar}
+                                    className="bg-green-200 p-2 rounded-full"
+                                >
+                                    <Feather name="check" size={20} color="green" />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    onPress={handleCancelar}
+                                    className="bg-gray-200 p-2 rounded-full"
+                                >
+                                    <Feather name="x" size={20} color="black" />
+                                </TouchableOpacity>
+
+                            </View>
+                        )}
+                    </View>
+
                 </View>
 
-                {/* Botones */}
+
                 <View className='absolute top-[-28px] right-[-3]'>
                     <TouchableOpacity
                         className="mt-2 bg-green-100 w-[40px] h-[40px] items-center justify-center rounded-full"
-                        onPress={onAportar}
+                        onPress={() => setMostrarInput(true)}
                     >
-                        <Text className="text-center text-2xl">➕</Text>
+                        <AntDesign name="pluscircleo" size={20} color="green" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         className="mt-2 bg-red-100 w-[40px] h-[40px] items-center justify-center rounded-full"
                         onPress={onAportar}
                     >
-                        <Text className="text-center text-2xl">🗑</Text>
+                        <AntDesign name="delete" size={20} color="red" />
                     </TouchableOpacity>
                 </View>
             </View>
-        </LinearGradient>
+        </View>
     );
 };
 

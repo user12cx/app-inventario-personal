@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Pressable, FlatList, KeyboardAvoidingView
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { usehookCuentas } from '@/hook/usehookCuentas';
 import { TextInput } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 const Index = () => {
   const [showModal, setShowModal] = useState(false);
@@ -14,7 +15,7 @@ const Index = () => {
   const [monto, setMonto] = useState('');
   const [estado, setEstado] = useState('');
 
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['40%'], []);
 
   const handleOpenSheet = () => {
     setShowModal(true);
@@ -49,7 +50,7 @@ const Index = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            // backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
             zIndex: 10,
           }}
         >
@@ -58,13 +59,13 @@ const Index = () => {
       )}
 
       {/* Contenido principal */}
-      <View className="flex-row justify-between p-4">
-        <Text className="text-xl font-semibold mb-4">Tarjetas Disponibles</Text>
+      <View className="flex-row justify-between p-4 items-center">
+        <Text className="text-xl font-bold mb-4">Tarjetas Disponibles</Text>
         <TouchableOpacity
           className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
           onPress={handleOpenSheet}
         >
-          <Text className="text-white text-4xl">+</Text>
+          <AntDesign name="addfile" size={24} color="white" /> 
         </TouchableOpacity>
       </View>
 

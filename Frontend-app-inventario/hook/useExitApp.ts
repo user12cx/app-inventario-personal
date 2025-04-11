@@ -1,40 +1,29 @@
 // hooks/useExitApp.ts
-import { useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { BackHandler, Alert } from 'react-native';
+import { useCallback } from 'react';
 
 const useExitApp = () => {
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert(
-        "Confirmar salida",
-        "¿Estás seguro de que quieres salir de la app?",
-        [
-          {
-            text: "Cancelar",
-            onPress: () => null, // Si el usuario cancela, no pasa nada
-            style: "cancel",
-          },
-          {
-            text: "Salir",
-            onPress: () => {
-              // Sale de la app
-              BackHandler.exitApp();
-            },
-          },
-        ],
-        { cancelable: false } // No permitir que se cierre al tocar fuera de la alerta
-      );
-      return true; // Esto evita que la app se cierre inmediatamente
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert(
+          'Confirmar salida',
+          '¿Estás seguro de que quieres salir de la app?',
+          [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'Salir', onPress: () => BackHandler.exitApp() },
+          ],
+          { cancelable: false }
+        );
+        return true;
+      };
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+      const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-    // Limpieza del listener cuando el componente se desmonta
-    return () => backHandler.remove();
-  }, []);
+      return () => subscription.remove();
+    }, [])
+  );
 };
 
 export default useExitApp;
