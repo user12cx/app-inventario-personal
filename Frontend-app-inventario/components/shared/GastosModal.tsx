@@ -2,32 +2,43 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
 import { Select } from "../select";
 import * as Print from "expo-print"; // Se cambió a expo-print
+import { AntDesign } from "@expo/vector-icons";
+import { useHookCategorias } from "@/hook/usehookCategorias";
+import { usehookCuentas } from "@/hook/usehookCuentas";
+import FlashMessage, { showMessage } from "react-native-flash-message";
+import mostrarMensaje from "@/alert/Mesage";
+import SkeletonLoader from "@/squeletor/SkeletonLoader";
 
 const GastosModal = () => {
     const [nombreGasto, setNombreGasto] = useState("");
     const [monto, setMonto] = useState("");
-    const [categoria, setCategoria] = useState(null);
-    const [tipoPago, setTipoPago] = useState(null);
+    const [categoria, setCategoria] = useState("");
+    const [tipoPago, setTipoPago] = useState("");
+
     const [historialGastos, setHistorialGastos] = useState([]);
 
-    const categorias = [
-        { key: "Ropa", value: "Ropa", label: "Ropa" },
-        { key: "Comida", value: "Comida", label: "Comida" },
-        { key: "Viajes", value: "Viajes", label: "Viajes" },
-        { key: "Tecnologia", value: "Tecnologia", label: "Tecnologia" },
-        { key: "Salud", value: "Salud", label: "Salud" },
-    ];
+    const { categorias, loading: loadingCategorias } = useHookCategorias();
+    const { datos: cuentas, loading: loadingCuentas } = usehookCuentas();
 
-    const tiposPago = [
-        { key: "Efectivo", value: "Efectivo", label: "Efectivo" },
-        { key: "Tarjeta", value: "Tarjeta", label: "Tarjeta" },
-        { key: "Transferencia", value: "Transferencia", label: "Transferencia" },
-    ];
+
+    if (loadingCategorias || loadingCuentas) {
+        return <Text>Cargando categorías...</Text>; // o un spinner
+    }
+
+
 
     // Función para imprimir historial de gastos con estilos
     const imprimirGastos = async () => {
         if (historialGastos.length === 0) {
-            Alert.alert("Error", "No hay gastos para imprimir.");
+            mostrarMensaje(
+                "No hay gastos para imprimir",
+                "danger", // Tipo de mensaje (advertencia o error)
+                '#FFEBEE', // Fondo rojo muy claro (suave)
+                '#D32F2F', // Color de texto rojo oscuro
+                500 // Duración en ms
+            );
+
+
             return;
         }
 
@@ -105,13 +116,26 @@ const GastosModal = () => {
     // Función para agregar gasto al historial
     const agregarGasto = () => {
         if (!nombreGasto || !monto || !categoria || !tipoPago) {
-            Alert.alert("Error", "Todos los campos son obligatorios.");
+            mostrarMensaje(
+                "Todos los campos son obligatorios",
+                "danger", // Tipo de mensaje
+                'rgba(255, 186, 186, 1)', // Fondo semi-transparente
+                '#D8000C', // Color de texto
+                500 // Duración en ms
+            );
+
             return;
         }
 
         const montoFloat = parseFloat(monto);
         if (isNaN(montoFloat) || montoFloat <= 0) {
-            Alert.alert("Error", "El monto debe ser un número válido mayor a 0.");
+            mostrarMensaje(
+                "El monto debe ser mayor a 1",
+                "danger", // Tipo de mensaje
+                'rgba(255, 186, 186, 1)', // Fondo semi-transparente
+                '#D8000C', // Color de texto
+                600 // Duración en ms
+            );
             return;
         }
 
@@ -126,9 +150,20 @@ const GastosModal = () => {
         setHistorialGastos([...historialGastos, nuevoGasto]);
         setNombreGasto("");
         setMonto("");
-        setCategoria(null);
-        setTipoPago(null);
+        setCategoria("");
+        setTipoPago("");
+
+        mostrarMensaje(
+            "Agregado Correctamente",
+            "success", // Tipo de mensaje
+            '#A5D6A7', // Fondo verde claro (sin opacidad)
+            '#2C6B2F', // Color de texto verde oscuro
+            500 // Duración en ms
+        );
+
+
     };
+
 
     // Función para eliminar un gasto
     const eliminarGasto = (id) => {
@@ -136,8 +171,16 @@ const GastosModal = () => {
     };
 
     return (
-        <View style={{ padding: 20 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center", marginBottom: 10 }}>Registar Gastos Pendiantes</Text>
+        <View className="flex-1 p-4">
+
+            <View className="flex-row justify-between items-center">
+                <Text className="text-xl font-bold mb-4">Registar Gastos Pendiantes</Text>
+
+                <TouchableOpacity onPress={imprimirGastos} className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center">
+                    <AntDesign name="printer" size={24} color="white" />
+                </TouchableOpacity>
+
+            </View>
 
             <View>
                 <Text className="text-lg font-semibold">Nombre del Gasto</Text>
@@ -161,52 +204,65 @@ const GastosModal = () => {
 
             <View style={{ marginTop: 10 }}>
                 <Text className="text-lg font-semibold">Categoría</Text>
-                <Select items={categorias} value={categoria} onValueChange={setCategoria} />
+                <Select
+                    items={categorias.map((cat) => ({
+                        label: cat.nombre,     // ajusta al campo real
+                        value: cat.idCategoria // ajusta al campo real
+                    }))}
+                    value={categoria}
+                    onValueChange={setCategoria}
+                />
             </View>
 
             <View style={{ marginTop: 10 }}>
                 <Text className="text-lg font-semibold">Tipo de Pago</Text>
-                <Select items={tiposPago} value={tipoPago} onValueChange={setTipoPago} />
+                <Select
+                    items={cuentas.map((cuenta) => ({
+                        label: cuenta.nombre,       // ajusta a tus datos reales
+                        value: cuenta.idCuenta,     // ajusta a tus datos reales
+                    }))}
+                    value={cuentas}
+                    onValueChange={setTipoPago}
+                />
             </View>
 
 
-            <TouchableOpacity onPress={agregarGasto} style={{ backgroundColor: "blue", padding: 10, marginTop: 20, borderRadius: 5 }}>
-                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>+ Sumar gasto</Text>
+            <TouchableOpacity onPress={agregarGasto} style={{ backgroundColor: "#5A8FCA", padding: 10, marginTop: 20, borderRadius: 5 }}>
+                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>Agregar gasto</Text>
             </TouchableOpacity>
 
-            <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 20 }}>Historial de Gastos</Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 20 }}>Historial de Gastos Diarios</Text>
             {historialGastos.length === 0 ? (
-                <Text style={{ textAlign: "center", marginTop: 10 }}>No hay gastos registrados.</Text>
-            ) 
-            :
-            (
-                <FlatList
-                    data={historialGastos}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            padding: 10,
-                            backgroundColor: "#f9f9f9",
-                            marginTop: 5,
-                            borderRadius: 5
-                        }}>
-                            <View>
-                                <Text style={{ fontWeight: "bold" }}>{item.nombre}</Text>
-                                <Text>${item.monto} - {item.categoria} ({item.tipoPago})</Text>
+                <SkeletonLoader /> 
+            )
+                :
+                (
+                    <FlatList
+                        data={historialGastos}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                padding: 10,
+                                backgroundColor: "#f9f9f9",
+                                marginTop: 5,
+                                borderRadius: 5
+                            }}>
+                                <View>
+                                    <Text style={{ fontWeight: "bold" }}>{item.nombre}</Text>
+                                    <Text>${item.monto} - {item.categorias} ({item.cuentas})</Text>
+                                </View>
+                                <TouchableOpacity onPress={() => eliminarGasto(item.id)}>
+                                    <AntDesign name="delete" size={24} color="red" />
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity onPress={() => eliminarGasto(item.id)}>
-                                <Text style={{ color: "red" }}>❌ Eliminar</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-            )}
+                        )}
+                    />
+                )}
 
-            <TouchableOpacity onPress={imprimirGastos} style={{ backgroundColor: "green", padding: 10, marginTop: 20, borderRadius: 5 }}>
-                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>🖨 Imprimir Gastos</Text>
-            </TouchableOpacity>
+            {/* tu navegación o contenido principal */}
+            <FlashMessage position="top" />
         </View>
     );
 };

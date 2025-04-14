@@ -24,7 +24,7 @@ const Categorías = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [nombre, setNombre] = useState('');
-  const [tipo, setTipo] = useState('Ingreso');
+  const [tipo, setTipo] = useState('');
 
   const handleOpenSheet = () => {
     setShowModal(true);
@@ -40,7 +40,7 @@ const Categorías = () => {
     agregarCategoria(nombre, tipo); // Llamamos a la función para agregar la categoría
     setTimeout(() => {
       setNombre('');
-      setTipo('Ingreso');
+      setTipo('');
       handleCloseSheet();
     }, 1500);
   };
@@ -83,8 +83,8 @@ const Categorías = () => {
               showMessage({
                 message: 'Error al eliminar la categoría.',
                 type: 'danger',
-                icon: 'auto',
-                duration: 1000,
+                icon: 'info',
+                duration: 800,
                 floating: true,
                 position: 'top',
                 backgroundColor: '#FFBABA', // Fondo rojo

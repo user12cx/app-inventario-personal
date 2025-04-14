@@ -1,11 +1,13 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, Pressable, FlatList, KeyboardAvoidingView, ScrollView, Platform, RefreshControl } from 'react-native';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView, TouchableWithoutFeedback } from '@gorhom/bottom-sheet';
 import { usehookCuentas } from '@/hook/usehookCuentas';
 import { TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 const Index = () => {
+
   const [showModal, setShowModal] = useState(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [refreshingActive, setRefreshingActive] = useState(false);
@@ -17,14 +19,19 @@ const Index = () => {
 
   const snapPoints = useMemo(() => ['40%'], []);
 
-  const handleOpenSheet = () => {
+  const handleOpenSheetCuentas = () => {
     setShowModal(true);
     bottomSheetRef.current?.expand();
   };
 
-  const handleCloseModal = () => {
+  const limpiarCampos=()=>{
+    setEstado('')
+    setNombre('')
+    setMonto('')
+  }
+  const handleCloseModalCuentas = () => {
     setShowModal(false);
-    bottomSheetRef.current?.forceClose();
+    bottomSheetRef.current?.close();
   };
 
   const handleRefresh = async () => {
@@ -36,58 +43,70 @@ const Index = () => {
   const handleGuardar = () => {
     // Aquí puedes enviar los datos al backend o hacer lo que necesites
     console.log({ nombre, monto, estado });
-    handleCloseModal();
+    handleCloseModalCuentas();
+    limpiarCampos()
+    showMessage({
+      message:'Nueva Targeta Agregada Correctamente',
+      type:'success',
+      icon:'success',
+      duration:500,
+      floating:true,
+      position:'top',
+      backgroundColor: '#DFF2BF', // Fondo claro
+      color: '#4F8A10', // Texto verde
+      style: {
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: '#38761A', // Borde más oscuro (verde oscuro)
+      },
+    })
   };
 
   return (
     <>
-      {/* Modal con fondo oscuro simple */}
-      {showModal && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
-            zIndex: 10,
-          }}
-        >
-          <Pressable className="flex-1 justify-center items-center" onPress={handleCloseModal} />
-        </View>
-      )}
 
       {/* Contenido principal */}
-      <View className="flex-row justify-between p-4 items-center">
-        <Text className="text-xl font-bold mb-4">Tarjetas Disponibles</Text>
-        <TouchableOpacity
-          className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
-          onPress={handleOpenSheet}
-        >
-          <AntDesign name="addfile" size={24} color="white" /> 
-        </TouchableOpacity>
+      <View className='flex-1'>
+
+        <View className="flex-row justify-between p-4 items-center">
+          <Text className="text-xl font-bold mb-4">Tarjetas Disponibles</Text>
+          <TouchableOpacity
+            className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
+            onPress={handleOpenSheetCuentas}
+          >
+            <AntDesign name="addfile" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={Array.isArray(datos) ? datos : []}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={handleOpenSheetCuentas}
+              className="p-4 mb-2 shadow-xl m-2 bg-gray-100">
+
+              <View className="flex-row justify-between">
+                <Text className="text-xl">{item.nombre}</Text>
+                <Text className="text-green-700 text-base">{`$ ${item.saldo}`}</Text>
+              </View>
+              <Text className="text-amber-500">{item.estado}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.idCuenta}
+          refreshControl={
+            <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
+          }
+
+        />
       </View>
 
-      <FlatList
-        data={Array.isArray(datos) ? datos : []}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={handleOpenSheet}
-            className="p-4 mb-2 shadow-xl m-2 bg-gray-100">
 
-            <View className="flex-row justify-between">
-              <Text className="text-xl">{item.nombre}</Text>
-              <Text className="text-green-700 text-base">{`$ ${item.saldo}`}</Text>
-            </View>
-            <Text className="text-amber-500">{item.estado}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item) => item.idCuenta}
-        refreshControl={
-          <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
-        }
-      />
+      {/* Modal con fondo oscuro simple */}
+      {showModal && (
+        <TouchableWithoutFeedback onPress={handleCloseModalCuentas}>
+          <View style={{ flex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10, backgroundColor: 'rgba(0, 0, 0, 0.3)' }} />
+        </TouchableWithoutFeedback>
+      )}
 
       <BottomSheet
         ref={bottomSheetRef}
@@ -135,6 +154,9 @@ const Index = () => {
           </KeyboardAvoidingView>
         </BottomSheetView>
       </BottomSheet>
+
+      {/* FlashMessage */}
+      <FlashMessage position="top" />
     </>
   );
 };

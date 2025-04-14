@@ -19,7 +19,7 @@ const ListCategorias: React.FC<ListCategoriasProps> = ({ categorias, handleElimi
       {categorias.map((item) => (
         <View
           key={item.idCategoria.toString()}
-          className="bg-gray-100 p-4 mb-2 flex-row items-center justify-between shadow-xl rounded-xl"
+          className="bg-gray-100 p-4 mb-2 flex-row items-center justify-between shadow-xl rounded-md"
         >
           <View className="flex-1">
             <Text className="text-xl font-bold">{item.nombre}</Text>
