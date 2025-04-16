@@ -33,7 +33,7 @@ const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuar
 
             console.log("🔍 Buscando transacciones para usuario_id:", usuario_id);
 
-            const response = await getPaginatedTransactions(parseInt(usuario_id, 10), 1, 5);
+            const response = await getPaginatedTransactions(parseInt(usuario_id, 10));
             console.log("✅ Datos recibidos de la API:", response);
 
             setTransacciones(response);

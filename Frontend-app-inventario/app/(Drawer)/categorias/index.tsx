@@ -36,69 +36,69 @@ const Categorías = () => {
     bottomSheetRef.current?.close();
   };
 
-  const handleGuardar = () => {
-    agregarCategoria(nombre, tipo); // Llamamos a la función para agregar la categoría
-    setTimeout(() => {
-      setNombre('');
-      setTipo('');
-      handleCloseSheet();
-    }, 1500);
+
+
+  const handleGuardar = async () => {
+    const result = await agregarCategoria(nombre, tipo); // Esperamos la respuesta
+    if (result.success) {
+      showMessage({
+        message: result.message || 'Categoría agregada con éxito.',
+        type: 'success',
+        icon: 'success',
+        duration: 500,
+        floating: true,
+        position: 'top',
+        backgroundColor: '#DFF2BF',
+        color: '#4F8A10',
+        style: { borderRadius: 6, borderWidth: 1, borderColor: '#38761A' },
+      });
+      setNombre('')
+      handleCloseSheet()
+    } else {
+      showMessage({
+        message: result.error || 'Error al agregar la categoría.',
+        type: 'danger',
+        icon: 'info',
+        duration: 800,
+        floating: true,
+        position: 'top',
+        backgroundColor: '#FFBABA',
+        color: '#D8000C',
+        style: { borderRadius: 6 },
+      });
+    }
+    
   };
-
-  const handleEliminarCategoria = (categoriaId: number) => {
-    // Mostrar la alerta de confirmación
-    Alert.alert(
-      'Confirmar Eliminación',
-      '¿Estás seguro de que deseas eliminar esta categoría?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          onPress: async () => {
-            try {
-              // Eliminar la categoría
-              await eliminarCategoria(categoriaId);
-
-              // Mostrar mensaje de éxito después de eliminar
-              showMessage({
-                message: 'Categoría eliminada con éxito.',
-                type: 'success',
-                icon: 'success',
-                duration: 500,
-                floating: true,
-                position: 'top',
-                backgroundColor: '#DFF2BF', // Fondo claro
-                color: '#4F8A10', // Texto verde
-                style: {
-                  borderRadius: 6,
-                  borderWidth: 1,
-                  borderColor: '#38761A', // Borde más oscuro (verde oscuro)
-                },
-              });
-            } catch (error) {
-              // Si hay un error, muestra un mensaje de error
-              showMessage({
-                message: 'Error al eliminar la categoría.',
-                type: 'danger',
-                icon: 'info',
-                duration: 800,
-                floating: true,
-                position: 'top',
-                backgroundColor: '#FFBABA', // Fondo rojo
-                color: '#D8000C', // Texto rojo
-                style: { borderRadius: 6 },
-              });
-            }
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+  
+  const handleEliminarCategoria = async (categoriaId: number) => {
+    const result = await eliminarCategoria(categoriaId);
+    if (result.success) {
+      showMessage({
+        message: result.message || 'Categoría eliminada con éxito.',
+        type: 'success',
+        icon: 'success',
+        duration: 500,
+        floating: true,
+        position: 'top',
+        backgroundColor: '#DFF2BF',
+        color: '#4F8A10',
+        style: { borderRadius: 6, borderWidth: 1, borderColor: '#38761A' },
+      });
+    } else {
+      showMessage({
+        message: result.error || 'Error al eliminar la categoría.',
+        type: 'danger',
+        icon: 'info',
+        duration: 800,
+        floating: true,
+        position: 'top',
+        backgroundColor: '#FFBABA',
+        color: '#D8000C',
+        style: { borderRadius: 6 },
+      });
+    }
   };
-
+  
   return (
     <>
       <ScrollView
@@ -111,7 +111,6 @@ const Categorías = () => {
           <Text className="text-red-500 text-center mt-4">{`Error: ${error}`}</Text>
         ) : (
           <View>
-
             <View className="flex-row justify-between p-4 items-center">
               <Text className="text-xl font-bold mb-4">Categorías Disponibles</Text>
               {/* Botón flotante */}

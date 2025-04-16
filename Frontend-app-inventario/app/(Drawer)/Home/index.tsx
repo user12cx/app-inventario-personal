@@ -56,7 +56,7 @@ const HomeScreen = () => {
   const { datosTop, loadingTop, errorTop } = usehookTransacciones();
 
   // Usamos el hook de gastos, pasando el usuario_id
-  const { loading: loadingGastos, chartData, error: errorGastos } = usehookGastos("usuario_id_aqui");
+  const { loading: loadingGastos, chartData, error: errorGastos } = usehookGastos("1");
 
   const handleHistory = () => {
     setModalVisible(true);
@@ -81,7 +81,7 @@ const HomeScreen = () => {
           <CustomCardHome fondo="violet" title="Metas" icons="rocket1" iconSize={30} iconColor="#efc7ea" ruta="objetivoAhorro" />
           <CustomCardHome fondo="succes" title="Categorias" icons="appstore1" iconSize={30} iconColor="#9E9E9E" ruta="categorias" />
           <CustomCardHome fondo="buy" title="Gastos" icons="shoppingcart" iconSize={25} iconColor="#008000" ruta="gastos" />
-          <CustomCardHome fondo="perf" title="Perfil" icons="solution1" iconSize={25} iconColor="#5A8FCA" ruta="ajustes" />
+          <CustomCardHome fondo="infoRigth" title="Ajustes" icons="solution1" iconSize={25} iconColor="#5A8FCA" ruta="ajustes" />
         </View>
 
         {/* Gráfico */}

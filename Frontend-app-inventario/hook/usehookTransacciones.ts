@@ -1,14 +1,19 @@
 import { View, Text } from 'react-native'
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { get_top_acc, OrdenItem } from '@/service/transaccionesService';
+import { addTransaccion, get_top_acc, NuevaTransaccion, OrdenItem } from '@/service/transaccionesService';
 
- export const usehookTransacciones = () => {
-      const [loadingTop, setLoadingTop] = useState(false);
-      const [datosTop, setDatosTop] = useState<OrdenItem[]>([]);// Cambia 'any[]' por el tipo adecuado
-      const [errorTop, setErrorTop] = useState<string | undefined>('');
+export const usehookTransacciones = () => {
 
-        useEffect(() => {
+  const [loadingTop, setLoadingTop] = useState(false);
+  const [datosTop, setDatosTop] = useState<OrdenItem[]>([]);// Cambia 'any[]' por el tipo adecuado
+  const [errorTop, setErrorTop] = useState<string | undefined>('');
+
+  const [loadingAdd, setLoadingAdd] = useState(false);
+  const [successAdd, setSuccessAdd] = useState(false);
+  const [errorAdd, setErrorAdd] = useState<string | null>(null);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoadingTop(true);
@@ -47,6 +52,24 @@ import { get_top_acc, OrdenItem } from '@/service/transaccionesService';
     fetchData();
   }, []);
   
-  return { loadingTop, datosTop, errorTop };
+  const agregarTransaccion = async (transaccion: NuevaTransaccion): Promise<boolean> => {
+    try {
+      setLoadingAdd(true);
+      setErrorAdd(null);
+      setSuccessAdd(false);
+  
+      await addTransaccion(transaccion);
+      setSuccessAdd(true);
+      return true; // ✅ Éxito
+    } catch (error: any) {
+      console.error("Error al agregar transacción:", error.message);
+      setErrorAdd(error.message || "Error desconocido.");
+      return false; // ❌ Error
+    } finally {
+      setLoadingAdd(false);
+    }
+  };
+  
+  return { loadingTop, datosTop, errorTop,loadingAdd,successAdd,errorAdd, agregarTransaccion };
 }
 

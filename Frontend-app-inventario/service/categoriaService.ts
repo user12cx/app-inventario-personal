@@ -40,7 +40,7 @@ export const gestionarCategoria = async (
   categoria_id?: number,
   nombre?: string,
   tipo?: string
-): Promise<string> => {
+): Promise<GestionarCategoriaResponse> => {
   try {
     const payload = {
       accion,
@@ -55,13 +55,7 @@ export const gestionarCategoria = async (
       payload
     );
 
-    if (response.data.success) {
-      console.log(response.data.message);
-      return response.data.message || "Operación exitosa";
-    } else {
-      console.error(response.data.error);
-      return response.data.error || "Error desconocido";
-    }
+    return response.data;
   } catch (error) {
     console.error("Error al gestionar categoría:", error);
     throw error;

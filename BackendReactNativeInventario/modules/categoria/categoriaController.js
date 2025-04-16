@@ -22,24 +22,29 @@ const getCategoria = async (req, res) => {
 const gestionarCategorias = async (req, res) => {
     try {
         const pool = await poolPromise;
-        const { accion, usuario_id, categoria_id, nombre } = req.body;  // Recibimos los datos desde el body
+        const { accion, usuario_id, categoria_id, nombre,tipo } = req.body;
 
         if (!usuario_id) {
-            return res.status(400).send({ success: false, error: "El usuario_id es requerido" });
+            return res.status(400).send("El usuario_id es requerido");
         }
 
-        // Verificamos si la operación es válida
         if (![1, 2, 3].includes(accion)) {
-            return res.status(400).send({ success: false, error: "Acción no válida" });
+            return res.status(400).send("Acción no válida");
         }
 
-        // Llamamos al procedimiento almacenado con los parámetros
+        // Ejecutar el procedimiento almacenado
         const result = await pool.request()
-            .input("accion", sql.Int, accion)  // 1 = Agregar, 2 = Editar, 3 = Eliminar
+            .input("accion", sql.Int, accion)
             .input("usuario_id", sql.Int, usuario_id)
-            .input("categoria_id", sql.Int, categoria_id || null)  // Pasamos NULL si no hay categoria_id
-            .input("nombre", sql.NVarChar, nombre || null)  // Pasamos NULL si no hay nombre
-            .execute("gestionarCategorias");  // Llamamos al procedimiento almacenado
+            .input("categoria_id", sql.Int, categoria_id || null)
+            .input("nombre", sql.NVarChar, nombre || null)
+            .input("tipo", sql.NVarChar, tipo || null)
+            .execute("gestionarCategorias");
+
+        // Si el resultado tiene un mensaje de error, lo manejamos aquí
+        if (result && result.error) {
+            return res.status(400).send({ success: false, error: result.error.message });
+        }
 
         // Verificamos si la operación afectó alguna fila
         if (result) {
@@ -52,7 +57,9 @@ const gestionarCategorias = async (req, res) => {
         console.error("Error al ejecutar el procedimiento: ", error);
         return res.status(500).send({ success: false, error: error.message });
     }
-};
+}
+
+
 
 
 

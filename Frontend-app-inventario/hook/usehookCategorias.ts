@@ -22,11 +22,11 @@ export const useHookCategorias = () => {
       const usuario_id = parseInt(usuarioIdStr, 10);
       const response = await getCategorias(usuario_id);
 
-      if (response && Array.isArray(response.result)) {
+      if (response.success && Array.isArray(response.result)) {
         setCategorias(response.result);
         setError(null);
       } else {
-        setError("No se encontraron categorías.");
+        setError(response.error || "No se encontraron categorías.");
       }
     } catch (err) {
       console.error(err);
@@ -41,19 +41,34 @@ export const useHookCategorias = () => {
       const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
       if (!usuarioIdStr) {
         setError("No se encontró el usuario.");
-        return;
+        return { success: false, error: "No se encontró el usuario." };
       }
-
+  
       const usuario_id = parseInt(usuarioIdStr, 10);
-      await gestionarCategoria(3, usuario_id, categoriaId);
-      setCategorias((prev) => prev.filter((cat) => cat.idCategoria !== categoriaId));
-      setError(null);
+      const result = await gestionarCategoria(3, usuario_id, categoriaId);
+  
+      // Verificamos si result existe y tiene la propiedad success
+      if (result && result.success) {
+        setCategorias((prev) => prev.filter((cat) => cat.idCategoria !== categoriaId));
+        setMessage(result.message || "Categoría eliminada con éxito.");
+        setError(null);
+        return { success: true, message: result.message || "Categoría eliminada con éxito." };
+      } else {
+        // Si result es undefined o no tiene success, devolvemos un error
+        const errorMessage = result?.error || "Error al eliminar la categoría.";
+        setMessage(errorMessage);
+        return { success: false, error: errorMessage };
+      }
     } catch (err) {
-      console.error(err);
-      setError("Error al eliminar la categoría.");
+      console.error("Error al gestionar categoría:", err);
+  
+      // Capturamos el error de Axios de manera más detallada
+      const errorMessage = err.response?.data?.message || "Error al eliminar la categoría.";
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     }
   };
-
+  
   const editarCategoria = (categoriaId: number) => {
     // Aquí iría la lógica para abrir un modal o manejar el estado para editar
     console.log(`Editar categoría con ID: ${categoriaId}`);
@@ -64,22 +79,25 @@ export const useHookCategorias = () => {
       const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
       if (!usuarioIdStr) {
         setError("No se encontró el usuario.");
-        return;
+        return { success: false, error: "No se encontró el usuario." };
       }
 
       const usuario_id = parseInt(usuarioIdStr, 10);
-      const result = await gestionarCategoria(1, usuario_id, nombre, tipo);
+      const result = await gestionarCategoria(1, usuario_id, undefined, nombre, tipo);
 
-      if (result) {
-        setMessage("Categoría agregada con éxito.");
+      if (result.success) {
+        setMessage(result.message || "Categoría agregada con éxito.");
         // Recargamos las categorías para mostrar la nueva
         fetchCategorias();
+        return { success: true, message: result.message || "Categoría agregada con éxito." };
       } else {
-        setMessage(result || "Error al agregar la categoría");
+        setMessage(result.error || "Error al agregar la categoría");
+        return { success: false, error: result.error || "Error al agregar la categoría" };
       }
     } catch (error) {
-      setMessage("Categoria Agregada");
       console.error(error);
+      setMessage("Error al agregar la categoría.");
+      return { success: false, error: "Error al agregar la categoría." };
     }
   };
 

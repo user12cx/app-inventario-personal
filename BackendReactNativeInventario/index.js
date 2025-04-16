@@ -22,6 +22,7 @@ const getTopGastos = require("./routers/transaccionesRouter");
 const getTransaccionesPaginadas = require("./routers/transaccionesRouter");
 const gestionarCategorias = require("./routers/categoriaRouter");
 const getGastosPorMes = require("./routers/graficaRouter");
+const addTransaccion = require("./routers/transaccionesRouter");
 
 
 
@@ -39,6 +40,7 @@ app.use("/api/register", register);
 
 app.use ("/api/getTopGastos", getTopGastos)
 app.use ("/api/getTransaccionesPaginadas", getTransaccionesPaginadas)
+app.use ("/api/addTransaccion", addTransaccion)
 
 
 

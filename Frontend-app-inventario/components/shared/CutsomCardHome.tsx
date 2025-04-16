@@ -19,8 +19,7 @@ const CutsomCardHome = ({ title, icons, iconSize = 24, iconColor = "black", fond
     violet: "bg-[#fbebf8]", // Color para 'violet'
     succes: "bg-[#D6D6D1]", // Color para 'succes'
     buy: "bg-[#D0F0D0]", // Color para 'buy'
-    perf:"bg-[#C1DBF0]",
-    infoRigth: "bg-[#fffae7]", // Color para 'infoRigth'
+    infoRigth: "bg-[#C1DBF0]", // Color para 'infoRigth'
   }[fondo];
 
   return (
