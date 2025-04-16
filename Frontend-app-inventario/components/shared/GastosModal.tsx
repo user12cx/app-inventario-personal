@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, Alert, ActivityIndicator, Switch, ScrollView } from "react-native";
 import { Select } from "../select";
 import * as Print from "expo-print"; // Se cambió a expo-print
 import { AntDesign } from "@expo/vector-icons";
@@ -7,22 +7,27 @@ import { useHookCategorias } from "@/hook/usehookCategorias";
 import { usehookCuentas } from "@/hook/usehookCuentas";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import mostrarMensaje from "@/alert/Mesage";
-import SkeletonLoader from "@/squeletor/SkeletonLoader";
+import { usehookTransacciones } from "@/hook/usehookTransacciones";
+import OrdenList from "./OrdenList";
+import { RadioButton } from "react-native-paper";
 
 const GastosModal = () => {
     const [nombreGasto, setNombreGasto] = useState("");
     const [monto, setMonto] = useState("");
     const [categoria, setCategoria] = useState("");
     const [tipoPago, setTipoPago] = useState("");
+    const [tipoTransaccion, settipoTransaccion] = useState('gasto')
+    const [esGasto, setEsGasto] = useState(true); // si usas el switch
 
     const [historialGastos, setHistorialGastos] = useState([]);
 
     const { categorias, loading: loadingCategorias } = useHookCategorias();
     const { datos: cuentas, loading: loadingCuentas } = usehookCuentas();
 
+    const { datosTop, loadingTop, errorTop } = usehookTransacciones();
 
-    if (loadingCategorias || loadingCuentas) {
-        return <Text>Cargando categorías...</Text>; // o un spinner
+    if (loadingCategorias || loadingCuentas || loadingTop) {
+        return <Text>Cargando datos...</Text>; // o un spinner
     }
 
 
@@ -33,8 +38,8 @@ const GastosModal = () => {
             mostrarMensaje(
                 "No hay gastos para imprimir",
                 "danger", // Tipo de mensaje (advertencia o error)
-                '#FFEBEE', // Fondo rojo muy claro (suave)
-                '#D32F2F', // Color de texto rojo oscuro
+                "rgba(255, 186, 186, 1)", // Fondo rojo muy claro (suave)
+                '#D8000C', // Color de texto rojo oscuro
                 500 // Duración en ms
             );
 
@@ -165,16 +170,11 @@ const GastosModal = () => {
     };
 
 
-    // Función para eliminar un gasto
-    const eliminarGasto = (id) => {
-        setHistorialGastos(historialGastos.filter(gasto => gasto.id !== id));
-    };
-
     return (
-        <View className="flex-1 p-4">
+        <ScrollView className="flex-1 p-4">
 
             <View className="flex-row justify-between items-center">
-                <Text className="text-xl font-bold mb-4">Registar Gastos Pendiantes</Text>
+                <Text className="text-2xl font-bold mb-4">Registar Ultimas Acciones</Text>
 
                 <TouchableOpacity onPress={imprimirGastos} className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center">
                     <AntDesign name="printer" size={24} color="white" />
@@ -182,18 +182,37 @@ const GastosModal = () => {
 
             </View>
 
+            <View className="mt-4 mb-2">
+                <Text className="text-xl text-gray-500 font-bold mb-4">Tipo de Transacción</Text>
+                <RadioButton.Group
+                    onValueChange={newValue => settipoTransaccion(newValue)}
+                    value={tipoTransaccion}
+                >
+                    <View className="flex-row gap-10">
+                        <View className="flex-row items-center">
+                            <RadioButton value="gasto" />
+                            <Text>Gasto</Text>
+                        </View>
+                        <View className="flex-row items-center">
+                            <RadioButton value="ingreso" />
+                            <Text>Ingreso</Text>
+                        </View>
+                    </View>
+                </RadioButton.Group>
+            </View>
+
             <View>
-                <Text className="text-lg font-semibold">Nombre del Gasto</Text>
-                <TextInput className="bg-white p-4 px-4 mt-1 border border-gray-200 rounded-lg"
+                <Text className="text-xl text-gray-500  font-bold mb-4">Nombre del Gasto o Ingreso</Text>
+                <TextInput className="bg-white p-4 px-4  border border-gray-200 rounded-lg"
                     placeholder="Ej. Cena en restaurante"
                     value={nombreGasto}
                     onChangeText={setNombreGasto}
                 />
             </View>
 
-            <View style={{ marginTop: 10 }}>
-                <Text className="text-lg font-semibold">Monto</Text></View>
-            <View style={{ marginTop: 10 }}>
+            <View style={{ marginTop: 13 }}>
+                <Text className="text-xl text-gray-500 font-bold">Monto</Text></View>
+            <View style={{ marginTop: 13 }}>
                 <TextInput className="bg-white p-4 px-4 border border-gray-200 rounded-lg"
                     placeholder="$0.00"
                     keyboardType="numeric"
@@ -202,8 +221,8 @@ const GastosModal = () => {
                 />
             </View>
 
-            <View style={{ marginTop: 10 }}>
-                <Text className="text-lg font-semibold">Categoría</Text>
+            <View style={{ marginTop: 13 }}>
+                <Text className="text-xl text-gray-500 font-bold mb-4">Categoría</Text>
                 <Select
                     items={categorias.map((cat) => ({
                         label: cat.nombre,     // ajusta al campo real
@@ -214,8 +233,8 @@ const GastosModal = () => {
                 />
             </View>
 
-            <View style={{ marginTop: 10 }}>
-                <Text className="text-lg font-semibold">Tipo de Pago</Text>
+            <View style={{ marginTop: 13 }}>
+                <Text className="text-xl text-gray-500 font-bold mb-4">Tipo de Pago</Text>
                 <Select
                     items={cuentas.map((cuenta) => ({
                         label: cuenta.nombre,       // ajusta a tus datos reales
@@ -227,43 +246,25 @@ const GastosModal = () => {
             </View>
 
 
-            <TouchableOpacity onPress={agregarGasto} style={{ backgroundColor: "#5A8FCA", padding: 10, marginTop: 20, borderRadius: 5 }}>
-                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold" }}>Agregar gasto</Text>
+            <TouchableOpacity onPress={agregarGasto} style={{ backgroundColor: "#5A8FCA", padding: 13, marginTop: 20, borderRadius: 5 }}>
+                <Text style={{ color: "white", textAlign: "center", fontWeight: "bold", fontSize: 17 }}>Agregar gasto</Text>
             </TouchableOpacity>
 
-            <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 20 }}>Historial de Gastos Diarios</Text>
-            {historialGastos.length === 0 ? (
-                <SkeletonLoader /> 
-            )
-                :
-                (
-                    <FlatList
-                        data={historialGastos}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <View style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                padding: 10,
-                                backgroundColor: "#f9f9f9",
-                                marginTop: 5,
-                                borderRadius: 5
-                            }}>
-                                <View>
-                                    <Text style={{ fontWeight: "bold" }}>{item.nombre}</Text>
-                                    <Text>${item.monto} - {item.categorias} ({item.cuentas})</Text>
-                                </View>
-                                <TouchableOpacity onPress={() => eliminarGasto(item.id)}>
-                                    <AntDesign name="delete" size={24} color="red" />
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    />
+            <View className="mt-4">
+
+                {loadingTop ? (
+                    <ActivityIndicator size="large" color="#5A8FCA" />
+                ) : errorTop ? (
+                    <Text className="text-center text-red-500">{errorTop}</Text>
+                ) : (
+                    <OrdenList data={datosTop} />
                 )}
+            </View>
+
 
             {/* tu navegación o contenido principal */}
             <FlashMessage position="top" />
-        </View>
+        </ScrollView>
     );
 };
 

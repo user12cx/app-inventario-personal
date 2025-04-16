@@ -100,11 +100,12 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT 
-        DATENAME(MONTH, t.fecha) + ' ' + CAST(YEAR(t.fecha) AS VARCHAR) AS mes, 
+        LEFT(DATENAME(MONTH, t.fecha), 3) + ' ' + CAST(YEAR(t.fecha) AS VARCHAR) AS mes, 
         SUM(t.monto) AS total_gasto
     FROM Transacciones t
+    INNER JOIN TipoTransaccion tt ON t.tipo_id = tt.id_tipo
     WHERE t.usuario_id = @usuario_id
-      AND t.tipo = 'gasto'
+      AND tt.nombre = 'gasto'  -- ← ahora se filtra por nombre del tipo
     GROUP BY YEAR(t.fecha), MONTH(t.fecha), DATENAME(MONTH, t.fecha)
     ORDER BY YEAR(t.fecha), MONTH(t.fecha);
 END;
@@ -231,6 +232,7 @@ BEGIN
     WHERE t.usuario_id = @usuario_id  
     ORDER BY t.idTransaccion DESC;  
 END
+GO 
 
 CREATE PROCEDURE [dbo].[getTransacciones]
     @usuario_id INT  -- Se elimina el valor por defecto NULL
@@ -252,4 +254,40 @@ BEGIN
     JOIN Cuentas cu ON t.cuenta_id = cu.idCuenta
     WHERE t.usuario_id = @usuario_id  -- Se mantiene la condición del usuario
     ORDER BY t.fecha DESC;  -- Se ordena por fecha de más reciente a más antigua
+END;
+GO
+
+CREATE PROCEDURE [dbo].[addTransaccion]
+    @descripcion VARCHAR(255),
+    @categoria_id INT,
+    @monto DECIMAL(10,2),
+    @tipo_id INT,
+    @cuenta_id INT,
+    @fecha DATETIME,
+    @usuario_id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar la transacción
+    INSERT INTO Transacciones (descripcion, categoria_id, monto, tipo_id, cuenta_id, fecha, usuario_id)
+    VALUES (@descripcion, @categoria_id, @monto, @tipo_id, @cuenta_id, @fecha, @usuario_id);
+
+    -- Obtener si el tipo es 'gasto' o 'ingreso'
+    DECLARE @nombreTipo VARCHAR(50);
+    SELECT @nombreTipo = nombre FROM TipoTransaccion WHERE id_tipo = @tipo_id;
+
+    -- Actualizar el saldo de la cuenta según el tipo
+    IF @nombreTipo = 'gasto'
+    BEGIN
+        UPDATE Cuentas
+        SET saldo = saldo - @monto
+        WHERE idCuenta = @cuenta_id;
+    END
+    ELSE IF @nombreTipo = 'ingreso'
+    BEGIN
+        UPDATE Cuentas
+        SET saldo = saldo + @monto
+        WHERE idCuenta = @cuenta_id;
+    END
 END;

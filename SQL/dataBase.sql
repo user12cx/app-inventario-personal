@@ -47,11 +47,17 @@ CREATE TABLE Transacciones (
 	descripcion VARCHAR(255) NOT NULL,
 	categoria_id INT,
 	monto DECIMAL(10,2) NOT NULL,
-	tipo VARCHAR(50) NOT NULL,
+	tipo_id INT NOT NULL,
 	cuenta_id INT,
 	fecha DATETIME NOT NULL,
 	usuario_id INT,
 	FOREIGN KEY (categoria_id) REFERENCES Categorias(idCategoria),
 	FOREIGN KEY (cuenta_id) REFERENCES Cuentas(idCuenta),
-	FOREIGN KEY (usuario_id) REFERENCES Usuarios(idUser)
+	FOREIGN KEY (usuario_id) REFERENCES Usuarios(idUser),
+	FOREIGN KEY (tipo_id) REFERENCES TipoTransaccion(id_tipo)
+);
+
+CREATE TABLE TipoTransaccion (
+    id_tipo INT IDENTITY (1,1) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
 );
