@@ -24,7 +24,6 @@ const Categorías = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [nombre, setNombre] = useState('');
-  const [tipo, setTipo] = useState('');
 
   const handleOpenSheet = () => {
     setShowModal(true);
@@ -39,7 +38,7 @@ const Categorías = () => {
 
 
   const handleGuardar = async () => {
-    const result = await agregarCategoria(nombre, tipo); // Esperamos la respuesta
+    const result = await agregarCategoria(nombre); // Esperamos la respuesta
     if (result.success) {
       showMessage({
         message: result.message || 'Categoría agregada con éxito.',
@@ -106,7 +105,7 @@ const Categorías = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#5A8FCA" />
         ) : error ? (
           <Text className="text-red-500 text-center mt-4">{`Error: ${error}`}</Text>
         ) : (
@@ -157,21 +156,14 @@ const Categorías = () => {
                 placeholder="Nombre"
                 value={nombre}
                 onChangeText={setNombre}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
-              />
-
-              <TextInput
-                placeholder="Tipo (Ingreso o Gasto)"
-                value={tipo}
-                onChangeText={setTipo}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded-lg px-3 p-4 mb-3"
               />
 
               <TouchableOpacity
-                className="bg-[#5A8FCA] py-3 rounded items-center"
+                className="bg-[#5A8FCA] py-3 rounded-lg items-center mt-6"
                 onPress={handleGuardar}
               >
-                <Text className="text-white font-bold">Guardar</Text>
+                <Text className="text-white font-bold text-lg">Guardar</Text>
               </TouchableOpacity>
 
               {message && (

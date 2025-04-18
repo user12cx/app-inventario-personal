@@ -4,7 +4,6 @@ import { instance } from "./api";
 export interface Categoria {
   idCategoria: number;
   nombre: string;
-  tipo: string;
 }
 
 export interface GetCategoriasResponse {
@@ -38,16 +37,14 @@ export const gestionarCategoria = async (
   accion: 1 | 2 | 3, // 1 = Agregar, 2 = Editar, 3 = Eliminar
   usuario_id: number,
   categoria_id?: number,
-  nombre?: string,
-  tipo?: string
+  nombre?: string
 ): Promise<GestionarCategoriaResponse> => {
   try {
     const payload = {
       accion,
       usuario_id,
       categoria_id,
-      nombre,
-      tipo,
+      nombre
     };
 
     const response = await instance.post<GestionarCategoriaResponse>(

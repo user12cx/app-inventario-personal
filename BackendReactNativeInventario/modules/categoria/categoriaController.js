@@ -22,7 +22,7 @@ const getCategoria = async (req, res) => {
 const gestionarCategorias = async (req, res) => {
     try {
         const pool = await poolPromise;
-        const { accion, usuario_id, categoria_id, nombre,tipo } = req.body;
+        const { accion, usuario_id, categoria_id, nombre } = req.body;
 
         if (!usuario_id) {
             return res.status(400).send("El usuario_id es requerido");
@@ -38,7 +38,6 @@ const gestionarCategorias = async (req, res) => {
             .input("usuario_id", sql.Int, usuario_id)
             .input("categoria_id", sql.Int, categoria_id || null)
             .input("nombre", sql.NVarChar, nombre || null)
-            .input("tipo", sql.NVarChar, tipo || null)
             .execute("gestionarCategorias");
 
         // Si el resultado tiene un mensaje de error, lo manejamos aquí

@@ -74,7 +74,7 @@ export const useHookCategorias = () => {
     console.log(`Editar categoría con ID: ${categoriaId}`);
   };
 
-  const agregarCategoria = async (nombre: string, tipo: string) => {
+  const agregarCategoria = async (nombre: string) => {
     try {
       const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
       if (!usuarioIdStr) {
@@ -83,7 +83,7 @@ export const useHookCategorias = () => {
       }
 
       const usuario_id = parseInt(usuarioIdStr, 10);
-      const result = await gestionarCategoria(1, usuario_id, undefined, nombre, tipo);
+      const result = await gestionarCategoria(1, usuario_id, undefined, nombre);
 
       if (result.success) {
         setMessage(result.message || "Categoría agregada con éxito.");
