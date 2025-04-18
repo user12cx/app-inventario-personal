@@ -14,14 +14,15 @@ const AcercaDe = () => {
 
       {/* Descripción */}
       <Text className="text-gray-700 text-base text-justify mb-5">
-        Esta aplicación te permite gestionar tu inventario personal de manera sencilla y eficiente.
-        Registra, edita y elimina productos fácilmente para llevar un control detallado de tus pertenencias.
+        Esta aplicación te permite registar tus cuentas y gastos de manera sencilla y rápida. Puedes llevar
+        el Control de tus gastos mensuales, así como también crear categorías y metas de ahorro.
+        <Text className="font-semibold"> ¡Comienza a gestionar tu dinero de manera efectiva!</Text>
       </Text>
 
       {/* Información del desarrollador */}
       <View className="mb-5">
         <Text className="text-xl font-semibold text-[#5A8FCA] mb-2">Desarrollador</Text>
-        <Text className="text-gray-700">Flexing Code</Text>
+        <Text className="text-gray-700">Ivan Chimbo Bautista  -  <Text className=" text-[#5A8FCA] text-b"> Developer Full Stark </Text> </Text>
       </View>
 
       <Text className="text-xl font-semibold text-[#5A8FCA] mb-2">Contacto</Text>
@@ -46,7 +47,7 @@ const AcercaDe = () => {
       {/* Política de privacidad */}
       <View className="mb-5">
         <Text className="text-xl font-semibold text-[#5A8FCA] mb-2">Política de Privacidad</Text>
-        <TouchableOpacity onPress={() => Linking.openURL("https://tuapp.com/politica")}>
+        <TouchableOpacity onPress={() => Linking.openURL("https://www.iubenda.com/es/help/39451-politica-de-privacidad-para-apps-de-android")}>
           <Text className="text-blue-500 underline">Ver detalles</Text>
         </TouchableOpacity>
       </View>

@@ -56,7 +56,7 @@ const HomeScreen = () => {
   const { datosTop, loadingTop, errorTop } = usehookTransacciones();
 
   // Usamos el hook de gastos, pasando el usuario_id
-  const { loading: loadingGastos, chartData, error: errorGastos } = usehookGastos("1");
+  const { loading: loadingGastos, chartData, error: errorGastos } = usehookGastos('usuario_id');
 
   const handleHistory = () => {
     setModalVisible(true);
@@ -76,12 +76,13 @@ const HomeScreen = () => {
 
         {/* Accesos rápidos */}
         <View className="flex-row py-2 px-2 justify-evenly">
-          <CustomCardHome fondo="primary" title="Saldo" icons="table" iconSize={30} iconColor="#747bfc" ruta="saldo" />
-          <CustomCardHome fondo="infoBold" title="Cuentas" icons="creditcard" iconSize={30} iconColor="#ff9c2a" ruta="targetas" />
-          <CustomCardHome fondo="violet" title="Metas" icons="rocket1" iconSize={30} iconColor="#efc7ea" ruta="objetivoAhorro" />
-          <CustomCardHome fondo="succes" title="Categorias" icons="appstore1" iconSize={30} iconColor="#9E9E9E" ruta="categorias" />
           <CustomCardHome fondo="buy" title="Gastos" icons="shoppingcart" iconSize={25} iconColor="#008000" ruta="gastos" />
-          <CustomCardHome fondo="infoRigth" title="Ajustes" icons="solution1" iconSize={25} iconColor="#5A8FCA" ruta="ajustes" />
+          <CustomCardHome fondo="infoBold" title="Cuentas" icons="creditcard" iconSize={25} iconColor="#ff9c2a" ruta="targetas" />
+          <CustomCardHome fondo="succes" title="Categorias" icons="appstore1" iconSize={25} iconColor="#9E9E9E" ruta="categorias" />
+          <CustomCardHome fondo="violet" title="Metas" icons="rocket1" iconSize={25} iconColor="#efc7ea" ruta="objetivoAhorro" />
+          <CustomCardHome fondo="primary" title="Ajustes" icons="solution1" iconSize={25} iconColor="#747bfa" ruta="ajustes" />
+          <CustomCardHome fondo="infoRigth" title="App" icons="info" iconSize={25} iconColor="#5A8FCA" ruta="acercade" />
+
         </View>
 
         {/* Gráfico */}
@@ -152,7 +153,7 @@ const HomeScreen = () => {
           <Text className="text-amber-500 text-xl" onPress={handleHistory}>
             Ver Más +
           </Text>
-          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)}/>
+          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} />
         </View>
       </View>
     </ScrollView>

@@ -45,16 +45,6 @@ export default function Layout() {
             )
           }}
         />
-        <Drawer.Screen
-          name="saldo/index"
-          options={{
-            drawerLabel: 'Saldo',
-            title: 'Saldo del Mes',
-            drawerIcon: ({ color, size }) => (
-              <Ionicons name="cash-outline" size={size} color={color} />
-            )
-          }}
-        />
 
         <Drawer.Screen
           name="categorias/index"
@@ -113,8 +103,8 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="apps-outline" size={size} color={color} />
             ),
-            drawerLabel: 'Acerca De  ?',
-            title: 'App',
+            drawerLabel: 'App',
+            title: 'Acerca de la App',
           }}
         />
 
