@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons'
 
 interface PropsAjustes {
     title: string;
-    icons: string;
+    icons: any;
     iconSize?: number;
 }
 

@@ -24,13 +24,13 @@ interface Objecttype {
   nombre: string;
   monto_objetivo: number;
   monto_actual: number;
-  fecha_limite: string;
+  fecha_limite: string
 }
 
 const ObjetivoAhorro = () => {
 
   const [datos, setdatos] = useState<Objecttype[]>([]);
-  const [error, seterror] = useState(null);
+  const [error, seterror] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -47,8 +47,8 @@ const ObjetivoAhorro = () => {
       setLoading(true);
       const response = await getObjetivosAhorro();
       setdatos(response.result);
-    } catch (err) {
-      seterror(err);
+    } catch (error) {
+      seterror(error);
     } finally {
       setLoading(false);
     }
