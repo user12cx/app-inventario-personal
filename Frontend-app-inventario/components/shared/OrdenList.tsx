@@ -13,7 +13,7 @@ const Item = ({ descripcion, categoria, cuenta, fecha, monto, tipo }: OrdenItem)
 
         {/* Información */}
         <View className="flex-1">
-            <Text className="text-xl font-bold text-gray-800">{descripcion}</Text>
+            <Text className="text-xl font-bold text-gray-800 dark:text-gray-300">{descripcion}</Text>
             <Text className="text-gray-500 text-base">
                 {categoria} - {cuenta} - {new Date(fecha).toLocaleDateString()} {/* Formatear fecha */}
             </Text>

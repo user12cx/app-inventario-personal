@@ -20,7 +20,7 @@ const TerminosYCondiciones = ({ visible, onClose, onAccept }: Props) => {
   const allChecked = checks.every((item) => item);
 
   return (
-    <Modal visible={visible} transparent animationType="fade">
+    <Modal visible={visible} transparent animationType="fade" >
       <View className="absolute top-20 left-6 right-6 bg-white p-6 rounded-xl shadow-xl border border-gray-300">
         {/* Título */}
         <View className="items-center mb-6">

@@ -1,5 +1,5 @@
 import React, { useRef, useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, Pressable, FlatList, KeyboardAvoidingView, ScrollView, Platform, RefreshControl } from 'react-native';
+import { View, Text, TouchableOpacity, Pressable, FlatList, KeyboardAvoidingView, ScrollView, Platform, RefreshControl, useColorScheme } from 'react-native';
 import BottomSheet, { BottomSheetView, TouchableWithoutFeedback } from '@gorhom/bottom-sheet';
 import { usehookCuentas } from '@/hook/usehookCuentas';
 import { TextInput } from 'react-native';
@@ -7,9 +7,12 @@ import { AntDesign } from '@expo/vector-icons';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 const Index = () => {
+  const isDarkMode = useColorScheme() === "dark";
 
   const [showModal, setShowModal] = useState(false);
+
   const bottomSheetRef = useRef<BottomSheet>(null);
+
   const [refreshingActive, setRefreshingActive] = useState(false);
   const { datos } = usehookCuentas();
 
@@ -29,6 +32,7 @@ const Index = () => {
     setNombre('')
     setMonto('')
   }
+
   const handleCloseModalCuentas = () => {
     setShowModal(false);
     bottomSheetRef.current?.close();
@@ -66,10 +70,10 @@ const Index = () => {
     <>
 
       {/* Contenido principal */}
-      <View className='flex-1'>
+      <View className='flex-1  dark:bg-slate-900'>
 
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-xl font-bold mb-4">Tarjetas Disponibles</Text>
+          <Text className="text-xl font-bold mb-4  dark:text-white">Tarjetas Disponibles</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
             onPress={handleOpenSheetCuentas}
@@ -83,11 +87,11 @@ const Index = () => {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={handleOpenSheetCuentas}
-              className="p-4 mb-2 shadow-xl m-2 bg-gray-100">
+              className="p-4 mb-2 shadow-xl m-2 bg-gray-100  dark:bg-slate-800">
 
               <View className="flex-row justify-between">
-                <Text className="text-xl">{item.nombre}</Text>
-                <Text className="text-green-700 text-base">{`$ ${item.saldo}`}</Text>
+                <Text className="text-xl dark:text-white">{item.nombre}</Text>
+                <Text className="text-green-500 text-base">{`$ ${item.saldo}`}</Text>
               </View>
               <Text className="text-amber-500">{item.estado}</Text>
             </TouchableOpacity>
@@ -113,6 +117,11 @@ const Index = () => {
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         onClose={() => setShowModal(false)} // importante para que se quite el overlay
+        backgroundStyle={{
+          backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}
       >
         <BottomSheetView style={{ flex: 1 }}>
           <KeyboardAvoidingView
@@ -120,13 +129,13 @@ const Index = () => {
             style={{ flex: 1 }}
           >
             <ScrollView contentContainerStyle={{ padding: 16 }}>
-              <Text className="text-lg font-bold mb-4 text-center">Agregar Tarjeta</Text>
+              <Text className="text-lg font-bold mb-4 text-center dark:text-white">Agregar Tarjeta</Text>
 
               <TextInput
                 placeholder="Nombre de la tarjeta"
                 value={nombre}
                 onChangeText={setNombre}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
 
               <TextInput
@@ -134,14 +143,14 @@ const Index = () => {
                 value={monto}
                 onChangeText={setMonto}
                 keyboardType="numeric"
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
 
               <TextInput
                 placeholder="Estado"
                 value={estado}
                 onChangeText={setEstado}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-4"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-4 dark:text-white"
               />
 
               <TouchableOpacity

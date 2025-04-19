@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -22,7 +22,7 @@ const AjuesteScrenn = () => {
   });
 
   return (
- <Formik
+    <Formik
       initialValues={{
         email: "",
         password: "",
@@ -37,13 +37,13 @@ const AjuesteScrenn = () => {
         Alert.alert("Registro Exitoso", JSON.stringify(values, null, 2));
       }}
     >
-      {({ handleChange, handleBlur, values, errors, touched }) => (
-        <View className="flex-1 bg-white p-5 justify-center">
-          <Text className="text-2xl font-bold text-center mb-5">Registro</Text>
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+        <View className="flex-1 bg-white dark:bg-slate-800 p-5 justify-center">
+          <Text className="text-2xl font-bold text-center mb-5 text-gray-800 dark:text-white">Registro</Text>
 
           {/* Email */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Correo electrónico"
             keyboardType="email-address"
             value={values.email}
@@ -54,7 +54,7 @@ const AjuesteScrenn = () => {
 
           {/* Contraseña */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Contraseña"
             secureTextEntry
             value={values.password}
@@ -65,7 +65,7 @@ const AjuesteScrenn = () => {
 
           {/* Confirmar contraseña */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Confirmar contraseña"
             secureTextEntry
             value={values.confirmPassword}
@@ -78,7 +78,7 @@ const AjuesteScrenn = () => {
 
           {/* Nombre */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Nombre"
             value={values.firstName}
             onChangeText={handleChange("firstName")}
@@ -88,7 +88,7 @@ const AjuesteScrenn = () => {
 
           {/* Apellido */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Apellidos"
             value={values.lastName}
             onChangeText={handleChange("lastName")}
@@ -98,7 +98,7 @@ const AjuesteScrenn = () => {
 
           {/* Teléfono */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-2"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Teléfono"
             keyboardType="phone-pad"
             value={values.phone}
@@ -109,22 +109,22 @@ const AjuesteScrenn = () => {
 
           {/* Empresa */}
           <TextInput
-            className="border-b border-gray-300 py-2 text-lg mb-5"
+            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-5 text-gray-800 dark:text-white"
             placeholder="Empresa o lugar de trabajo"
             value={values.company}
             onChangeText={handleChange("company")}
             onBlur={handleBlur("company")}
           />
           <TouchableOpacity
-            className="bg-[#5A8FCA] py-3 rounded-lg"
             // onPress={handleSubmit}
+            className="bg-[#5A8FCA] dark:bg-[#3B82F6] py-3 rounded-lg"
           >
             <Text className="text-white text-center font-bold text-lg">Registrarse</Text>
           </TouchableOpacity>
         </View>
       )}
     </Formik>
-  )
-}
+  );
+};
 
-export default AjuesteScrenn
+export default AjuesteScrenn;

@@ -8,7 +8,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  useColorScheme
 } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomAhorro from '@/components/shared/CustomAhorro';
@@ -38,6 +39,8 @@ const ObjetivoAhorro = () => {
 
   const [nombre, setNombre] = useState('');
   const [meta, setMeta] = useState('');
+
+  const isDarkMode = useColorScheme() === "dark";
 
   const fetchData = async () => {
     try {
@@ -100,7 +103,7 @@ const ObjetivoAhorro = () => {
 
   return (
     <>
-      <ScrollView className="flex-1">
+      <ScrollView className="flex-1 dark:bg-slate-900">
 
         {showModal && (
           <TouchableWithoutFeedback onPress={handleCloseSheet}>
@@ -109,12 +112,12 @@ const ObjetivoAhorro = () => {
         )}
 
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-xl font-semibold mb-4">Metas Disponibles</Text>
+          <Text className="text-xl font-semibold mb-4 dark:text-white">Metas Disponibles</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
             onPress={handleOpenSheet}
           >
-            <AntDesign name="addfile" size={24} color="white" />  
+            <AntDesign name="addfile" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
@@ -141,6 +144,13 @@ const ObjetivoAhorro = () => {
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         onClose={() => setShowModal(false)}
+        backgroundStyle={{
+          backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}
+
+
       >
         <BottomSheetView style={{ flex: 1 }}>
           <KeyboardAvoidingView

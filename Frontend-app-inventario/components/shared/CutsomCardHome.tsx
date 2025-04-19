@@ -37,7 +37,7 @@ const CutsomCardHome = ({ title, icons, iconSize = 24, iconColor = "black", fond
       >
         <AntDesign className="font-bold" name={icons} size={iconSize} color={iconColor} />
       </View>
-      <Text className="text-center font-semibold text-[15px]">{title}</Text>
+      <Text className="text-center font-semibold text-[15px] dark:text-white">{title}</Text>
     </TouchableOpacity>
   );
 };

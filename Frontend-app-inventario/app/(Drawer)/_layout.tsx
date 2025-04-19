@@ -3,36 +3,40 @@ import 'react-native-reanimated';
 import { Drawer } from 'expo-router/drawer';
 import CustomDrawerContent from '@/components/shared/CustomDrawerContent'; // Importa tu componente personalizado
 import { Ionicons } from '@expo/vector-icons';
-import { StatusBar } from 'react-native'; // Importamos StatusBar
+import { StatusBar, useColorScheme } from 'react-native'; // Importamos StatusBar
 import "../../i18n";
 
 export default function Layout() {
-
+  const isDark = useColorScheme() === 'dark';
   return (
 
     <>
       {/* Cambia el color de la barra de estado */}
 
-      <StatusBar backgroundColor="#5A8FCA" barStyle="default" />
+      <StatusBar
+        backgroundColor={isDark ? "#0f172a" : "#5A8FCA"}
+        barStyle={isDark ? "light-content" : "dark-content"}
+      />
 
       <Drawer
-
-        drawerContent={CustomDrawerContent} // Personaliza el contenido del Drawer
+        drawerContent={CustomDrawerContent}
         screenOptions={{
           drawerLabelStyle: {
-            fontSize: 16, // Aumenta el tamaño del texto
-            color: "#000", // Texto en negro
-            fontWeight: "bold", // Opcional para que resalte más
+            fontSize: 16,
+            color: isDark ? "#fff" : "#000",
+            fontWeight: "bold",
           },
-
           headerStyle: {
-            backgroundColor: "#5A8FCA", // Color de los encabezados
+            backgroundColor: isDark ? "#0f172a" : "#5A8FCA",
           },
-          headerTintColor: "#fff", // Color del texto del encabezado
+          drawerStyle: {
+            backgroundColor: isDark ? "#0f172a" : "#fff", // <-- AQUÍ CAMBIA EL FONDO DEL DRAWER
+          },
+          headerTintColor: isDark ? "#fff" : "#fff", // Puedes ajustar si quieres un cambio
           headerShadowVisible: false,
-          headerShown: true, // Muestra el encabezado
-          drawerPosition: 'left', // Posición del Drawer (izquierda o derecha)
-          drawerType: "front", // Hace que el Drawer cubra toda la pantalla sin margen
+          headerShown: true,
+          drawerPosition: 'left',
+          drawerType: "front",
         }}
       >
         <Drawer.Screen

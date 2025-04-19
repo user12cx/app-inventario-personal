@@ -1,16 +1,20 @@
-import { View, Text, ViewProps } from 'react-native'
-import React from 'react'
+import { View, ViewProps } from 'react-native';
+import React from 'react';
 
-interface Prop extends ViewProps{
-    className?: string
-
+interface Props extends ViewProps {
+  className?: string;
+  darkClassName?: string; // Añadir soporte para clases oscuras personalizadas
 }
-const ThemeView = ({children}: Prop) => {
+
+const ThemeView = ({ children, className = '', darkClassName = '', ...rest }: Props) => {
   return (
-    <View className='bg-white dark:bg-slate-800'>
+    <View
+      className={`${className} ${darkClassName ? darkClassName : 'bg-white dark:bg-slate-900'}`}
+      {...rest}
+    >
       {children}
     </View>
-  )
-}
+  );
+};
 
-export default ThemeView
+export default ThemeView;

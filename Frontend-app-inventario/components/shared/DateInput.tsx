@@ -15,7 +15,7 @@ const DateInput = ({ fecha, setFecha, usarFechaActual, setUsarFechaActual }) => 
     return (
         <View style={{ marginTop: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <Text className="text-xl text-gray-500 font-bold">Usar Fecha Actual</Text>
+                <Text className="text-xl text-gray-500 font-bold dark:text-white">Usar Fecha Actual</Text>
                 <Switch value={usarFechaActual} onValueChange={setUsarFechaActual} />
             </View>
 
@@ -28,7 +28,8 @@ const DateInput = ({ fecha, setFecha, usarFechaActual, setUsarFechaActual }) => 
                 <TextInput
                     editable={false}
                     value={fecha.toLocaleDateString()}
-                    className="bg-white p-4 border border-gray-200 rounded-lg text-gray-700"
+                    className="bg-white p-4 border border-gray-200 rounded-lg text-gray-700 dark:bg-slate-800 dark:text-white dark:border-gray-600"
+                    style={{ color: usarFechaActual ? "#ccc" : "#000" }}
                     placeholder="Selecciona una fecha"
                 />
             </TouchableOpacity>

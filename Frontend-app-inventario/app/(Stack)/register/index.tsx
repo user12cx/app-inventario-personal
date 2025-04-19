@@ -41,7 +41,7 @@ const RegisterScreen = () => {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
-          <View className="flex-1 bg-[#ECF3FB]">
+          <View className="flex-1 bg-[#ECF3FB]zz">
             <Image source={require("../../../assets/images/autentificacionlogin.png")} className="w-full" resizeMode="contain" />
           </View>
 

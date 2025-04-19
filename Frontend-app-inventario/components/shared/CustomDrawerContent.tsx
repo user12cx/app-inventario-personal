@@ -6,33 +6,29 @@ import { Ionicons } from '@expo/vector-icons';
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   return (
     <DrawerContentScrollView {...props} scrollEnabled={false}>
-      <View className="bg-[#5A8FCA] p-4 mb-10">
-        
+      <View className="p-4 mb-10">
+
         {/* Contenedor de imagen y modo oscuro */}
         <View className="flex-row justify-between items-center">
           {/* Imagen de perfil */}
           <Image
-            source={require('../../assets/images/autentificacionlogin.png')}
+            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2d9T79ZnmajOYdlgWi5X_es7M8GFk_aeO2Q&s" }}
             className="w-20 h-20 rounded-full border-white"
           />
-          
-          {/* Botón de modo oscuro */}
-          <TouchableOpacity>
-            <Ionicons name="moon-outline" size={24} color="white" />
-          </TouchableOpacity>
+
         </View>
 
         {/* Contenedor del nombre y desplegar opciones */}
         <View className="flex-row justify-between items-center mt-2">
-          <Text className="text-white text-xl font-bold">Ivan Bautista</Text>
-          <TouchableOpacity>
-            <Ionicons name="chevron-down-outline" size={24} color="white" />
+          <Text className="text-black text-xl font-bold dark:text-white">Ivan Bautista</Text>
+          <TouchableOpacity onPress={() => props.navigation.closeDrawer()} className="bg-[#5A8FCA] p-2 rounded-full">
+            <Ionicons name="close" size={24} color="white" />
           </TouchableOpacity>
         </View>
 
         {/* Contenedor del número de teléfono */}
         <View className="mt-1">
-          <Text className="text-white text-xl opacity-80">+51 992 036 274</Text>
+          <Text className="text-black text-sm text-sans-serif opacity-80  dark:text-[#5A8FCA]">DEVELOPER FULL STARK</Text>
         </View>
       </View>
 

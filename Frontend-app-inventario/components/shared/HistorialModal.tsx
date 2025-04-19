@@ -113,7 +113,7 @@ const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuar
 
     return (
         <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
-            <View className="flex-1 bg-white">
+            <View className="flex-1 bg-white dark:bg-slate-900">
                 {/* Encabezado con botón de cierre y botón de impresión */}
                 <View className="bg-[#5A8FCA] h-[60px] flex-row p-5 justify-between items-center">
                     <TouchableOpacity onPress={onClose} className="flex-row gap-3">
@@ -141,15 +141,15 @@ const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuar
                         data={transacciones}
                         keyExtractor={(item) => item.idTransaccion.toString()}
                         renderItem={({ item }) => (
-                            <View className="flex-row items-center p-4 border-b border-gray-300">
+                            <View className="flex-row items-center p-4 dark:border-gray-700">
                                 {/* Icono */}
-                                <View className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4">
+                                <View className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4 dark:bg-gray-700">
                                     <FontAwesome name="shopping-cart" size={20} color={item.tipo === "Gasto" ? "#FF3B30" : "#34D399"} />
                                 </View>
 
                                 {/* Información */}
                                 <View className="flex-1">
-                                    <Text className="text-xl font-bold text-gray-800">{item.descripcion}</Text>
+                                    <Text className="text-xl font-bold text-gray-800 dark:text-gray-300">{item.descripcion}</Text>
                                     <Text className="text-gray-500 text-base">
                                         {item.categoria} | {item.tipo} | {new Date(item.fecha).toLocaleDateString()}
                                     </Text>

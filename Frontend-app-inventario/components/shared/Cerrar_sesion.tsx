@@ -30,13 +30,12 @@ const Cerra_Sesion = () => {
     };
 
     return (
-        <View className="bg-white p-4 mt-4 rounded-lg shadow mx-4">
-
+        <View className="bg-white dark:bg-slate-800 p-4 mt-4 rounded-lg shadow mx-4">
             <TouchableOpacity
                 onPress={handleCerrarSesion}
                 className="flex-row items-center justify-between"
             >
-                <Text className="text-blue-500 text-sm">Cerrar Sesión</Text>
+                <Text className="text-blue-500 dark:text-blue-300 text-sm">Cerrar Sesión</Text>
                 <AntDesign
                     name={"export2"}
                     size={14}
@@ -44,6 +43,7 @@ const Cerra_Sesion = () => {
                 />
             </TouchableOpacity>
         </View>
+
     );
 };
 

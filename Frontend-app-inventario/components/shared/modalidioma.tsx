@@ -19,7 +19,7 @@ const LanguageModal = ({ visible, onClose }) => {
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
-            <View className="flex-1 bg-white">
+            <View className="flex-1 bg-white dark:bg-slate-900">
                 {/* Encabezado */}
                 <View className="bg-[#5A8FCA] h-[60px] flex-row p-5 justify-between items-center">
                     <TouchableOpacity onPress={onClose} className="flex-row gap-3">
@@ -27,21 +27,23 @@ const LanguageModal = ({ visible, onClose }) => {
                         <Text className="text-white text-2xl font-semibold">Lenguaje</Text>
                     </TouchableOpacity>
                 </View>
-                <View className="m-4 ">
-                    <Text className="text-gray-600 font-semibold text-lg">📌 ¿Sabías que...?</Text>
-                    <Text className="text-gray-500 mt-2">
+
+                <View className="m-4">
+                    <Text className="text-gray-600 dark:text-gray-400 font-semibold text-lg">📌 ¿Sabías que...?</Text>
+                    <Text className="text-gray-500 dark:text-gray-300 mt-2">
                         - Durante la Primera Guerra Mundial, el fútbol logró una tregua temporal entre soldados enemigos en 1914.
                         Se cree que los partidos se jugaron sin importar el idioma que hablaban. ⚽✨
                     </Text>
-                    <Text className="text-gray-500 mt-2">
+                    <Text className="text-gray-500 dark:text-gray-300 mt-2">
                         - El idioma más hablado en el mundo es el inglés, pero el chino mandarín tiene más hablantes nativos. 🗣️
                     </Text>
-                    <Text className="text-gray-500 mt-2">
+                    <Text className="text-gray-500 dark:text-gray-300 mt-2">
                         - El euskera, hablado en el País Vasco, es uno de los idiomas más antiguos de Europa y no está relacionado con ningún otro idioma conocido. 🏔️
                     </Text>
                 </View>
+
                 {/* Título */}
-                <Text className="text-blue-500 font-bold m-4">Selecciona un idioma</Text>
+                <Text className="text-blue-500 dark:text-blue-300 font-bold m-4">Selecciona un idioma</Text>
 
                 {/* Lista de idiomas con los radio buttons alineados */}
                 <FlatList
@@ -49,7 +51,7 @@ const LanguageModal = ({ visible, onClose }) => {
                     keyExtractor={(item) => item.code}
                     renderItem={({ item }) => (
                         <TouchableOpacity
-                            className="flex-row items-center gap-6 p-4 "
+                            className="flex-row items-center gap-6 p-4"
                             onPress={() => setSelectedLanguage(item.code)}
                         >
                             <Ionicons
@@ -57,12 +59,13 @@ const LanguageModal = ({ visible, onClose }) => {
                                 size={24}
                                 color={selectedLanguage === item.code ? "#5A8FCA" : "gray"}
                             />
-                            <Text className="text-lg">{item.name}</Text>
+                            <Text className="text-lg dark:text-white">{item.name}</Text>
                         </TouchableOpacity>
                     )}
                 />
             </View>
         </Modal>
+
     );
 };
 

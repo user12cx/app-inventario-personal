@@ -1,22 +1,27 @@
-import RNPickerSelect, {
-  PickerSelectProps,
-  PickerStyle,
-} from "react-native-picker-select";
-import tailwind from "twrnc";
+import { useColorScheme, Platform } from "react-native";
+import RNPickerSelect, { PickerSelectProps, PickerStyle } from "react-native-picker-select";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Platform } from "react-native";
+import tailwind from "twrnc";
 
 /**
- * React Native select component built with Tailwind CSS
+ * React Native select component built with Tailwind CSS y soporte para modo oscuro
  */
 export const Select = ({ style, Icon, ...props }: PickerSelectProps) => {
-  const defaultInputStyle = tailwind`w-full flex flex-row items-center bg-white border border-neutral-200 h-12 pl-4 pr-12 rounded-lg`;
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
+  const baseStyle = tailwind.style(
+    "w-full flex flex-row items-center h-12 pl-4 pr-12 rounded-lg",
+    isDark
+      ? "bg-slate-800 text-white border-gray-600"
+      : "bg-white text-black border-neutral-200"
+  );
 
   const combinedStyle: PickerStyle = {
-    inputIOS: defaultInputStyle,
-    inputAndroid: defaultInputStyle,
-    inputWeb: tailwind`w-full h-12 rounded-lg`, // TODO: improve web styling
-    iconContainer: tailwind`flex items-center justify-center h-12 w-12`,
+    inputIOS: baseStyle,
+    inputAndroid: baseStyle,
+    inputWeb: tailwind.style("w-full h-12 rounded-lg"),
+    iconContainer: tailwind.style("flex items-center justify-center h-12 w-12"),
     ...style,
   };
 
@@ -36,7 +41,7 @@ export const Select = ({ style, Icon, ...props }: PickerSelectProps) => {
           <Ionicons
             name="chevron-down"
             size={18}
-            color={tailwind.color("text-neutral-950")}
+            color={isDark ? "#fff" : "#000"} // Cambia el color del ícono según el tema
           />
         );
       }}

@@ -30,15 +30,15 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
     };
 
     return (
-        <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white">
+        <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white dark:bg-slate-800 dark:border-gray-600">
             <Text className="text-2xl font-bold font-sans text-[#5A8FCA]">{title}</Text>
 
             <View className='flex-row gap-3'>
                 <View className='w-[350px]'>
                     <View className="mt-2 flex-row justify-between gap-1">
-                        <Text className="text-gray-600 text-base font-sans">OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text></Text>
-                        <Text className="text-gray-600 text-base font-sans">META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text></Text>
-                        <Text className="text-gray-600 text-base font-sans">LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text></Text>
                     </View>
 
                     <View className="mt-2">
@@ -61,12 +61,12 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
 
                     <View >
                         {mostrarInput && (
-                            <View className="gap-4 flex-row">
+                            <View className="gap-4 flex-row mb-2 mt-4">
                                 <TextInput
                                     placeholder="Escribe aquí..."
                                     value={texto}
                                     onChangeText={setTexto}
-                                    className="border border-[#5A8FCA] rounded px-2 py-1 w-[220px]"
+                                    className="border border-[#5A8FCA] rounded px-2 py-1 w-[220px] dark:bg-slate-800 dark:text-white"
                                     keyboardType="numeric"
                                 />
 

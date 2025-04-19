@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 interface Categoria {
   idCategoria: number;
-  nombre: string
+  nombre: string;
 }
 
 interface ListCategoriasProps {
@@ -18,10 +18,10 @@ const ListCategorias: React.FC<ListCategoriasProps> = ({ categorias, handleElimi
       {categorias.map((item) => (
         <View
           key={item.idCategoria.toString()}
-          className="bg-gray-100 p-4 mb-2 flex-row items-center justify-between shadow-xl rounded-md"
+          className="bg-gray-100 dark:bg-slate-800 p-4 mb-2 flex-row items-center justify-between shadow-xl rounded-md"
         >
           <View className="flex-1">
-            <Text className="text-xl font-bold">{item.nombre}</Text>
+            <Text className="text-xl font-bold  dark:text-white">{item.nombre}</Text>
           </View>
 
           <View className="flex-row">

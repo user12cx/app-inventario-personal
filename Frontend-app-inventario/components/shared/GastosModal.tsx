@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView, useColorScheme } from "react-native";
 import { Select } from "../select";
 import { useHookCategorias } from "@/hook/usehookCategorias";
 import { usehookCuentas } from "@/hook/usehookCuentas";
@@ -86,28 +86,32 @@ const GastosModal = () => {
     setFecha(new Date());
   };
 
+  
   return (
-    <ScrollView className="flex-1 p-4">
+    <ScrollView className="flex-1 p-4 dark:bg-slate-900">
+
       <View className="mt-4 mb-2">
-        <Text className="text-xl text-gray-500 font-bold mb-4">Tipo de Transacción</Text>
+
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Tipo de Transacción</Text>
+
         <RadioButton.Group onValueChange={newValue => settipoTransaccion(newValue)} value={tipoTransaccion}>
           <View className="flex-row gap-10">
             <View className="flex-row items-center">
               <RadioButton value="gasto" />
-              <Text>Ingreso</Text>
+              <Text className="dark:text-white">Ingreso</Text>
             </View>
             <View className="flex-row items-center">
               <RadioButton value="ingreso" />
-              <Text>Gasto</Text>
+              <Text className="dark:text-white">Gasto</Text>
             </View>
           </View>
         </RadioButton.Group>
       </View>
 
       <View>
-        <Text className="text-xl text-gray-500 font-bold mb-4">Nombre del Gasto o Ingreso</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Nombre del Gasto o Ingreso</Text>
         <TextInput
-          className="bg-white p-4 px-4 border border-gray-200 rounded-lg"
+          className="bg-white p-4 px-4 border border-gray-200 rounded-lg dark:bg-slate-800 dark:text-white dark:border-gray-600"
           placeholder="Ej. Cena en restaurante"
           value={nombreGasto}
           onChangeText={setNombreGasto}
@@ -115,11 +119,11 @@ const GastosModal = () => {
       </View>
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold">Monto</Text>
+        <Text className="text-xl text-gray-500 font-bold dark:text-white">Monto</Text>
       </View>
       <View style={{ marginTop: 13 }}>
         <TextInput
-          className="bg-white p-4 px-4 border border-gray-200 rounded-lg"
+          className="bg-white p-4 px-4 border border-gray-200 rounded-lg dark:bg-slate-800 dark:text-white dark:border-gray-600"
           placeholder="$0.00"
           keyboardType="numeric"
           value={monto}
@@ -127,7 +131,7 @@ const GastosModal = () => {
         />
       </View>
 
-      <DateInput
+      <DateInput 
         fecha={fecha}
         setFecha={setFecha}
         usarFechaActual={usarFechaActual}
@@ -135,7 +139,7 @@ const GastosModal = () => {
       />
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold mb-4">Categoría</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white ">Categoría</Text>
         <Select
           items={categorias.map((cat) => ({ label: cat.nombre, value: cat.idCategoria }))}
           value={categoria}
@@ -144,11 +148,12 @@ const GastosModal = () => {
       </View>
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold mb-4">Tipo de Pago</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Tipo de Pago</Text>
         <Select
           items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
           value={tipoPago}
           onValueChange={setTipoPago}
+
         />
       </View>
 
