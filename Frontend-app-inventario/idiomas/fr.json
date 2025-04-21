@@ -1,0 +1,85 @@
+{
+  "language": {
+    "title": "Langue",
+    "selectLanguage": "Sélectionnez votre langue",
+    "main": "Navigation Principale",
+    "home": "Accueil",
+    "buy": "Dépenses",
+    "categorie": "Catégorie",
+    "met": "Objectifs",
+    "settings": "Paramètres",
+    "cuenta": "Comptes",
+    "app": "App",
+    "history_gastos": "Dépenses Mensuelles",
+    "history_target": "Comptes Disponibles",
+    "history_accion": "Dernières Actions",
+    "panel": "Tableau de Bord"
+  },
+  "about": {
+    "title": "Inventaire Personnel",
+    "version": "Version 1.0.0",
+    "description": "Cette application vous permet d'enregistrer vos comptes et vos dépenses de manière simple et rapide. Vous pouvez suivre vos dépenses mensuelles, ainsi que créer des catégories et des objectifs d’épargne.",
+    "callToAction": "Commencez à gérer votre argent efficacement !",
+    "developer": "Développeur",
+    "role": "Développeur Full Stack",
+    "contact": "Contact",
+    "whatsapp": "Discuter via WhatsApp",
+    "github": "Voir le code sur GitHub",
+    "privacyPolicy": "Politique de Confidentialité",
+    "viewDetails": "Voir les détails",
+    "rights": "Tous droits réservés."
+  },
+  "gastosModal": {
+    "tipoTransaccion": "Type de Transaction",
+    "ingreso": "Revenu",
+    "gasto": "Dépense",
+    "nombreGastoIngreso": "Nom de la Dépense ou du Revenu",
+    "nombrePlaceholder": "Ex. Dîner au restaurant",
+    "monto": "Montant",
+    "montoPlaceholder": "€0.00",
+    "categoria": "Catégorie",
+    "tipoPago": "Type de Paiement",
+    "agregarGasto": "Ajouter une dépense",
+    "cancelarAccion": "Annuler l'action",
+    "cargando": "Chargement des données...",
+    "todosObligatorios": "Tous les champs sont obligatoires",
+    "montoInvalido": "Le montant doit être supérieur à 1",
+    "usuarioNoEncontrado": "ID utilisateur non trouvé",
+    "agregadoCorrectamente": "Ajouté avec succès",
+    "errorAgregar": "Erreur lors de l'ajout de la transaction",
+    "errorInesperado": "Erreur inattendue"
+  },
+  "titles": {
+    "tarjetas_dis": "Cartes Disponibles",
+    "categorias_dis": "Catégories Disponibles",
+    "cuentas_dis": "Comptes Disponibles",
+    "metas_dis": "Objectifs Actuels",
+    "history": "Historique des Transactions",
+    "ver": "Voir Plus +",
+    "close": "Fermer",
+    "imprimir": "Imprimer",
+    "perfil_acconst": "Ajuster le Profil",
+    "perfil_cuenta": "Masquer le Profil",
+    "exit": "Déconnexion",
+    "cancelar": "Annuler",
+    "mesage_cancelar": "L'application et la session seront fermées. Êtes-vous sûr ?",
+    "registro": "S’inscrire",
+    "ok": "OK",
+    "cuenta": "Compte"
+  },
+  "perfil_atributes": {
+    "numero": "Appuyez pour changer le numéro de compte",
+    "user": "Nom d'utilisateur",
+    "description": "Ajoutez quelques mots sur vous"
+  },
+  "salir_app": {
+    "salir": "Quitter l'application",
+    "salir_mensaje": "Êtes-vous sûr de vouloir quitter l'application ?"
+  },
+  "seccion": {
+    "didYouKnow": "Saviez-vous...? ",
+    "fact1": "Pendant la Première Guerre mondiale, le football a obtenu une trêve temporaire entre des soldats ennemis en 1914.",
+    "fact2": "La langue la plus parlée dans le monde est l'anglais, mais le mandarin a plus de locuteurs natifs.",
+    "fact3": "Le basque est l'une des langues les plus anciennes d'Europe et n'est lié à aucune autre."
+  }
+}

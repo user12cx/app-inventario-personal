@@ -1,5 +1,85 @@
 {
-    "welcome": "¡Bienvenido!",
-    "change_language": "Cambiar idioma"
+  "language": {
+    "title": "Idioma",
+    "selectLanguage": "Selecciona tu Idioma",
+    "main": " Navegacion Principal",
+    "home": "Inicio",
+    "buy": "Gastos",
+    "categorie": "Categoria",
+    "met": "Metas",
+    "settings": "Ajustes",
+    "cuenta": "Cuentas",
+    "app": "App",
+    "history_gastos": "Gastos Mensuales",
+    "history_target": "Cuentas Disponibles",
+    "history_accion": "Ultimas Acciones",
+    "panel": "Panel de control"
+  },
+  "about": {
+    "title": "Inventario Personal",
+    "version": "Versión 1.0.0",
+    "description": "Esta aplicación te permite registar tus cuentas y gastos de manera sencilla y rápida. Puedes llevar el Control de tus gastos mensuales, así como también crear categorías y metas de ahorro.",
+    "callToAction": "¡Comienza a gestionar tu dinero de manera efectiva!",
+    "developer": "Desarrollador",
+    "role": "Developer Full Stark",
+    "contact": "Contacto",
+    "whatsapp": "Chatear por WhatsApp",
+    "github": "Ver código en GitHub",
+    "privacyPolicy": "Política de Privacidad",
+    "viewDetails": "Ver detalles",
+    "rights": "Todos los derechos reservados."
+  },
+  "gastosModal": {
+    "tipoTransaccion": "Tipo de Transacción",
+    "ingreso": "Ingreso",
+    "gasto": "Gasto",
+    "nombreGastoIngreso": "Nombre del Gasto o Ingreso",
+    "nombrePlaceholder": "Ej. Cena en restaurante",
+    "monto": "Monto",
+    "montoPlaceholder": "$0.00",
+    "categoria": "Categoría",
+    "tipoPago": "Tipo de Pago",
+    "agregarGasto": "Agregar gasto",
+    "cancelarAccion": "Cancelar Acción",
+    "cargando": "Cargando datos...",
+    "todosObligatorios": "Todos los campos son obligatorios",
+    "montoInvalido": "El monto debe ser mayor a 1",
+    "usuarioNoEncontrado": "No se encontró el ID del usuario",
+    "agregadoCorrectamente": "Agregado correctamente",
+    "errorAgregar": "Error al agregar transacción",
+    "errorInesperado": "Error inesperado"
+  },
+  "titles": {
+    "tarjetas_dis": "Tarjetas Disponibles",
+    "categorias_dis": "categorias Disponibles",
+    "cuentas_dis": "Cuentas Disponibles",
+    "metas_dis": "Metas Actuales",
+    "history": "Historial de Transacciónes",
+    "ver": "Ver Más +",
+    "close": "Cerrar",
+    "imprimir": "Imprimir",
+    "perfil_acconst": "Ajustar Perfil",
+    "perfil_cuenta": "Ocultar Perfil",
+    "exit": "Cerrar Sesión",
+    "cancelar": "Cancelar",
+    "mesage_cancelar": "Se cerraran la App y Sesion ¿Estas seguro?",
+    "registro": "Registro",
+    "ok": "ok",
+    "cuenta": "Cuenta"
+  },
+  "perfil_atributes": {
+    "numero": "Toca para cambiar el número de cuenta",
+    "user": "Nombre de usuario",
+    "description": "Añade algunas palabras sobre ti"
+  },
+  "salir_app": {
+    "salir": "Salir de la App",
+    "salir_mensaje": "¿Estas seguro de que quieres salir de la app?"
+  },
+  "seccion": {
+    "didYouKnow": "¿Sabías que...?",
+    "fact1": "Durante la Primera Guerra Mundial, el fútbol logró una tregua temporal entre soldados enemigos en 1914.",
+    "fact2": "El idioma más hablado en el mundo es el inglés, pero el chino mandarín tiene más hablantes nativos.",
+    "fact3": "El euskera es uno de los idiomas más antiguos de Europa y no está relacionado con ningún otro."
   }
-  
+}

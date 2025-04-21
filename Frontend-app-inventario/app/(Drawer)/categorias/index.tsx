@@ -17,6 +17,7 @@ import ListCategorias from '../../../components/shared/Table';
 import { useHookCategorias } from '@/hook/usehookCategorias';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { AntDesign } from '@expo/vector-icons';
+import { t } from 'i18next';
 
 
 const Categorías = () => {
@@ -122,7 +123,7 @@ const Categorías = () => {
             <>
               <View className="flex-row justify-between p-4 items-center">
                 <Text className="text-xl font-bold mb-4 dark:text-white">
-                  Categorías Disponibles
+                  {t("titles.categorias_dis")}
                 </Text>
                 <TouchableOpacity
                   className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"

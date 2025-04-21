@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TextInput, Alert, TouchableOpacity } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { t } from 'i18next';
 
 const AjuesteScrenn = () => {
 
@@ -39,11 +40,11 @@ const AjuesteScrenn = () => {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <View className="flex-1 bg-white dark:bg-slate-800 p-5 justify-center">
-          <Text className="text-2xl font-bold text-center mb-5 text-gray-800 dark:text-white">Registro</Text>
+          <Text className="text-2xl font-bold text-center mb-5 text-gray-800 dark:text-white">{t("titles.registro")}</Text>
 
           {/* Email */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Correo electrónico"
             keyboardType="email-address"
             value={values.email}
@@ -54,7 +55,7 @@ const AjuesteScrenn = () => {
 
           {/* Contraseña */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Contraseña"
             secureTextEntry
             value={values.password}
@@ -65,7 +66,7 @@ const AjuesteScrenn = () => {
 
           {/* Confirmar contraseña */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Confirmar contraseña"
             secureTextEntry
             value={values.confirmPassword}
@@ -78,7 +79,7 @@ const AjuesteScrenn = () => {
 
           {/* Nombre */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Nombre"
             value={values.firstName}
             onChangeText={handleChange("firstName")}
@@ -88,7 +89,7 @@ const AjuesteScrenn = () => {
 
           {/* Apellido */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Apellidos"
             value={values.lastName}
             onChangeText={handleChange("lastName")}
@@ -98,7 +99,7 @@ const AjuesteScrenn = () => {
 
           {/* Teléfono */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-2 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-2 text-gray-800 dark:text-white"
             placeholder="Teléfono"
             keyboardType="phone-pad"
             value={values.phone}
@@ -109,7 +110,7 @@ const AjuesteScrenn = () => {
 
           {/* Empresa */}
           <TextInput
-            className="border-b border-gray-300 dark:border-gray-600 py-2 text-lg mb-5 text-gray-800 dark:text-white"
+            className="border-b border-gray-300 dark:border-gray-400 py-2 text-lg mb-5 text-gray-800 dark:text-white"
             placeholder="Empresa o lugar de trabajo"
             value={values.company}
             onChangeText={handleChange("company")}
@@ -119,7 +120,7 @@ const AjuesteScrenn = () => {
             // onPress={handleSubmit}
             className="bg-[#5A8FCA] dark:bg-[#3B82F6] py-3 rounded-lg"
           >
-            <Text className="text-white text-center font-bold text-lg">Registrarse</Text>
+            <Text className="text-white text-center font-bold text-lg">{t("titles.ok")}</Text>
           </TouchableOpacity>
         </View>
       )}

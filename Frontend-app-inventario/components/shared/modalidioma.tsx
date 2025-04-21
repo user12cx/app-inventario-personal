@@ -1,21 +1,44 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Modal, TouchableOpacity, FlatList } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import i18n from "../../idiomas/i18n"; // Ajusta esta ruta según tu estructura
+import { useTranslation } from "react-i18next";
 
-const LanguageModal = ({ visible, onClose }) => {
+interface LanguageModalProps {
+    visible: boolean;
+    onClose: () => void;
+}
+
+const LanguageModal: React.FC<LanguageModalProps> = ({ visible, onClose }) => {
+
     const [selectedLanguage, setSelectedLanguage] = useState("es");
+    const { t } = useTranslation();
 
     const languages = [
         { code: "es", name: "Español" },
         { code: "en", name: "English" },
-        { code: "ar", name: "العربية" },
-        { code: "be", name: "Беларуская" },
-        { code: "po", name: "Portugues" },
-        { code: "hr", name: "Hrvatski" },
-        { code: "in", name: "Indio" },
-        { code: "nl", name: "Nederlands" },
-        { code: "ja", name: "Japones" },
+        { code: "pt", name: "Português" },
+        { code: "fr", name: "Français" },
+        { code: "ja", name: "日本語 (Japanese)" },
     ];
+
+    useEffect(() => {
+        const loadLanguage = async () => {
+            const savedLang = await AsyncStorage.getItem("language");
+            if (savedLang) {
+                setSelectedLanguage(savedLang);
+            }
+        };
+        loadLanguage();
+    }, []);
+
+    const changeLanguage = async (code: string) => {
+        setSelectedLanguage(code);
+        await AsyncStorage.setItem("language", code);
+        await i18n.changeLanguage(code); // Cambia idioma
+        // Cierra el modal;
+    };
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
@@ -29,30 +52,28 @@ const LanguageModal = ({ visible, onClose }) => {
                 </View>
 
                 <View className="m-4">
-                    <Text className="text-gray-600 dark:text-gray-400 font-semibold text-lg">📌 ¿Sabías que...?</Text>
+                    <Text className="text-gray-600 dark:text-gray-400 font-semibold text-lg">📌 {t("seccion.didYouKnow")}</Text>
                     <Text className="text-gray-500 dark:text-gray-300 mt-2">
-                        - Durante la Primera Guerra Mundial, el fútbol logró una tregua temporal entre soldados enemigos en 1914.
-                        Se cree que los partidos se jugaron sin importar el idioma que hablaban. ⚽✨
+                        - {t("seccion.fact1")}
                     </Text>
                     <Text className="text-gray-500 dark:text-gray-300 mt-2">
-                        - El idioma más hablado en el mundo es el inglés, pero el chino mandarín tiene más hablantes nativos. 🗣️
+                        - {t("seccion.fact2")}
                     </Text>
                     <Text className="text-gray-500 dark:text-gray-300 mt-2">
-                        - El euskera, hablado en el País Vasco, es uno de los idiomas más antiguos de Europa y no está relacionado con ningún otro idioma conocido. 🏔️
+                        - {t("seccion.fact3")}
                     </Text>
                 </View>
 
-                {/* Título */}
-                <Text className="text-blue-500 dark:text-blue-300 font-bold m-4">Selecciona un idioma</Text>
+                <Text className="text-blue-500 dark:text-blue-300 font-bold m-4">{t("language.selectLanguage")}</Text>
 
-                {/* Lista de idiomas con los radio buttons alineados */}
+
                 <FlatList
                     data={languages}
                     keyExtractor={(item) => item.code}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             className="flex-row items-center gap-6 p-4"
-                            onPress={() => setSelectedLanguage(item.code)}
+                            onPress={() => changeLanguage(item.code)}
                         >
                             <Ionicons
                                 name={selectedLanguage === item.code ? "radio-button-on" : "radio-button-off"}
@@ -65,7 +86,6 @@ const LanguageModal = ({ visible, onClose }) => {
                 />
             </View>
         </Modal>
-
     );
 };
 

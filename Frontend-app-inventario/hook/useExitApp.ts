@@ -2,17 +2,18 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { BackHandler, Alert } from 'react-native';
 import { useCallback } from 'react';
+import { t } from 'i18next';
 
 const useExitApp = () => {
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
         Alert.alert(
-          'Confirmar salida',
-          '¿Estás seguro de que quieres salir de la app?',
+          t("salir_app.salir"),
+          t("salir_app.salir_mensaje"),
           [
-            { text: 'Cancelar', style: 'cancel' },
-            { text: 'Salir', onPress: () => BackHandler.exitApp() },
+            { text: t("titles.cancelar"), style: 'cancel' },
+            { text: t("titles.ok"), onPress: () => BackHandler.exitApp() },
           ],
           { cancelable: false }
         );

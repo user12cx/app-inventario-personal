@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, ScrollView, useColorScheme } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { Select } from "../select";
 import { useHookCategorias } from "@/hook/usehookCategorias";
 import { usehookCuentas } from "@/hook/usehookCuentas";
@@ -10,8 +10,11 @@ import DateInput from "./DateInput";
 import { usehookTransacciones } from "@/hook/usehookTransacciones";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NuevaTransaccion } from "@/service/transaccionesService";
+import { useTranslation } from "react-i18next";
 
 const GastosModal = () => {
+  const { t } = useTranslation();
+
   const [nombreGasto, setNombreGasto] = useState("");
   const [monto, setMonto] = useState("");
   const [categoria, setCategoria] = useState("");
@@ -25,18 +28,18 @@ const GastosModal = () => {
   const { agregarTransaccion, loadingAdd } = usehookTransacciones();
 
   if (loadingCategorias || loadingCuentas || loadingAdd) {
-    return <Text>Cargando datos...</Text>;
+    return <Text>{t("gastosModal.cargando")}</Text>;
   }
 
   const agregarGasto = async () => {
     if (!nombreGasto || !monto || !categoria || !tipoPago) {
-      mostrarMensaje("Todos los campos son obligatorios", "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+      mostrarMensaje(t("gastosModal.todosObligatorios"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
       return;
     }
 
     const montoFloat = parseFloat(monto);
     if (isNaN(montoFloat) || montoFloat <= 0) {
-      mostrarMensaje("El monto debe ser mayor a 1", "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 600);
+      mostrarMensaje(t("gastosModal.montoInvalido"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 600);
       return;
     }
 
@@ -44,7 +47,7 @@ const GastosModal = () => {
       const usuario_id = await AsyncStorage.getItem("usuario_id");
 
       if (!usuario_id) {
-        mostrarMensaje("No se encontró el ID del usuario", "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+        mostrarMensaje((t("gastosModal.usuarioNoEncontrado")), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
         return;
       }
 
@@ -61,7 +64,7 @@ const GastosModal = () => {
       const fueExitosa = await agregarTransaccion(transaccion);
 
       if (fueExitosa) {
-        mostrarMensaje("Agregado correctamente", "success", '#A5D6A7', '#2C6B2F', 500);
+        mostrarMensaje(t("gastosModal.agregadoCorrectamente"), "success", '#A5D6A7', '#2C6B2F', 500);
         setNombreGasto("");
         setMonto("");
         setCategoria("");
@@ -69,11 +72,11 @@ const GastosModal = () => {
         setUsarFechaActual(true);
         setFecha(new Date());
       } else {
-        mostrarMensaje("Error al agregar transacción", "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+        mostrarMensaje(t("gastosModal.errorAgregar"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
       }
 
     } catch (error) {
-      mostrarMensaje("Error inesperado", "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+      mostrarMensaje(t("gastosModal.errorInesperado"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
     }
   };
 
@@ -86,45 +89,42 @@ const GastosModal = () => {
     setFecha(new Date());
   };
 
-  
   return (
     <ScrollView className="flex-1 p-4 dark:bg-slate-900">
 
       <View className="mt-4 mb-2">
-
-        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Tipo de Transacción</Text>
-
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.tipoTransaccion")}</Text>
         <RadioButton.Group onValueChange={newValue => settipoTransaccion(newValue)} value={tipoTransaccion}>
           <View className="flex-row gap-10">
             <View className="flex-row items-center">
               <RadioButton value="gasto" />
-              <Text className="dark:text-white">Ingreso</Text>
+              <Text className="dark:text-white">{t("gastosModal.ingreso")}</Text>
             </View>
             <View className="flex-row items-center">
               <RadioButton value="ingreso" />
-              <Text className="dark:text-white">Gasto</Text>
+              <Text className="dark:text-white">{t("gastosModal.gasto")}</Text>
             </View>
           </View>
         </RadioButton.Group>
       </View>
 
       <View>
-        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Nombre del Gasto o Ingreso</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.nombreGastoIngreso")}</Text>
         <TextInput
           className="bg-white p-4 px-4 border border-gray-200 rounded-lg dark:bg-slate-800 dark:text-white dark:border-gray-600"
-          placeholder="Ej. Cena en restaurante"
+          placeholder={t("gastosModal.nombrePlaceholder")}
           value={nombreGasto}
           onChangeText={setNombreGasto}
         />
       </View>
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold dark:text-white">Monto</Text>
+        <Text className="text-xl text-gray-500 font-bold dark:text-white">{t("gastosModal.monto")}</Text>
       </View>
       <View style={{ marginTop: 13 }}>
         <TextInput
           className="bg-white p-4 px-4 border border-gray-200 rounded-lg dark:bg-slate-800 dark:text-white dark:border-gray-600"
-          placeholder="$0.00"
+          placeholder={t("gastosModal.montoPlaceholder")}
           keyboardType="numeric"
           value={monto}
           onChangeText={setMonto}
@@ -139,7 +139,7 @@ const GastosModal = () => {
       />
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white ">Categoría</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.categoria")}</Text>
         <Select
           items={categorias.map((cat) => ({ label: cat.nombre, value: cat.idCategoria }))}
           value={categoria}
@@ -148,12 +148,11 @@ const GastosModal = () => {
       </View>
 
       <View style={{ marginTop: 13 }}>
-        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">Tipo de Pago</Text>
+        <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.tipoPago")}</Text>
         <Select
           items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
           value={tipoPago}
           onValueChange={setTipoPago}
-
         />
       </View>
 
@@ -162,7 +161,7 @@ const GastosModal = () => {
         style={{ backgroundColor: "#5A8FCA", padding: 13, marginTop: 30, borderRadius: 5 }}
       >
         <Text style={{ color: "white", textAlign: "center", fontWeight: "bold", fontSize: 17 }}>
-          Agregar gasto
+          {t("gastosModal.agregarGasto")}
         </Text>
       </TouchableOpacity>
 
@@ -171,7 +170,7 @@ const GastosModal = () => {
         style={{ backgroundColor: "gray", padding: 13, marginTop: 20, borderRadius: 5 }}
       >
         <Text style={{ color: "white", textAlign: "center", fontWeight: "bold", fontSize: 17 }}>
-          Cancelar Acción
+          {t("gastosModal.cancelarAccion")}
         </Text>
       </TouchableOpacity>
 

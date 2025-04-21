@@ -5,6 +5,7 @@ import { usehookCuentas } from '@/hook/usehookCuentas';
 import { TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
+import { t } from 'i18next';
 
 const Index = () => {
   const isDarkMode = useColorScheme() === "dark";
@@ -73,7 +74,7 @@ const Index = () => {
       <View className='flex-1  dark:bg-slate-900'>
 
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-xl font-bold mb-4  dark:text-white">Tarjetas Disponibles</Text>
+          <Text className="text-xl font-bold mb-4  dark:text-white">{t("titles.tarjetas_dis")}</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
             onPress={handleOpenSheetCuentas}

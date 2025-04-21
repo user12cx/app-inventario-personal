@@ -5,6 +5,7 @@ import CustomDrawerContent from '@/components/shared/CustomDrawerContent'; // Im
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar, useColorScheme } from 'react-native'; // Importamos StatusBar
 import "../../i18n";
+import { t } from 'i18next';
 
 export default function Layout() {
   const isDark = useColorScheme() === 'dark';
@@ -42,8 +43,8 @@ export default function Layout() {
         <Drawer.Screen
           name="Home/index"
           options={{
-            drawerLabel: 'Home',
-            title: 'Panel de Control',
+            drawerLabel: t("language.title"),
+            title:t("language.panel"),
             drawerIcon: ({ color, size }) => (
               <Ionicons name="home-outline" size={size} color={color} />
             )
@@ -56,7 +57,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="grid-outline" size={size} color={color} />
             ),
-            title: 'Categorias',
+            title: t("language.categorie"),
           }}
         />
         <Drawer.Screen
@@ -65,8 +66,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="wallet-outline" size={size} color={color} />
             ),
-            drawerLabel: 'Gastos',
-            title: 'Resumen  de Gastos',
+            title: t("language.buy"),
           }}
         />
 
@@ -77,8 +77,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="rocket-outline" size={size} color={color} />
             ),
-            drawerLabel: 'Metas a Futuro',
-            title: 'Pendientes ',
+            title: t("language.met"),
           }}
         />
         <Drawer.Screen
@@ -87,8 +86,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="logo-dropbox" size={size} color={color} />
             ),
-            drawerLabel: 'Targetas',
-            title: 'Disponibles',
+            title: t("language.cuenta"),
           }}
         />
         <Drawer.Screen
@@ -97,8 +95,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="accessibility-outline" size={size} color={color} />
             ),
-            drawerLabel: 'Ajustes',
-            title: 'Ajustar Perfil',
+            title: t("language.settings"),
           }}
         />
         <Drawer.Screen
@@ -107,8 +104,7 @@ export default function Layout() {
             drawerIcon: ({ color, size }) => (
               <Ionicons name="apps-outline" size={size} color={color} />
             ),
-            drawerLabel: 'App',
-            title: 'Acerca de la App',
+            title: t("language.app"),
           }}
         />
 

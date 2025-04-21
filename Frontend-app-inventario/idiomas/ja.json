@@ -1,0 +1,85 @@
+{
+  "language": {
+    "title": "言語",
+    "selectLanguage": "言語を選択してください",
+    "main": "メインナビゲーション",
+    "home": "ホーム",
+    "buy": "支出",
+    "categorie": "カテゴリ",
+    "met": "目標",
+    "settings": "設定",
+    "cuenta": "アカウント",
+    "app": "アプリ",
+    "history_gastos": "月次支出",
+    "history_target": "利用可能なアカウント",
+    "history_accion": "最近のアクション",
+    "panel": "ダッシュボード"
+  },
+  "about": {
+    "title": "個人インベントリ",
+    "version": "バージョン 1.0.0",
+    "description": "このアプリは、アカウントと支出を簡単かつ迅速に記録できるようにします。月次支出を管理し、カテゴリや貯蓄目標を作成することもできます。",
+    "callToAction": "効率的にお金を管理し始めましょう！",
+    "developer": "開発者",
+    "role": "フルスタック開発者",
+    "contact": "お問い合わせ",
+    "whatsapp": "WhatsAppでチャット",
+    "github": "GitHubでコードを見る",
+    "privacyPolicy": "プライバシーポリシー",
+    "viewDetails": "詳細を見る",
+    "rights": "すべての権利を保有"
+  },
+  "gastosModal": {
+    "tipoTransaccion": "取引の種類",
+    "ingreso": "収入",
+    "gasto": "支出",
+    "nombreGastoIngreso": "収入または支出の名前",
+    "nombrePlaceholder": "例: レストランでのディナー",
+    "monto": "金額",
+    "montoPlaceholder": "¥0.00",
+    "categoria": "カテゴリ",
+    "tipoPago": "支払い方法",
+    "agregarGasto": "支出を追加",
+    "cancelarAccion": "アクションをキャンセル",
+    "cargando": "データを読み込んでいます...",
+    "todosObligatorios": "すべてのフィールドは必須です",
+    "montoInvalido": "金額は1より大きくなければなりません",
+    "usuarioNoEncontrado": "ユーザーIDが見つかりません",
+    "agregadoCorrectamente": "正常に追加されました",
+    "errorAgregar": "取引の追加中にエラーが発生しました",
+    "errorInesperado": "予期しないエラー"
+  },
+  "titles": {
+    "tarjetas_dis": "利用可能なカード",
+    "categorias_dis": "利用可能なカテゴリ",
+    "cuentas_dis": "利用可能なアカウント",
+    "metas_dis": "現在の目標",
+    "history": "取引履歴",
+    "ver": "さらに表示 +",
+    "close": "閉じる",
+    "imprimir": "印刷",
+    "perfil_acconst": "プロフィールの調整",
+    "perfil_cuenta": "プロフィールの非表示",
+    "exit": "ログアウト",
+    "cancelar": "キャンセル",
+    "mesage_cancelar": "アプリとセッションが終了します。続けますか？",
+    "registro": "登録",
+    "ok": "OK",
+    "cuenta": "アカウント"
+  },
+  "perfil_atributes": {
+    "numero": "アカウント番号を変更するにはタップしてください",
+    "user": "ユーザー名",
+    "description": "あなたについての一言を追加してください"
+  },
+  "salir_app": {
+    "salir": "アプリを終了",
+    "salir_mensaje": "アプリを終了してもよろしいですか？"
+  },
+  "seccion": {
+    "didYouKnow": "知っていましたか...? ",
+    "fact1": "第一次世界大戦中、サッカーは1914年に敵兵士の間で一時的な休戦を達成しました。",
+    "fact2": "世界で最も話されている言語は英語ですが、中国語（標準語）の方が母語話者が多いです。",
+    "fact3": "バスク語はヨーロッパで最も古い言語の一つで、他の言語とは関連がありません。"
+  }
+}

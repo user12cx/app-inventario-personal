@@ -16,6 +16,7 @@ import CustomAhorro from '@/components/shared/CustomAhorro';
 import { getObjetivosAhorro } from '@/service/objetivoService'; // Asegúrate de tener esta función
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { AntDesign } from '@expo/vector-icons';
+import { t } from 'i18next';
 
 interface Objecttype {
   key: number;
@@ -112,7 +113,7 @@ const ObjetivoAhorro = () => {
         )}
 
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-xl font-semibold mb-4 dark:text-white">Metas Disponibles</Text>
+          <Text className="text-xl font-semibold mb-4 dark:text-white">{t("titles.metas_dis")}</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
             onPress={handleOpenSheet}

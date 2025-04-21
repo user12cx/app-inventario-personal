@@ -4,11 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { View, Text, Modal, TouchableOpacity, ActivityIndicator, FlatList } from "react-native";
 import * as Print from "expo-print"; // Importar expo-print
+import { t } from "i18next";
 
 interface HistorialModalProps {
     visible: boolean;
     onClose: () => void;
-    usuario_id: number;
+    usuario_id: string;
 }
 
 const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuario_id }) => {
@@ -118,19 +119,19 @@ const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuar
                 <View className="bg-[#5A8FCA] h-[60px] flex-row p-5 justify-between items-center">
                     <TouchableOpacity onPress={onClose} className="flex-row gap-3">
                         <Ionicons name="close" size={24} color="white" />
-                        <Text className="text-white text-2xl font-semibold">Cerrar</Text>
+                        <Text className="text-white text-2xl font-semibold">{t("titles.close")}</Text>
                     </TouchableOpacity>
 
                     {/* Botón para imprimir */}
                     <TouchableOpacity onPress={handlePrint} className="flex-row items-center gap-2">
                         <Feather name="printer" size={24} color="white" />
-                        <Text className="text-white text-lg font-semibold">Imprimir</Text>
+                        <Text className="text-white text-lg font-semibold">{t("titles.imprimir")}</Text>
                     </TouchableOpacity>
                 </View>
 
                 {/* Título */}
                 <View className="p-5">
-                    <Text className="text-[#5A8FCA] text-2xl font-bold text-center">Historial de Transacciones</Text>
+                    <Text className="text-[#5A8FCA] text-2xl font-bold text-center">{t("titles.history")}</Text>
                 </View>
 
                 {/* Cargando */}

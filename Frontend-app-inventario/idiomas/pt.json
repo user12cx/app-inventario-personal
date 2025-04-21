@@ -1,0 +1,85 @@
+{
+  "language": {
+    "title": "Idioma",
+    "selectLanguage": "Selecione seu idioma",
+    "main": "Navegação Principal",
+    "home": "Início",
+    "buy": "Despesas",
+    "categorie": "Categoria",
+    "met": "Metas",
+    "settings": "Configurações",
+    "cuenta": "Contas",
+    "app": "App",
+    "history_gastos": "Despesas Mensais",
+    "history_target": "Contas Disponíveis",
+    "history_accion": "Últimas Ações",
+    "panel": "Painel de Controle"
+  },
+  "about": {
+    "title": "Inventário Pessoal",
+    "version": "Versão 1.0.0",
+    "description": "Este aplicativo permite que você registre suas contas e despesas de maneira simples e rápida. Você pode acompanhar suas despesas mensais, além de criar categorias e metas de economia.",
+    "callToAction": "Comece a gerenciar seu dinheiro com eficácia!",
+    "developer": "Desenvolvedor",
+    "role": "Desenvolvedor Full Stack",
+    "contact": "Contato",
+    "whatsapp": "Conversar no WhatsApp",
+    "github": "Ver código no GitHub",
+    "privacyPolicy": "Política de Privacidade",
+    "viewDetails": "Ver detalhes",
+    "rights": "Todos os direitos reservados."
+  },
+  "gastosModal": {
+    "tipoTransaccion": "Tipo de Transação",
+    "ingreso": "Receita",
+    "gasto": "Despesa",
+    "nombreGastoIngreso": "Nome da Receita ou Despesa",
+    "nombrePlaceholder": "Ex. Jantar no restaurante",
+    "monto": "Valor",
+    "montoPlaceholder": "R$0.00",
+    "categoria": "Categoria",
+    "tipoPago": "Tipo de Pagamento",
+    "agregarGasto": "Adicionar despesa",
+    "cancelarAccion": "Cancelar Ação",
+    "cargando": "Carregando dados...",
+    "todosObligatorios": "Todos os campos são obrigatórios",
+    "montoInvalido": "O valor deve ser maior que 1",
+    "usuarioNoEncontrado": "ID do usuário não encontrado",
+    "agregadoCorrectamente": "Adicionado com sucesso",
+    "errorAgregar": "Erro ao adicionar transação",
+    "errorInesperado": "Erro inesperado"
+  },
+  "titles": {
+    "tarjetas_dis": "Cartões Disponíveis",
+    "categorias_dis": "Categorias Disponíveis",
+    "cuentas_dis": "Contas Disponíveis",
+    "metas_dis": "Metas Atuais",
+    "history": "Histórico de Transações",
+    "ver": "Ver Mais +",
+    "close": "Fechar",
+    "imprimir": "Imprimir",
+    "perfil_acconst": "Ajustar Perfil",
+    "perfil_cuenta": "Ocultar Perfil",
+    "exit": "Encerrar Sessão",
+    "cancelar": "Cancelar",
+    "mesage_cancelar": "O app e a sessão serão encerrados. Tem certeza?",
+    "registro": "Registrar",
+    "ok": "ok",
+    "cuenta": "Conta"
+  },
+  "perfil_atributes": {
+    "numero": "Toque para alterar o número da conta",
+    "user": "Nome de usuário",
+    "description": "Adicione algumas palavras sobre você"
+  },
+  "salir_app": {
+    "salir": "Sair do App",
+    "salir_mensaje": "Tem certeza de que deseja sair do aplicativo?"
+  },
+  "seccion": {
+    "didYouKnow": "Você sabia...? ",
+    "fact1": "Durante a Primeira Guerra Mundial, o futebol conseguiu uma trégua temporária entre soldados inimigos em 1914.",
+    "fact2": "O idioma mais falado no mundo é o inglês, mas o mandarim tem mais falantes nativos.",
+    "fact3": "O basco é uma das línguas mais antigas da Europa e não está relacionado com nenhuma outra."
+  }
+}

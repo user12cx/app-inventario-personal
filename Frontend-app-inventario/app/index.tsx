@@ -2,7 +2,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import React, { useEffect, useState } from 'react';
 import MainLayout from '@/components/MainLayout';
 import AuthProvider from '@/context/authContexto';
-import "../i18n";
+// import "../locales/i18n"; // Asegúrate de que la ruta sea correcta
 import 'react-native-reanimated';
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";

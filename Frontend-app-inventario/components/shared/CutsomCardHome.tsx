@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router"; // Importamos router para la navegación
-
 interface Props {
   title: string;
   icons: string;
@@ -26,7 +25,7 @@ const CutsomCardHome = ({ title, icons, iconSize = 24, iconColor = "black", fond
     <TouchableOpacity
       onPress={(e) => {
         if (ruta) {
-          router.push(ruta); // Redirige a la ruta si está definida
+          router.push(ruta as any); // Redirige a la ruta si está definida
           console.log("Redirigiendo a la ruta", ruta);
         }
       }}
@@ -35,7 +34,7 @@ const CutsomCardHome = ({ title, icons, iconSize = 24, iconColor = "black", fond
         style={{ borderColor: iconColor }} // Aplica el color del ícono al borde
         className={`${theme} w-[60px] h-[60px] rounded-full justify-center items-center border-2`}
       >
-        <AntDesign className="font-bold" name={icons} size={iconSize} color={iconColor} />
+        <AntDesign className="font-bold" name={icons as any} size={iconSize} color={iconColor} />
       </View>
       <Text className="text-center font-semibold text-[15px] dark:text-white">{title}</Text>
     </TouchableOpacity>

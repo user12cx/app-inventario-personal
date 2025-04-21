@@ -19,6 +19,7 @@ import { usehookCuentas } from "@/hook/usehookCuentas";
 import { usehookTransacciones } from "@/hook/usehookTransacciones";
 import { usehookGastos } from "@/hook/usehookgrafica";
 import useExitApp from "@/hook/useExitApp";
+import { t } from "i18next";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -27,6 +28,7 @@ const screenWidth = Dimensions.get("window").width;
 
 
 const HomeScreen = () => {
+  
   const isDarkMode = useColorScheme() === "dark";
   const chartConfig = useMemo(() => ({
     backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
@@ -75,23 +77,23 @@ const HomeScreen = () => {
     >
       <View className="gap-4 flex-1">
         <Text className="text-stone-400 text-center text-2xl mt-2 font-serif dark:text-stone-200">
-          Navegate Dashboard
+          {t("language.main")}
         </Text>
 
         {/* Accesos rápidos */}
         <View className="flex-row py-2 px-2 justify-evenly">
-          <CustomCardHome fondo="buy" title="Gastos" icons="shoppingcart" iconSize={25} iconColor="#008000" ruta="gastos" />
-          <CustomCardHome fondo="infoBold" title="Cuentas" icons="creditcard" iconSize={25} iconColor="#ff9c2a" ruta="targetas" />
-          <CustomCardHome fondo="succes" title="Categorias" icons="appstore1" iconSize={25} iconColor="#9E9E9E" ruta="categorias" />
-          <CustomCardHome fondo="violet" title="Metas" icons="rocket1" iconSize={25} iconColor="#efc7ea" ruta="objetivoAhorro" />
-          <CustomCardHome fondo="primary" title="Ajustes" icons="solution1" iconSize={25} iconColor="#747bfa" ruta="ajustes" />
-          <CustomCardHome fondo="infoRigth" title="App" icons="info" iconSize={25} iconColor="#5A8FCA" ruta="acercade" />
+          <CustomCardHome fondo="buy" title={t("language.buy")} icons="shoppingcart" iconSize={25} iconColor="#008000" ruta="gastos" />
+          <CustomCardHome fondo="infoBold" title={t("language.cuenta")}icons="creditcard" iconSize={25} iconColor="#ff9c2a" ruta="targetas" />
+          <CustomCardHome fondo="succes" title={t("language.categorie")}icons="appstore1" iconSize={25} iconColor="#9E9E9E" ruta="categorias" />
+          <CustomCardHome fondo="violet" title={t("language.met")} icons="rocket1" iconSize={25} iconColor="#efc7ea" ruta="objetivoAhorro" />
+          <CustomCardHome fondo="primary" title={t("language.settings")} icons="solution1" iconSize={25} iconColor="#747bfa" ruta="ajustes" />
+          <CustomCardHome fondo="infoRigth" title={t("language.app")} icons="info" iconSize={25} iconColor="#5A8FCA" ruta="acercade" />
 
         </View>
 
         {/* Gráfico */}
         <View className="p-2">
-          <Text className="text-[20px] font-bold mb-2 text-neutral-600 dark:text-white">Gastos Mensuales</Text>
+          <Text className="text-[20px] font-bold mb-2 text-neutral-600 dark:text-white">{t("language.history_gastos")}</Text>
           {loadingGastos ? (
             <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorGastos ? (
@@ -115,7 +117,7 @@ const HomeScreen = () => {
 
         {/* Cuentas disponibles */}
         <View>
-          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">Cuentas Disponibles</Text>
+          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">{t("language.history_target")}</Text>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -142,7 +144,7 @@ const HomeScreen = () => {
 
         {/* Últimas acciones */}
         <View>
-          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">Últimas Acciones</Text>
+          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">{t("language.history_accion")}</Text>
           {loadingTop ? (
             <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorTop ? (
@@ -155,9 +157,9 @@ const HomeScreen = () => {
         {/* Ver más */}
         <View className="justify-center items-center pb-4">
           <Text className="text-amber-500 text-xl" onPress={handleHistory}>
-            Ver Más +
+            {t("titles.ver")}
           </Text>
-          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} usuario_id="usuario_id"/>
         </View>
       </View>
     </ScrollView>

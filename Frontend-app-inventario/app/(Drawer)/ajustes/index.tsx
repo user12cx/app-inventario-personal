@@ -6,6 +6,7 @@ import AjuesteScrenn from '@/components/shared/PerfilAjustes';
 import * as ImagePicker from "expo-image-picker";
 import LanguageModal from '../../../components/shared/modalidioma';
 import Cerra_Sesion from '@/components/shared/Cerrar_sesion';
+import { t } from 'i18next';
 
 const ajustes = () => {
   const [image, setImage] = useState("https://imgs.search.brave.com/AIhr-Sk0iRtUThA1TOMXlmagkXha3WVtDXLRr7FnIW8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wcmV2/aWV3LnJlZGQuaXQv/d2hhdC1kby15b3Ut/dGhpbmstb2YtbWVs/aW9kYXMtYXMtYS1j/aGFyYWN0ZXItdjAt/dng4MmUwd3NxYXFj/MS5qcGVnP3dpZHRo/PTY0MCZjcm9wPXNt/YXJ0JmF1dG89d2Vi/cCZzPTYzODdmODQ2/NjUxMjIwOGQ3YzU4/OGFkYjIxODE3ZDY3/YjgzZWRlMGI");
@@ -48,25 +49,25 @@ const ajustes = () => {
 
         {/* Información */}
         <View className="bg-white dark:bg-slate-800 p-4 mt-4 rounded-lg shadow mx-4">
-          <Text className="text-blue-500 dark:text-blue-300 font-semibold">Cuenta</Text>
+          <Text className="text-blue-500 dark:text-blue-300 font-semibold">{t("titles.cuenta")}</Text>
           <TouchableOpacity>
             <Text className="text-lg font-semibold mt-1 dark:text-gray-200">+51 992 036 274</Text>
-            <Text className="text-gray-500 dark:text-gray-400 text-sm">Toca para cambiar el número</Text>
+            <Text className="text-gray-500 dark:text-gray-400 text-sm">{t("perfil_atributes.numero")}</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <Text className="text-lg font-semibold mt-4 dark:text-gray-200">Ivan</Text>
-            <Text className="text-gray-500 dark:text-gray-400 text-sm">Nombre de usuario</Text>
+            <Text className="text-gray-500 dark:text-gray-400 text-sm">{t("perfil_atributes.user")}</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <Text className="text-lg font-semibold mt-4 dark:text-gray-200">Ingeniero de Software</Text>
-            <Text className="text-gray-500 dark:text-gray-400 text-sm">Añade algunas palabras sobre ti</Text>
+            <Text className="text-gray-500 dark:text-gray-400 text-sm">{t("perfil_atributes.description")}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Información */}
         <View className="bg-white dark:bg-slate-800 p-4 mt-4 rounded-lg shadow mx-4">
           <TouchableOpacity className="gap-4 flex-row " onPress={() => setModalVisible(true)}>
-            <Text className="text-blue-500 dark:text-blue-300 text-sm">Idioma</Text>
+            <Text className="text-blue-500 dark:text-blue-300 text-sm">{t("language.title")}</Text>
             <LanguageModal
               visible={isModalVisible}
               onClose={() => setModalVisible(false)}
@@ -78,7 +79,7 @@ const ajustes = () => {
         <View className="bg-white dark:bg-slate-800 p-4 mt-4 rounded-lg shadow mx-4">
           <TouchableOpacity onPress={handlePerfil} className="flex-row items-center justify-between">
             <Text className="text-blue-500 dark:text-blue-300 text-sm">
-              {mostrarAjustes ? "Ocultar ajustes" : "Ajustes Perfil"}
+              {mostrarAjustes ? t("titles.perfil_cuenta") : t("titles.perfil_acconst")}
             </Text>
             <AntDesign
               name={mostrarAjustes ? "up" : "down"}

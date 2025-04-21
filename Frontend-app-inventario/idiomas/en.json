@@ -1,5 +1,85 @@
 {
-    "welcome": "Welcome!",
-    "change_language": "Change Language"
+  "language": {
+    "title": "Language",
+    "selectLanguage": "Select your Language",
+    "main": "Dashboard Navigation",
+    "home": "Home",
+    "buy": "Expenses",
+    "categorie": "Category",
+    "met": "Goals",
+    "settings": "Settings",
+    "cuenta": "Accounts",
+    "app": "App",
+    "history_gastos": "Monthly Expenses",
+    "history_target": "Available Accounts",
+    "history_accion": "Latest Actions",
+    "panel": "Control Panel"
+  },
+  "about": {
+    "title": "Personal Inventory",
+    "version": "Version 1.0.0",
+    "description": "This app allows you to quickly and easily register your accounts and expenses. You can track your monthly expenses, as well as create categories and saving goals.",
+    "callToAction": "Start managing your money effectively!",
+    "developer": "Developer",
+    "role": "Full Stack Developer",
+    "contact": "Contact",
+    "whatsapp": "Chat via WhatsApp",
+    "github": "View code on GitHub",
+    "privacyPolicy": "Privacy Policy",
+    "viewDetails": "View details",
+    "rights": "All rights reserved."
+  },
+  "gastosModal": {
+    "tipoTransaccion": "Transaction Type",
+    "ingreso": "Income",
+    "gasto": "Expense",
+    "nombreGastoIngreso": "Name of Expense or Income",
+    "nombrePlaceholder": "E.g. Dinner at restaurant",
+    "monto": "Amount",
+    "montoPlaceholder": "$0.00",
+    "categoria": "Category",
+    "tipoPago": "Payment Method",
+    "agregarGasto": "Add Expense",
+    "cancelarAccion": "Cancel Action",
+    "cargando": "Loading data...",
+    "todosObligatorios": "All fields are required",
+    "montoInvalido": "Amount must be greater than 1",
+    "usuarioNoEncontrado": "User ID not found",
+    "agregadoCorrectamente": "Successfully added",
+    "errorAgregar": "Error adding transaction",
+    "errorInesperado": "Unexpected error"
+  },
+  "titles": {
+    "tarjetas_dis": "Available Cards",
+    "categorias_dis": "  Available Categories",
+    "cuentas_dis": "Available Accounts",
+    "metas_dis": "Current Goals",
+    "history": "Transaction History",
+    "ver": "See More +",
+    "close": "Close",
+    "imprimir": "Print to Transaccions",
+    "perfil_acconst": "Account Settings",
+    "perfil_cuenta": "close Profile",
+    "exit": "Log Out",
+    "cancelar": "Cancel",
+    "mesage_cancelar": "The app and session will be closed. Are you sure?",
+    "registro": "Register",
+    "ok": "ok",
+    "cuenta": "Account"
+  },
+  "perfil_atributes": {
+    "numero": "Tap to change account number",
+    "user": "Username",
+    "description": "Add a few words about yourself"
+  },
+  "salir_app": {
+    "salir": "Exit App",
+    "salir_mensaje": "Are you sure you want to exit the app?"
+  },
+  "seccion": {
+    "didYouKnow": "Did you know...?",
+    "fact1": "During World War I, football achieved a temporary truce between enemy soldiers in 1914.",
+    "fact2": "The most spoken language in the world is English, but Mandarin Chinese has more native speakers.",
+    "fact3": "Basque is one of the oldest languages in Europe and is not related to any other."
   }
-  
+}
