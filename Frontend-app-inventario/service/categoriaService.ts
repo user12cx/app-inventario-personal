@@ -7,7 +7,7 @@ export interface Categoria {
 }
 
 export interface GetCategoriasResponse {
-  success: boolean;
+  success: boolean
   result: Categoria[];
   message?: string;
   error?: string;

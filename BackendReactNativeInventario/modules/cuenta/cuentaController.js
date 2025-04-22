@@ -25,4 +25,45 @@ const getCuenta = async (req, res) => {
     }
 };
 
-module.exports = { getCuenta };
+const gestionarCuentas = async (req, res) => {
+    try {
+        const pool = await poolPromise;
+        const { tipo, idCuenta, nombre, saldo, estado, usuario_id } = req.body;
+
+        if (!tipo || !["agregar", "editar", "eliminar"].includes(tipo)) {
+            return res.status(400).send("Tipo de operación no válido");
+        }
+
+        // Validación básica de usuario
+        if ((tipo !== 'listar' || idCuenta) && !usuario_id) {
+            return res.status(400).send("El usuario_id es requerido");
+        }
+
+        // Crear la solicitud SQL
+        const request = pool.request()
+            .input("tipo", sql.VarChar, tipo)
+            .input("idCuenta", sql.Int, idCuenta || null)
+            .input("nombre", sql.VarChar, nombre || null)
+            .input("saldo", sql.Money, saldo != null ? saldo : null)
+            .input("estado", sql.VarChar, estado || null)
+            .input("usuario_id", sql.Int, usuario_id || null);
+
+        // Ejecutar el procedimiento
+        const result = await request.execute("sp_cuentas_tipo");
+
+        // Enviar los resultados si es un listado
+        if (tipo === "listar") {
+            return res.status(200).send({ success: true, data: result.recordset });
+        }
+
+        // Para las demás operaciones
+        return res.status(200).send({ success: true, message: "Operación realizada con éxito." });
+
+    } catch (error) {
+        console.error("Error al ejecutar procedimiento de cuentas: ", error);
+        return res.status(500).send({ success: false, error: error.message });
+    }
+};
+
+
+module.exports = { getCuenta, gestionarCuentas };

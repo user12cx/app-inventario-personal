@@ -24,14 +24,20 @@ const gestionarCategorias = require("./routers/categoriaRouter");
 const getGastosPorMes = require("./routers/graficaRouter");
 const addTransaccion = require("./routers/transaccionesRouter");
 
+const gestionarCuentas = require("./routers/cuentaRouter");
 
+const gestionarUsuarios = require("./routers/userRouter");
+
+const gestionarMetasFuturo = require("./routers/objetivoRouter");
 
 app.use("/api/categorias", categoriaRouter);
 app.use("/api/gestionarCategorias", gestionarCategorias);
 
 app.use("/api/cuentas", cuentaRouter);
+app.use("/api/gestionarCuentas", gestionarCuentas);
 
 app.use("/api/objetivos", objetivoRouter);
+app.use("/api/gestionarMetasFuturo", gestionarMetasFuturo);
 
 app.use("/api/getGastosPorMes", getGastosPorMes);
 
@@ -41,6 +47,8 @@ app.use("/api/register", register);
 app.use ("/api/getTopGastos", getTopGastos)
 app.use ("/api/getTransaccionesPaginadas", getTransaccionesPaginadas)
 app.use ("/api/addTransaccion", addTransaccion)
+
+app.use ("/api/gestionarUsuarios", gestionarUsuarios)
 
 
 

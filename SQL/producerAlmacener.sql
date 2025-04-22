@@ -291,3 +291,156 @@ BEGIN
         WHERE idCuenta = @cuenta_id;
     END
 END;
+go
+
+-- aqui actualiza edita y elimina  metas a futuro
+
+CREATE PROCEDURE sp_objetivos_ahorro_tipo
+    @tipo            VARCHAR(10),      -- 'agregar', 'editar', 'eliminar'
+    @idObjetivo      INT = NULL,       -- solo necesario para editar o eliminar
+    @nombre          VARCHAR(100) = NULL,
+    @monto_objetivo  DECIMAL(10, 2) = NULL,
+    @monto_actual    DECIMAL(10, 2) = NULL,
+    @fecha_limite    DATE = NULL,
+    @usuario_id      INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @tipo = 'agregar'
+    BEGIN
+        INSERT INTO ObjetivosAhorro (nombre, monto_objetivo, monto_actual, fecha_limite, usuario_id)
+        VALUES (@nombre, ISNULL(@monto_objetivo, 0), ISNULL(@monto_actual, 0), @fecha_limite, @usuario_id);
+
+        SELECT SCOPE_IDENTITY() AS idNuevoObjetivo; -- devuelve el id insertado
+    END
+    ELSE IF @tipo = 'editar'
+    BEGIN
+        UPDATE ObjetivosAhorro
+        SET nombre = @nombre,
+            monto_objetivo = @monto_objetivo,
+            monto_actual = @monto_actual,
+            fecha_limite = @fecha_limite,
+            usuario_id = @usuario_id
+        WHERE idObjetivo = @idObjetivo;
+
+        SELECT 'Objetivo actualizado correctamente' AS mensaje;
+    END
+    ELSE IF @tipo = 'eliminar'
+    BEGIN
+        DELETE FROM ObjetivosAhorro
+        WHERE idObjetivo = @idObjetivo;
+
+        SELECT 'Objetivo eliminado correctamente' AS mensaje;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Tipo de operación no válido. Usa: agregar, editar o eliminar.' AS error;
+    END
+END
+go
+
+-- este es para las cuentas 
+
+CREATE PROCEDURE sp_cuentas_tipo
+    @tipo         VARCHAR(10),       -- 'agregar', 'editar', 'eliminar'
+    @idCuenta     INT = NULL,        -- necesario para editar o eliminar
+    @nombre       VARCHAR(100) = NULL,
+    @saldo        MONEY = NULL,
+    @estado       VARCHAR(10) = NULL,
+    @usuario_id   INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @tipo = 'agregar'
+    BEGIN
+        INSERT INTO Cuentas (nombre, saldo, estado, usuario_id)
+        VALUES (@nombre, ISNULL(@saldo, 0), @estado, @usuario_id);
+
+        SELECT SCOPE_IDENTITY() AS idNuevaCuenta; -- devuelve ID insertado
+    END
+    ELSE IF @tipo = 'editar'
+    BEGIN
+        UPDATE Cuentas
+        SET nombre = @nombre,
+            saldo = @saldo,
+            estado = @estado,
+            usuario_id = @usuario_id
+        WHERE idCuenta = @idCuenta;
+
+        SELECT 'Cuenta actualizada correctamente' AS mensaje;
+    END
+    ELSE IF @tipo = 'eliminar'
+    BEGIN
+        DELETE FROM Cuentas
+        WHERE idCuenta = @idCuenta;
+
+        SELECT 'Cuenta eliminada correctamente' AS mensaje;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Tipo de operación no válido. Usa: agregar, editar o eliminar.' AS error;
+    END
+END
+go
+
+
+--prodecimiento para edidar usuarios
+
+
+CREATE PROCEDURE sp_usuarios_tipo
+    @tipo            VARCHAR(10),       -- 'agregar', 'editar', 'eliminar', 'listar'
+    @idUser          INT = NULL,        -- para editar, eliminar o listar por ID
+    @usuario         VARCHAR(20) = NULL,
+    @name            VARCHAR(70) = NULL,
+    @apellidos       VARCHAR(100) = NULL,
+    @email           VARCHAR(100) = NULL,
+    @password        VARCHAR(255) = NULL,
+    @telefono        INT = NULL,
+    @ocupacion       VARCHAR(50) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @tipo = 'agregar'
+    BEGIN
+        INSERT INTO Usuarios (usuario, name, apellidos, email, password, telefono, ocupacion)
+        VALUES (@usuario, @name, @apellidos, @email, @password, @telefono, @ocupacion);
+
+        SELECT SCOPE_IDENTITY() AS idNuevoUsuario;
+    END
+    ELSE IF @tipo = 'editar'
+    BEGIN
+        UPDATE Usuarios
+        SET usuario = @usuario,
+            name = @name,
+            apellidos = @apellidos,
+            email = @email,
+            password = @password,
+            telefono = @telefono,
+            ocupacion = @ocupacion
+        WHERE idUser = @idUser;
+
+        SELECT 'Usuario actualizado correctamente' AS mensaje;
+    END
+    ELSE IF @tipo = 'eliminar'
+    BEGIN
+        DELETE FROM Usuarios
+        WHERE idUser = @idUser;
+
+        SELECT 'Usuario eliminado correctamente' AS mensaje;
+    END
+    ELSE IF @tipo = 'listar'
+    BEGIN
+        IF @idUser IS NULL
+            SELECT * FROM Usuarios;
+        ELSE
+            SELECT * FROM Usuarios WHERE idUser = @idUser;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Tipo de operación no válido. Usa: agregar, editar, eliminar o listar.' AS error;
+    END
+END
+go
