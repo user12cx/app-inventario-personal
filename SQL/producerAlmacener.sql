@@ -444,3 +444,70 @@ BEGIN
     END
 END
 go
+
+-- las acciones de objetivos y cuentas son agregar, editar y eliminar actualizada]
+
+CREATE PROCEDURE sp_objetivos_tipo
+    @tipo VARCHAR(10),
+    @idObjetivo INT = NULL,
+    @nombre VARCHAR(100) = NULL,
+    @monto_objetivo DECIMAL(10,2) = NULL,
+    @monto_actual DECIMAL(10,2) = NULL,
+    @fecha_limite DATE = NULL,
+    @usuario_id INT = NULL,
+    @cuenta_id INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF @tipo = 'agregar'
+    BEGIN
+        -- Restar monto de la cuenta
+        UPDATE Cuentas
+        SET saldo = saldo - ISNULL(@monto_actual, 0)
+        WHERE idCuenta = @cuenta_id;
+
+        -- Crear objetivo
+        INSERT INTO ObjetivosAhorro (nombre, monto_objetivo, monto_actual, fecha_limite, usuario_id, cuenta_id)
+        VALUES (@nombre, @monto_objetivo, @monto_actual, @fecha_limite, @usuario_id, @cuenta_id);
+    END
+    ELSE IF @tipo = 'editar'
+    BEGIN
+        DECLARE @monto_anterior DECIMAL(10,2);
+        SELECT @monto_anterior = monto_actual FROM ObjetivosAhorro WHERE idObjetivo = @idObjetivo;
+
+        -- Calcular diferencia
+        DECLARE @diferencia DECIMAL(10,2) = ISNULL(@monto_actual, 0) - ISNULL(@monto_anterior, 0);
+
+        -- Restar o sumar a la cuenta
+        UPDATE Cuentas
+        SET saldo = saldo - @diferencia
+        WHERE idCuenta = @cuenta_id;
+
+        -- Actualizar objetivo
+        UPDATE ObjetivosAhorro
+        SET nombre = @nombre,
+            monto_objetivo = @monto_objetivo,
+            monto_actual = @monto_actual,
+            fecha_limite = @fecha_limite
+        WHERE idObjetivo = @idObjetivo;
+    END
+    ELSE IF @tipo = 'eliminar'
+    BEGIN
+        DECLARE @monto_actual_eliminar DECIMAL(10,2);
+        SELECT @monto_actual_eliminar = monto_actual FROM ObjetivosAhorro WHERE idObjetivo = @idObjetivo;
+
+        -- Devolver fondos
+        UPDATE Cuentas
+        SET saldo = saldo + @monto_actual_eliminar
+        WHERE idCuenta = (SELECT cuenta_id FROM ObjetivosAhorro WHERE idObjetivo = @idObjetivo);
+
+        -- Eliminar objetivo
+        DELETE FROM ObjetivosAhorro WHERE idObjetivo = @idObjetivo;
+    END
+    ELSE IF @tipo = 'listar'
+    BEGIN
+        SELECT * FROM ObjetivosAhorro WHERE usuario_id = @usuario_id;
+    END
+END
+go
