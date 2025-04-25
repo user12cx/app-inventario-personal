@@ -59,11 +59,11 @@ export const useHookCategorias = () => {
         setMessage(errorMessage);
         return { success: false, error: errorMessage };
       }
-    } catch (err) {
-      console.error("Error al gestionar categoría:", err);
+    } catch (error:unknown) {
+      console.error("Error al gestionar categoría:", error);
   
       // Capturamos el error de Axios de manera más detallada
-      const errorMessage = err.response?.data?.message || "Error al eliminar la categoría.";
+      const errorMessage = error.response?.data?.message || "Error al eliminar la categoría.";
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }

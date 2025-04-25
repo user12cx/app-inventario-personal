@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const { sql, poolPromise } = require("../../config/conexion");
 
 const gestionarUsuarios = async (req, res) => {
@@ -19,6 +20,14 @@ const gestionarUsuarios = async (req, res) => {
             return res.status(400).send("Tipo de operación no válido");
         }
 
+        let passwordFinal = password;
+
+        // Solo hasheamos si hay una contraseña y la operación es agregar o editar
+        if (password && (tipo === "agregar" || tipo === "editar")) {
+            const salt = await bcrypt.genSalt(10);
+            passwordFinal = await bcrypt.hash(password, salt);
+        }
+
         const request = pool.request()
             .input("tipo", sql.VarChar, tipo)
             .input("idUser", sql.Int, idUser || null)
@@ -26,7 +35,7 @@ const gestionarUsuarios = async (req, res) => {
             .input("name", sql.VarChar, name || null)
             .input("apellidos", sql.VarChar, apellidos || null)
             .input("email", sql.VarChar, email || null)
-            .input("password", sql.VarChar, password || null)
+            .input("password", sql.VarChar, passwordFinal || null)
             .input("telefono", sql.Int, telefono || null)
             .input("ocupacion", sql.VarChar, ocupacion || null);
 
@@ -43,6 +52,5 @@ const gestionarUsuarios = async (req, res) => {
         return res.status(500).send({ success: false, error: error.message });
     }
 };
-  
 
-module.exports= { gestionarUsuarios };
+module.exports = { gestionarUsuarios };

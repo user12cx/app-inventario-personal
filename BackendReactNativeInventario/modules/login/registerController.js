@@ -54,6 +54,8 @@ const validateRegister = [
         .isEmail().withMessage("Correo inválido"),
     body("password")
         .isLength({ min: 6 }).withMessage("La contraseña debe tener al menos 6 caracteres"),
+      
+        
 ];
 
 module.exports = { register, validateRegister };

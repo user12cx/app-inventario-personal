@@ -19,6 +19,7 @@ export interface GetObjetivosAhorroResponse {
   success: boolean;
   data: ObjetivoAhorro[];
   message?: string;
+  result:any;
   error?: string;
 }
 export const getObjetivosAhorro = async (): Promise<GetObjetivosAhorroResponse> => {
@@ -33,10 +34,10 @@ export const getObjetivosAhorro = async (): Promise<GetObjetivosAhorroResponse> 
 
 export const gestionarMeta = async (
   tipo: 'agregar' | 'editar' | 'eliminar',
-  idMeta?: number,
-  descripcion?: string,
-  fecha_objetivo?: string,
-  monto_estimado?: number,
+  idObjetivo?: number,
+  nombre?: string,
+  fecha_limite?: string,
+  monto_objetivo?: number,
   monto_actual?: number,
   usuario_id?: number,
   cuenta_id?: number
@@ -44,10 +45,10 @@ export const gestionarMeta = async (
   try {
     const payload = {
       tipo,
-      idMeta,
-      descripcion,
-      fecha_objetivo,
-      monto_estimado,
+      idObjetivo,
+      nombre,
+      fecha_limite,
+      monto_objetivo,
       monto_actual,
       usuario_id,
       cuenta_id, // Pasamos la cuenta vinculada

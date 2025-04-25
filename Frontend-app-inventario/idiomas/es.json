@@ -70,7 +70,9 @@
   "perfil_atributes": {
     "numero": "Toca para cambiar el número de cuenta",
     "user": "Nombre de usuario",
-    "description": "Añade algunas palabras sobre ti"
+    "description": "Añade algunas palabras sobre ti",
+    "email": "Correo electrónico",
+    "password": "Contraseña nueva"
   },
   "salir_app": {
     "salir": "Salir de la App",

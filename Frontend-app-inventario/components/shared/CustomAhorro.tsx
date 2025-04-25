@@ -1,33 +1,85 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { ProgressBar } from 'react-native-paper';
 import { AntDesign, Feather } from '@expo/vector-icons';
+import { usehookobjetivo } from '@/hook/usehookobjetivo';
+import { showMessage } from 'react-native-flash-message';
 
 interface MetasItems {
     title: string;
+    idObjetivo: number;
     montoActual: number;
     meta: number;
     fechaLimite: string;
-    onAportar?: () => void;
+    onEliminar?: (id: number) => void; // Para actualizar la lista desde el componente padre
 }
 
-const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLimite, onAportar }) => {
+const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLimite, idObjetivo, onEliminar }) => {
     const progress = Math.max(0, Math.min(1, montoActual / (meta || 1)));
     const [mostrarInput, setMostrarInput] = useState(false);
     const [texto, setTexto] = useState('');
 
+    const { eliminarObjetivo } = usehookobjetivo()
+
+
     const handleAceptar = () => {
-        // Aquí puedes hacer algo con el valor de `texto`, por ejemplo:
-        console.log("Valor aportado:", texto);
+        const nuevoMonto = parseFloat(texto);
+        if (!isNaN(nuevoMonto)) {
+            // Aquí iría lógica para agregar dinero (si aún no lo haces)
+        }
         setMostrarInput(false);
         setTexto('');
-        // También podrías llamar a `onAportar` si aplica
     };
 
     const handleCancelar = () => {
         setMostrarInput(false);
         setTexto('');
     };
+    const handleEliminar = () => {
+        // Muestra la alerta de confirmación
+        console.log("paso");
+        
+        Alert.alert(
+            "¿Eliminar meta?",
+            "¿Estás seguro de que deseas eliminar esta meta de ahorro?",
+            [
+                { text: "Cancelar", style: "cancel" },
+                {
+                    text: "Eliminar", 
+                    style: "destructive", 
+                    onPress: async () => {
+                        // Aquí manejamos la eliminación y la respuesta asincrónica
+                        try {
+                            // Solo eliminamos cuando la respuesta es exitosa
+                            const response = await eliminarObjetivo(idObjetivo);
+                            if (response.success) {
+                                // Muestra el mensaje de éxito
+                                showMessage({
+                                    message: "Meta eliminada exitosamente",
+                                    type: "success",
+                                });
+                                onEliminar?.(idObjetivo); // Actualiza lista si se pasa esta función desde el padre
+                            } else {
+                                // En caso de error
+                                showMessage({
+                                    message: response.message || "No se pudo eliminar la meta.",
+                                    type: "danger",
+                                });
+                            }
+                        } catch (error) {
+                            // Captura cualquier error inesperado
+                            showMessage({
+                                message: "Ocurrió un error al eliminar la meta.",
+                                type: "danger",
+                            });
+                            console.error(error);
+                        }
+                    }
+                }
+            ]
+        );
+    };
+    
 
     return (
         <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white dark:bg-slate-800 dark:border-gray-600">
@@ -36,9 +88,15 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
             <View className='flex-row gap-3'>
                 <View className='w-[350px]'>
                     <View className="mt-2 flex-row justify-between gap-1">
-                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text></Text>
-                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text></Text>
-                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text></Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">
+                            OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text>
+                        </Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">
+                            META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text>
+                        </Text>
+                        <Text className="text-gray-600 text-base font-sans dark:text-gray-400">
+                            LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text>
+                        </Text>
                     </View>
 
                     <View className="mt-2">
@@ -59,7 +117,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                         })()}
                     </View>
 
-                    <View >
+                    <View>
                         {mostrarInput && (
                             <View className="gap-4 flex-row mb-2 mt-4">
                                 <TextInput
@@ -69,7 +127,6 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                                     className="border border-[#5A8FCA] rounded px-2 py-1 w-[220px] dark:bg-slate-800 dark:text-white"
                                     keyboardType="numeric"
                                 />
-
                                 <TouchableOpacity
                                     onPress={handleAceptar}
                                     className="bg-green-200 p-2 rounded-full"
@@ -83,25 +140,22 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                                 >
                                     <Feather name="x" size={20} color="black" />
                                 </TouchableOpacity>
-
                             </View>
                         )}
                     </View>
-
                 </View>
-
 
                 <View className='absolute top-[-28px] right-[-3]'>
                     <TouchableOpacity
                         className="mt-2 bg-green-100 w-[40px] h-[40px] items-center justify-center rounded-full"
-                        onPress={() => setMostrarInput(true)}
+                        onPress={() => console.log("Editar")}
                     >
                         <AntDesign name="pluscircleo" size={20} color="green" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         className="mt-2 bg-red-100 w-[40px] h-[40px] items-center justify-center rounded-full"
-                        onPress={onAportar}
+                        onPress={handleEliminar}
                     >
                         <AntDesign name="delete" size={20} color="red" />
                     </TouchableOpacity>

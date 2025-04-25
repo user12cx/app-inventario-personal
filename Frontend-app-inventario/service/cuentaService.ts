@@ -21,20 +21,21 @@ export interface ListarCuentasResponse {
 export interface GetCuentasResponse {
   success: boolean;
   data: Cuenta[];
+  result?: undefined;
   message?: string;
   error?: string;
 }
 
 
-export const getCuentas =  async(usuario_id:number):Promise<GetCuentasResponse>=>{
+export const getCuentas = async (usuario_id: number): Promise<GetCuentasResponse> => {
   try {
-    const response =  await instance.get("cuentas/getCuenta",{
-      params:{usuario_id},
+    const response = await instance.get("cuentas/getCuenta", {
+      params: { usuario_id },
     });
     return response.data;
   } catch (error) {
     console.log("error al cargar las cuentas", error);
-    throw {message: error};
+    throw { message: error };
   }
 };
 

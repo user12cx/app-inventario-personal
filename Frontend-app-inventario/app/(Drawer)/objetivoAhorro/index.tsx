@@ -17,9 +17,15 @@ import { getObjetivosAhorro } from '@/service/objetivoService'; // Asegúrate de
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { AntDesign } from '@expo/vector-icons';
 import { t } from 'i18next';
+import { usehookCuentas } from '@/hook/usehookCuentas';
+import { Select } from '@/components/select';
+import { usehookobjetivo } from '@/hook/usehookobjetivo';
+import DateInput from '@/components/shared/DateInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Objecttype {
-  key: number;
+  key: any;
+  idObjetivo: number;
   id: number;
   usuario_id: number;
   nombre: string;
@@ -34,13 +40,29 @@ const ObjetivoAhorro = () => {
   const [error, seterror] = useState<unknown>(null);
   const [loading, setLoading] = useState(true);
 
+  const [fecha, setFecha] = useState(new Date());
+  const [usarFechaActual, setUsarFechaActual] = useState(true);
+
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['50%'], []);
+  const snapPoints = useMemo(() => ['60%'], []);
   const [showModal, setShowModal] = useState(false);
+  const [tipoPago, setTipoPago] = useState("");
+  const { datos: cuentas, loading: loadingCuentas } = usehookCuentas();
+
+  const {
+    objetivos,
+    agregarObjetivo,
+    eliminarObjetivo,
+    editarObjetivo,
+    loading: loadingObjetivos,
+    error: errorObjetos
+  } = usehookobjetivo();
 
   const [nombre, setNombre] = useState('');
   const [meta, setMeta] = useState('');
-
+  const [montoActual, setMontoActual] = useState('');
+  const [montoEstimado, setMontoEstimado] = useState('');
+  
   const isDarkMode = useColorScheme() === "dark";
 
   const fetchData = async () => {
@@ -59,6 +81,7 @@ const ObjetivoAhorro = () => {
     fetchData();
   }, []);
 
+
   const handleOpenSheet = () => {
     setShowModal(true);
     bottomSheetRef.current?.expand();
@@ -70,7 +93,7 @@ const ObjetivoAhorro = () => {
   };
 
   const handleGuardar = async () => {
-    if (!nombre || !meta) {
+    if (!nombre || !montoActual || !montoEstimado || !tipoPago) {
       showMessage({
         message: 'Completa todos los campos',
         type: 'warning',
@@ -79,28 +102,52 @@ const ObjetivoAhorro = () => {
       });
       return;
     }
-
+  
     try {
-      // await agregarObjetivoAhorro(nombre, parseFloat(meta)); // Ajusta según tu API
+      const id = await AsyncStorage.getItem("usuario_id");
+      if (!id) throw new Error("Usuario no autenticado");
+  
+      const usuario_id = parseInt(id);
+  
+      await agregarObjetivo({
+        nombre,
+        fecha_limite: usarFechaActual ? new Date().toISOString() : fecha.toISOString(),
+        monto_actual: parseFloat(montoActual),
+        monto_objetivo: parseFloat(montoEstimado),
+        usuario_id,
+        cuenta_id: parseInt(tipoPago),
+      });
+  
       showMessage({
-        message: 'Objetivo agregado',
+        message: 'Objetivo agregado correctamente',
         type: 'success',
         backgroundColor: '#D4EDDA',
         color: '#155724',
       });
+  
+      // Limpiar y cerrar
       handleCloseSheet();
       setNombre('');
-      setMeta('');
-      fetchData();
+      setMontoActual('');
+      setMontoEstimado('');
+      setTipoPago('');
+      setUsarFechaActual(true);
+      setFecha(new Date());
+      fetchData(); // Recargar datos
     } catch (err) {
+      console.error(err);
       showMessage({
-        message: 'Error al guardar',
+        message: 'Error al guardar objetivo',
         type: 'danger',
         backgroundColor: '#F8D7DA',
         color: '#721C24',
       });
     }
   };
+  
+  
+  
+
 
   return (
     <>
@@ -130,10 +177,12 @@ const ObjetivoAhorro = () => {
           datos.map((item) => (
             <CustomAhorro
               key={item.id}
+              idObjetivo={item.idObjetivo}
               title={item.nombre}
               montoActual={item.monto_actual}
               meta={item.monto_objetivo}
               fechaLimite={item.fecha_limite ? new Date(item.fecha_limite).toLocaleDateString() : "Sin fecha"}
+              onEliminar={eliminarObjetivo} // ✅ Se pasa aquí
             />
           ))
         )}
@@ -159,35 +208,44 @@ const ObjetivoAhorro = () => {
             style={{ flex: 1 }}
           >
             <ScrollView contentContainerStyle={{ padding: 16 }}>
-              <Text className="text-lg font-bold mb-4 text-center">Nuevo Objetivo</Text>
+              <Text className="text-lg font-bold mb-4 text-center dark:text-white">Nuevo Objetivo</Text>
 
               <TextInput
                 placeholder="Nombre del objetivo"
                 value={nombre}
                 onChangeText={setNombre}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
 
               <TextInput
                 placeholder="Obtenido"
-                value={meta}
-                onChangeText={setMeta}
+                value={montoActual}
+                onChangeText={setMontoActual}
                 keyboardType="numeric"
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
               <TextInput
                 placeholder="Meta"
-                value={meta}
-                onChangeText={setMeta}
+                value={montoEstimado}
+                onChangeText={setMontoEstimado}
                 keyboardType="numeric"
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
-              <TextInput
-                placeholder="Fecha"
-                value={meta}
-                onChangeText={setMeta}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3"
+              <DateInput
+                fecha={fecha}
+                setFecha={setFecha}
+                usarFechaActual={usarFechaActual}
+                setUsarFechaActual={setUsarFechaActual}
               />
+
+              <View className='border border-[#5A8FCA] rounded px-3  mb-3 dark:text-white'>
+                <Select
+                  placeholder={{ label: 'Cuenta a Enlazar', value: null }}
+                  items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
+                  value={tipoPago}
+                  onValueChange={setTipoPago}
+                />
+              </View>
 
               <TouchableOpacity
                 className="bg-[#5A8FCA] py-3 rounded items-center"

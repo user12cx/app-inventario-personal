@@ -1,38 +1,48 @@
 import React, { useRef, useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, Pressable, FlatList, KeyboardAvoidingView, ScrollView, Platform, RefreshControl, useColorScheme } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, KeyboardAvoidingView, ScrollView, Platform, RefreshControl, TextInput, useColorScheme } from 'react-native';
 import BottomSheet, { BottomSheetView, TouchableWithoutFeedback } from '@gorhom/bottom-sheet';
 import { usehookCuentas } from '@/hook/usehookCuentas';
-import { TextInput } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { t } from 'i18next';
 
 const Index = () => {
   const isDarkMode = useColorScheme() === "dark";
-
-  const [showModal, setShowModal] = useState(false);
-
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const [showModal, setShowModal] = useState(false);
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [idCuentaSeleccionada, setIdCuentaSeleccionada] = useState<number | null>(null);
   const [refreshingActive, setRefreshingActive] = useState(false);
-  const { datos } = usehookCuentas();
-
   const [nombre, setNombre] = useState('');
   const [monto, setMonto] = useState('');
   const [estado, setEstado] = useState('');
-
   const snapPoints = useMemo(() => ['40%'], []);
 
-  const handleOpenSheetCuentas = () => {
+  const { datos, agregarCuenta, editarCuenta } = usehookCuentas();
+
+  const limpiarCampos = () => {
+    setNombre('');
+    setMonto('');
+    setEstado('');
+  };
+
+  const handleOpenSheetCuentas = (cuenta?: any) => {
+    if (cuenta) {
+      setModoEdicion(true);
+      setIdCuentaSeleccionada(cuenta.idCuenta);
+      setNombre(cuenta.nombre);
+      setMonto(cuenta.saldo.toString());
+      setEstado(cuenta.estado);
+    } else {
+      limpiarCampos();
+      setModoEdicion(false);
+      setIdCuentaSeleccionada(null);
+    }
+
     setShowModal(true);
     bottomSheetRef.current?.expand();
   };
-
-  const limpiarCampos=()=>{
-    setEstado('')
-    setNombre('')
-    setMonto('')
-  }
 
   const handleCloseModalCuentas = () => {
     setShowModal(false);
@@ -41,43 +51,44 @@ const Index = () => {
 
   const handleRefresh = async () => {
     setRefreshingActive(true);
-    // await usehookCuentas(); // Esto debería actualizar los datos.
+    // Aquí podrías actualizar datos si tu hook lo permite
     setRefreshingActive(false);
   };
 
-  const handleGuardar = () => {
-    // Aquí puedes enviar los datos al backend o hacer lo que necesites
-    console.log({ nombre, monto, estado });
-    handleCloseModalCuentas();
-    limpiarCampos()
-    showMessage({
-      message:'Nueva Targeta Agregada Correctamente',
-      type:'success',
-      icon:'success',
-      duration:500,
-      floating:true,
-      position:'top',
-      backgroundColor: '#DFF2BF', // Fondo claro
-      color: '#4F8A10', // Texto verde
-      style: {
-        borderRadius: 6,
-        borderWidth: 1,
-        borderColor: '#38761A', // Borde más oscuro (verde oscuro)
-      },
-    })
+  const handleGuardar = async () => {
+    try {
+      if (!nombre || !monto || !estado) {
+        showMessage({
+          message: "Todos los campos son obligatorios",
+          type: "danger",
+        });
+        return;
+      }
+
+      if (modoEdicion && idCuentaSeleccionada !== null) {
+        await editarCuenta(idCuentaSeleccionada, nombre, parseFloat(monto), estado);
+        showMessage({ message: "Tarjeta actualizada correctamente", type: "success" });
+      } else {
+        await agregarCuenta(nombre, parseFloat(monto), estado);
+        showMessage({ message: "Nueva tarjeta agregada correctamente", type: "success" });
+      }
+
+      handleCloseModalCuentas();
+      limpiarCampos();
+    } catch (error) {
+      console.error(error);
+      showMessage({ message: "Error al guardar", type: "danger" });
+    }
   };
 
   return (
     <>
-
-      {/* Contenido principal */}
-      <View className='flex-1  dark:bg-slate-900'>
-
+      <View className='flex-1 dark:bg-slate-900'>
         <View className="flex-row justify-between p-4 items-center">
-          <Text className="text-xl font-bold mb-4  dark:text-white">{t("titles.tarjetas_dis")}</Text>
+          <Text className="text-xl font-bold mb-4 dark:text-white">{t("titles.tarjetas_dis")}</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
-            onPress={handleOpenSheetCuentas}
+            onPress={() => handleOpenSheetCuentas()}
           >
             <AntDesign name="addfile" size={24} color="white" />
           </TouchableOpacity>
@@ -87,9 +98,9 @@ const Index = () => {
           data={Array.isArray(datos) ? datos : []}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={handleOpenSheetCuentas}
-              className="p-4 mb-2 shadow-xl m-2 bg-gray-100  dark:bg-slate-800">
-
+              onPress={() => handleOpenSheetCuentas(item)}
+              className="p-4 mb-2 shadow-xl m-2 bg-gray-100 dark:bg-slate-800"
+            >
               <View className="flex-row justify-between">
                 <Text className="text-xl dark:text-white">{item.nombre}</Text>
                 <Text className="text-green-500 text-base">{`$ ${item.saldo}`}</Text>
@@ -97,19 +108,25 @@ const Index = () => {
               <Text className="text-amber-500">{item.estado}</Text>
             </TouchableOpacity>
           )}
-          keyExtractor={(item) => item.idCuenta}
+          keyExtractor={(item) => item.idCuenta.toString()}
           refreshControl={
             <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
           }
-
         />
       </View>
 
-
-      {/* Modal con fondo oscuro simple */}
       {showModal && (
         <TouchableWithoutFeedback onPress={handleCloseModalCuentas}>
-          <View style={{ flex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10, backgroundColor: 'rgba(0, 0, 0, 0.3)' }} />
+          <View style={{
+            flex: 1,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 10,
+            backgroundColor: 'rgba(0, 0, 0, 0.3)'
+          }} />
         </TouchableWithoutFeedback>
       )}
 
@@ -117,7 +134,7 @@ const Index = () => {
         ref={bottomSheetRef}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
-        onClose={() => setShowModal(false)} // importante para que se quite el overlay
+        onClose={() => setShowModal(false)}
         backgroundStyle={{
           backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
           borderTopLeftRadius: 20,
@@ -130,7 +147,9 @@ const Index = () => {
             style={{ flex: 1 }}
           >
             <ScrollView contentContainerStyle={{ padding: 16 }}>
-              <Text className="text-lg font-bold mb-4 text-center dark:text-white">Agregar Tarjeta</Text>
+              <Text className="text-lg font-bold mb-4 text-center dark:text-white">
+                {modoEdicion ? "Editar Tarjeta" : "Agregar Tarjeta"}
+              </Text>
 
               <TextInput
                 placeholder="Nombre de la tarjeta"
@@ -158,14 +177,13 @@ const Index = () => {
                 onPress={handleGuardar}
                 className="bg-[#5A8FCA] py-3 rounded items-center"
               >
-                <Text className="text-white font-bold">Guardar</Text>
+                <Text className="text-white font-bold">{modoEdicion ? "Actualizar" : "Guardar"}</Text>
               </TouchableOpacity>
             </ScrollView>
           </KeyboardAvoidingView>
         </BottomSheetView>
       </BottomSheet>
 
-      {/* FlashMessage */}
       <FlashMessage position="top" />
     </>
   );
