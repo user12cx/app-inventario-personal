@@ -62,7 +62,7 @@ const ObjetivoAhorro = () => {
   const [meta, setMeta] = useState('');
   const [montoActual, setMontoActual] = useState('');
   const [montoEstimado, setMontoEstimado] = useState('');
-  
+
   const isDarkMode = useColorScheme() === "dark";
 
   const fetchData = async () => {
@@ -102,13 +102,13 @@ const ObjetivoAhorro = () => {
       });
       return;
     }
-  
+
     try {
       const id = await AsyncStorage.getItem("usuario_id");
       if (!id) throw new Error("Usuario no autenticado");
-  
+
       const usuario_id = parseInt(id);
-  
+
       await agregarObjetivo({
         nombre,
         fecha_limite: usarFechaActual ? new Date().toISOString() : fecha.toISOString(),
@@ -117,14 +117,14 @@ const ObjetivoAhorro = () => {
         usuario_id,
         cuenta_id: parseInt(tipoPago),
       });
-  
+
       showMessage({
         message: 'Objetivo agregado correctamente',
         type: 'success',
         backgroundColor: '#D4EDDA',
         color: '#155724',
       });
-  
+
       // Limpiar y cerrar
       handleCloseSheet();
       setNombre('');
@@ -144,9 +144,9 @@ const ObjetivoAhorro = () => {
       });
     }
   };
-  
-  
-  
+
+
+
 
 
   return (
@@ -231,12 +231,15 @@ const ObjetivoAhorro = () => {
                 keyboardType="numeric"
                 className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
               />
-              <DateInput
-                fecha={fecha}
-                setFecha={setFecha}
-                usarFechaActual={usarFechaActual}
-                setUsarFechaActual={setUsarFechaActual}
-              />
+              <View className='p-2'>
+                <DateInput
+                  fecha={fecha}
+                  setFecha={setFecha}
+                  usarFechaActual={usarFechaActual}
+                  setUsarFechaActual={setUsarFechaActual}
+                />
+              </View>
+
 
               <View className='border border-[#5A8FCA] rounded px-3  mb-3 dark:text-white'>
                 <Select

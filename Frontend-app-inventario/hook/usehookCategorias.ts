@@ -1,15 +1,17 @@
-// useHookCategorias.ts
 import { useState, useEffect } from "react";
 import { getCategorias, gestionarCategoria, Categoria } from "@/service/categoriaService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AxiosError } from 'axios';
+
 
 export const useHookCategorias = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null); // Mensaje de éxito o error
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
+  // Obtener categorías al iniciar
   const fetchCategorias = async () => {
     try {
       setLoading(true);
@@ -26,7 +28,7 @@ export const useHookCategorias = () => {
         setCategorias(response.result);
         setError(null);
       } else {
-        setError(response.error || "No se encontraron categorías.");
+        setError(error);
       }
     } catch (err) {
       console.error(err);
@@ -40,40 +42,63 @@ export const useHookCategorias = () => {
     try {
       const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
       if (!usuarioIdStr) {
-        setError("No se encontró el usuario.");
-        return { success: false, error: "No se encontró el usuario." };
+        return { success: false, message: null, error: "No se encontró el usuario." };
       }
   
       const usuario_id = parseInt(usuarioIdStr, 10);
       const result = await gestionarCategoria(3, usuario_id, categoriaId);
   
-      // Verificamos si result existe y tiene la propiedad success
-      if (result && result.success) {
+      if (result.success) {
         setCategorias((prev) => prev.filter((cat) => cat.idCategoria !== categoriaId));
-        setMessage(result.message || "Categoría eliminada con éxito.");
-        setError(null);
-        return { success: true, message: result.message || "Categoría eliminada con éxito." };
+        return { success: true, message: result.message || "Categoría eliminada con éxito.", error: null };
       } else {
-        // Si result es undefined o no tiene success, devolvemos un error
-        const errorMessage = result?.error || "Error al eliminar la categoría.";
-        setMessage(errorMessage);
-        return { success: false, error: errorMessage };
+        return { success: false, message: null, error: result.error || "Error al eliminar la categoría." };
       }
-    } catch (error:unknown) {
-      console.error("Error al gestionar categoría:", error);
-  
-      // Capturamos el error de Axios de manera más detallada
-      const errorMessage = error.response?.data?.message || "Error al eliminar la categoría.";
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
+    } catch (error) {
+      // Tipamos el error como AxiosError
+      if (error instanceof AxiosError) {
+        // Verificamos si el error es un error 400
+        if (error.response && error.response.status === 400) {
+          return { success: false, message: null, error: error.response.data.error || "Error al eliminar la categoría." };
+        }
+      }
+      
+      // Si no es un AxiosError, logueamos el error general
+      console.error("Error inesperado al gestionar categoría:", error);
+      
+      return { success: false, message: null, error: "Error al eliminar la categoría." };
     }
   };
   
-  const editarCategoria = (categoriaId: number) => {
-    // Aquí iría la lógica para abrir un modal o manejar el estado para editar
-    console.log(`Editar categoría con ID: ${categoriaId}`);
+  
+  
+  // Función para editar categoría
+  const editarCategoria = async (categoriaId: number, nombre: string) => {
+    try {
+      const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
+      if (!usuarioIdStr) {
+        setError("No se encontró el usuario.");
+        return;
+      }
+
+      const usuario_id = parseInt(usuarioIdStr, 10);
+      const result = await gestionarCategoria(2, usuario_id, categoriaId, nombre);
+
+      if (result.success) {
+        setMessage(result.message || "Categoría editada con éxito.");
+        fetchCategorias(); // Recargar categorías después de editar
+        setError(null);
+      } else {
+        setMessage(result.error || "Error al editar la categoría.");
+        setError(result.error|| "algo fallo");
+      }
+    } catch (error) {
+      console.error("Error al editar categoría:", error);
+      setError("Error al editar la categoría.");
+    }
   };
 
+  // Función para agregar categoría
   const agregarCategoria = async (nombre: string) => {
     try {
       const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
@@ -81,26 +106,28 @@ export const useHookCategorias = () => {
         setError("No se encontró el usuario.");
         return { success: false, error: "No se encontró el usuario." };
       }
-
+  
       const usuario_id = parseInt(usuarioIdStr, 10);
       const result = await gestionarCategoria(1, usuario_id, undefined, nombre);
-
+  
       if (result.success) {
         setMessage(result.message || "Categoría agregada con éxito.");
-        // Recargamos las categorías para mostrar la nueva
-        fetchCategorias();
+        fetchCategorias(); // Recargar categorías después de agregar
+        setError(null);
         return { success: true, message: result.message || "Categoría agregada con éxito." };
       } else {
-        setMessage(result.error || "Error al agregar la categoría");
-        return { success: false, error: result.error || "Error al agregar la categoría" };
+        setMessage(error);
+        return { success: false, error: result.error || "Error al agregar la categoría." };
       }
     } catch (error) {
-      console.error(error);
-      setMessage("Error al agregar la categoría.");
+      console.error("Error al agregar categoría:", error);
+      setError("Error al agregar la categoría.");
       return { success: false, error: "Error al agregar la categoría." };
     }
   };
-
+  
+  
+  // Función para refrescar la lista de categorías
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchCategorias();
@@ -115,11 +142,11 @@ export const useHookCategorias = () => {
     categorias,
     loading,
     error,
+    message,
     refreshing,
-    message, // mensaje de éxito/error
     eliminarCategoria,
     editarCategoria,
-    agregarCategoria, // agregamos la función para agregar categorías
+    agregarCategoria,
     onRefresh,
   };
 };

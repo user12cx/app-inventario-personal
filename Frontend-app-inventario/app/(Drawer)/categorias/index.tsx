@@ -48,9 +48,9 @@ const Categorías = () => {
     setShowModal(false);
     bottomSheetRef.current?.close();
   };
-
   const handleGuardar = async () => {
     const result = await agregarCategoria(nombre);
+  
     if (result.success) {
       showMessage({
         message: result.message || 'Categoría agregada con éxito.',
@@ -67,7 +67,7 @@ const Categorías = () => {
       handleCloseSheet();
     } else {
       showMessage({
-        message: result.error || 'Error al agregar la categoría.',
+        message:"Campos requeridos" ,
         type: 'danger',
         icon: 'info',
         duration: 800,
@@ -79,10 +79,13 @@ const Categorías = () => {
       });
     }
   };
+  
 
   const handleEliminarCategoria = async (categoriaId: number) => {
     const result = await eliminarCategoria(categoriaId);
-    if (result.success) {
+  
+    if (result.success && result.message) {
+      // Si la eliminación fue exitosa, mostrar mensaje de éxito
       showMessage({
         message: result.message || 'Categoría eliminada con éxito.',
         type: 'success',
@@ -95,6 +98,7 @@ const Categorías = () => {
         style: { borderRadius: 6, borderWidth: 1, borderColor: '#38761A' },
       });
     } else {
+      // Si ocurrió un error, mostrar mensaje de error
       showMessage({
         message: result.error || 'Error al eliminar la categoría.',
         type: 'danger',
@@ -108,6 +112,7 @@ const Categorías = () => {
       });
     }
   };
+  
 
   return (
     <>

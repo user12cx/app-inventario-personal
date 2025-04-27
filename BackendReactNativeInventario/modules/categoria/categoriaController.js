@@ -41,8 +41,8 @@ const gestionarCategorias = async (req, res) => {
             .execute("gestionarCategorias");
 
         // Si el resultado tiene un mensaje de error, lo manejamos aquí
-        if (result && result.error) {
-            return res.status(400).send({ success: false, error: result.error.message });
+        if (result && result.recordset && result.recordset.length > 0 && result.recordset[0].success === 0) {
+            return res.status(400).send({ success: false, error: result.recordset[0].error });
         }
 
         // Verificamos si la operación afectó alguna fila
@@ -62,5 +62,5 @@ const gestionarCategorias = async (req, res) => {
 
 
 
-module.exports = { getCategoria , gestionarCategorias};
+module.exports = { getCategoria, gestionarCategorias };
 

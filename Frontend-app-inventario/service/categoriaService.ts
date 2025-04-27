@@ -7,10 +7,10 @@ export interface Categoria {
 }
 
 export interface GetCategoriasResponse {
-  success: boolean
+  success: boolean;
   result: Categoria[];
   message?: string;
-  error?: string;
+  error?: unknown;
 }
 
 export interface GestionarCategoriaResponse {
@@ -40,11 +40,21 @@ export const gestionarCategoria = async (
   nombre?: string
 ): Promise<GestionarCategoriaResponse> => {
   try {
+    // Validación de parámetros antes de enviar la solicitud
+    if (accion === 1 && !nombre) {
+      throw new Error("El nombre es requerido para agregar una categoría.");
+    }
+
+    if ((accion === 2 || accion === 3) && !categoria_id) {
+      throw new Error("El idCategoria es requerido para editar o eliminar una categoría.");
+    }
+
+    // Construir el payload según la acción
     const payload = {
       accion,
       usuario_id,
       categoria_id,
-      nombre
+      nombre,
     };
 
     const response = await instance.post<GestionarCategoriaResponse>(
@@ -54,7 +64,7 @@ export const gestionarCategoria = async (
 
     return response.data;
   } catch (error) {
-    console.error("Error al gestionar categoría:", error);
+    // console.error("Error al gestionar categoría:", error);
     throw error;
   }
 };

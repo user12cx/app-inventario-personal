@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Switch, TextInput, Platform, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+
 const DateInput = ({ fecha, setFecha, usarFechaActual, setUsarFechaActual }) => {
     const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false);
 
@@ -28,7 +29,7 @@ const DateInput = ({ fecha, setFecha, usarFechaActual, setUsarFechaActual }) => 
                 <TextInput
                     editable={false}
                     value={fecha.toLocaleDateString()}
-                    className="bg-white p-4 border border-gray-200 rounded-lg text-gray-700 dark:bg-slate-800 dark:text-white dark:border-gray-600"
+                    className="bg-white p-4border border-gray-200 rounded-lg text-gray-700 dark:bg-slate-800 dark:text-white dark:border-gray-600"
                     style={{ color: usarFechaActual ? "#ccc" : "#000" }}
                     placeholder="Selecciona una fecha"
                 />
