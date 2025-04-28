@@ -19,7 +19,7 @@ export interface GetObjetivosAhorroResponse {
   success: boolean;
   data: ObjetivoAhorro[];
   message?: string;
-  result:any;
+  result: any;
   error?: string;
 }
 export const getObjetivosAhorro = async (): Promise<GetObjetivosAhorroResponse> => {
@@ -51,18 +51,23 @@ export const gestionarMeta = async (
       monto_objetivo,
       monto_actual,
       usuario_id,
-      cuenta_id, // Pasamos la cuenta vinculada
+      cuenta_id,
     };
 
     const response = await instance.post<GestionarMetaResponse>(
-      '/gestionarMetasFuturo/gestionarMetasFuturo', // La ruta de tu backend
+      'gestionarMetasFuturo/gestionarMetasFuturo',  // Asegúrate de que esta ruta sea correcta
       payload
     );
-    
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || 'Error desconocido');
+    }
+
     return response.data;
-  } catch (error) {
-    console.error('Error al gestionar meta:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('Error al gestionar meta:', error.message || error);
+    throw error; // Re-lanzar error para manejarlo en el componente
   }
 };
+
 

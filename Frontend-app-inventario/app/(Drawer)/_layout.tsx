@@ -18,7 +18,7 @@ export default function Layout() {
         backgroundColor={isDark ? "#0f172a" : "#5A8FCA"}
         barStyle={isDark ? "light-content" : "dark-content"}
       />
-
+      <FlashMessage position="top" />
       <Drawer
         drawerContent={CustomDrawerContent}
         screenOptions={{
@@ -39,11 +39,12 @@ export default function Layout() {
           drawerPosition: 'left',
           drawerType: "front",
         }}
+
       >
         <Drawer.Screen
           name="Home/index"
           options={{
-            drawerLabel: t("language.title"),
+            drawerLabel: t("language.home"),
             title: t("language.panel"),
             drawerIcon: ({ color, size }) => (
               <Ionicons name="home-outline" size={size} color={color} />
@@ -108,7 +109,7 @@ export default function Layout() {
           }}
 
         />
-        <FlashMessage position="top" />
+
 
       </Drawer>
     </>

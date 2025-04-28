@@ -4,6 +4,8 @@ import { ProgressBar } from 'react-native-paper';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { usehookobjetivo } from '@/hook/usehookobjetivo';
 import { showMessage } from 'react-native-flash-message';
+import { usehookCuentas } from '@/hook/usehookCuentas';
+import { Select } from '../select';
 
 interface MetasItems {
     title: string;
@@ -11,32 +13,66 @@ interface MetasItems {
     montoActual: number;
     meta: number;
     fechaLimite: string;
-    onEliminar?: (id: number) => void; // Para actualizar la lista desde el componente padre
+    onEliminar?: (id: number) => void;
 }
 
 const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLimite, idObjetivo, onEliminar }) => {
     const progress = Math.max(0, Math.min(1, montoActual / (meta || 1)));
     const [mostrarInput, setMostrarInput] = useState(false);
     const [texto, setTexto] = useState('');
+    const [tipoPago, setTipoPago] = useState("");
+    const [editando, setEditando] = useState(false); // <-- NUEVO estado para saber si estás editando
 
-    const { eliminarObjetivo } = usehookobjetivo()
+    const { eliminarObjetivo, editarObjetivo } = usehookobjetivo();
+    const { datos: cuentas, loading: loadingCuentas } = usehookCuentas();
 
-
-    const handleAceptar = () => {
+    const handleAceptar = async () => {
         const nuevoMonto = parseFloat(texto);
-        if (!isNaN(nuevoMonto)) {
-            // Aquí iría lógica para agregar dinero (si aún no lo haces)
+
+        if (!tipoPago) {
+            showMessage({ message: "Selecciona una cuenta", type: "warning" });
+            return;
         }
-        setMostrarInput(false);
-        setTexto('');
+
+        if (isNaN(nuevoMonto)) {
+            showMessage({ message: "Monto inválido", type: "danger" });
+            return;
+        }
+
+        try {
+            if (editando) {
+                await editarObjetivo(idObjetivo, {
+                    nombre: title,
+                    fecha_limite: fechaLimite,
+                    monto_objetivo: meta,
+                    monto_actual: nuevoMonto, // Actualiza el monto_actual
+                    usuario_id: 1, // <-- Cambia esto si es dinámico en tu app
+                    cuenta_id: Number(tipoPago),
+                });
+                showMessage({ message: "Meta actualizada exitosamente", type: "success" });
+            } else {
+                console.log("Agregar dinero, lógica aún no implementada"); 
+                // Aquí deberías hacer lógica para sumar dinero si quieres manejarlo distinto.
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage({ message: "Error al actualizar", type: "danger" });
+        } finally {
+            setMostrarInput(false);
+            setTexto('');
+            setEditando(false);
+            setTipoPago('');
+        }
     };
 
     const handleCancelar = () => {
         setMostrarInput(false);
         setTexto('');
+        setEditando(false);
+        setTipoPago('');
     };
-    const handleEliminar = () => {
 
+    const handleEliminar = () => {
         Alert.alert(
             "¿Eliminar meta?",
             "¿Estás seguro de que deseas eliminar esta meta de ahorro?",
@@ -46,31 +82,16 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                     text: "Eliminar",
                     style: "destructive",
                     onPress: async () => {
-                        // Aquí manejamos la eliminación y la respuesta asincrónica
                         try {
-                            // Solo eliminamos cuando la respuesta es exitosa
                             const response = await eliminarObjetivo(idObjetivo);
                             if (response.success) {
-                                // Muestra el mensaje de éxito
-                                showMessage({
-                                    message: "Meta eliminada exitosamente",
-                                    type: "success",
-                                });
-                                onEliminar?.(idObjetivo); // Actualiza lista si se pasa esta función desde el padre
-                                
+                                showMessage({ message: "Meta eliminada exitosamente", type: "success" });
+                                onEliminar?.(idObjetivo);
                             } else {
-                                // En caso de error
-                                showMessage({
-                                    message: response.message || "No se pudo eliminar la meta.",
-                                    type: "danger",
-                                });
+                                showMessage({ message: response.message || "No se pudo eliminar la meta.", type: "danger" });
                             }
                         } catch (error) {
-                            // Captura cualquier error inesperado
-                            showMessage({
-                                message: "Ocurrió un error al eliminar la meta.",
-                                type: "danger",
-                            });
+                            showMessage({ message: "Ocurrió un error al eliminar la meta.", type: "danger" });
                             console.error(error);
                         }
                     }
@@ -79,6 +100,10 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
         );
     };
 
+    const handleEditar = () => {
+        setMostrarInput(true);
+        setEditando(true);
+    };
 
     return (
         <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white dark:bg-slate-800 dark:border-gray-600">
@@ -116,16 +141,25 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                         })()}
                     </View>
 
-                    <View>
-                        {mostrarInput && (
-                            <View className="gap-4 flex-row mb-2 mt-4">
-                                <TextInput
-                                    placeholder="Escribe aquí..."
-                                    value={texto}
-                                    onChangeText={setTexto}
-                                    className="border border-[#5A8FCA] rounded px-2 py-1 w-[220px] dark:bg-slate-800 dark:text-white"
-                                    keyboardType="numeric"
-                                />
+                    {/* Mostrar input y select */}
+                    {mostrarInput && (
+                        <View className="gap-2 flex-col mb-2 mt-4">
+                            <TextInput
+                                placeholder="Nuevo monto..."
+                                value={texto}
+                                onChangeText={setTexto}
+                                className="border border-[#5A8FCA] rounded px-2 py-1 w-full dark:bg-slate-800 dark:text-white"
+                                keyboardType="numeric"
+                            />
+
+                            <Select
+                                placeholder={{ label: 'Cuenta a Enlazar', value: null }}
+                                items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
+                                value={tipoPago}
+                                onValueChange={setTipoPago}
+                            />
+
+                            <View className="flex-row justify-end gap-2 mt-2">
                                 <TouchableOpacity
                                     onPress={handleAceptar}
                                     className="bg-green-200 p-2 rounded-full"
@@ -140,16 +174,17 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                                     <Feather name="x" size={20} color="black" />
                                 </TouchableOpacity>
                             </View>
-                        )}
-                    </View>
+                        </View>
+                    )}
                 </View>
 
+                {/* Botones de acción (Editar y Eliminar) */}
                 <View className='absolute top-[-28px] right-[-3]'>
                     <TouchableOpacity
                         className="mt-2 bg-green-100 w-[40px] h-[40px] items-center justify-center rounded-full"
-                        onPress={() => console.log("Editar")}
+                        onPress={handleEditar}
                     >
-                        <AntDesign name="pluscircleo" size={20} color="green" />
+                        <AntDesign name="edit" size={20} color="green" />
                     </TouchableOpacity>
 
                     <TouchableOpacity

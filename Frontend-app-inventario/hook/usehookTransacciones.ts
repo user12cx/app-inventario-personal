@@ -57,11 +57,11 @@ export const usehookTransacciones = () => {
   
       await addTransaccion(transaccion);
       setSuccessAdd(true);
-      return true; // ✅ Éxito
+      return true; //Éxito
     } catch (error: any) {
       console.error("Error al agregar transacción:", error.message);
       setErrorAdd(error.message || "Error desconocido.");
-      return false; // ❌ Error
+      return false; //Error
     } finally {
       setLoadingAdd(false);
     }

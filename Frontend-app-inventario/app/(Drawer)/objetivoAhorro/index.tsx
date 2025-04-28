@@ -53,7 +53,7 @@ const ObjetivoAhorro = () => {
     agregarObjetivo,
     eliminarObjetivo,
     editarObjetivo,
-    loadingObjetivos,
+    cargarObjetivos,
     error: errorObjetos
   } = usehookobjetivo();
 
@@ -78,7 +78,7 @@ const ObjetivoAhorro = () => {
 
   useEffect(() => {
     fetchData();
-    loadingObjetivos
+    cargarObjetivos(); // Cargar objetivos al inicio
   }, []);
 
 
@@ -145,7 +145,32 @@ const ObjetivoAhorro = () => {
     }
   };
 
-  
+  const handleEliminarObjetivo = async (idObjetivo: number) => {
+    try {
+      const response = await eliminarObjetivo(idObjetivo);
+      if (response.success) {
+        showMessage({
+          message: "Meta eliminada exitosamente",
+          type: "success",
+        });
+        // Aquí recargas los datos, o filtras localmente si quieres
+        cargarObjetivos(); // <-- Recarga de datos (si tienes una función que lo hace)
+      } else {
+        showMessage({
+          message: response.message || "No se pudo eliminar la meta.",
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      showMessage({
+        message: "Error al eliminar la meta.",
+        type: "danger",
+      });
+      console.error(error);
+    }
+  };
+
+
 
 
   return (
@@ -167,13 +192,12 @@ const ObjetivoAhorro = () => {
             <AntDesign name="addfile" size={24} color="white" />
           </TouchableOpacity>
         </View>
-
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" className="mt-4" />
         ) : error ? (
           <Text className="text-red-500 text-center mt-4">Error al cargar objetivos</Text>
         ) : (
-          datos.map((item) => (
+          datos.map((item) => (  
             <CustomAhorro
               key={item.idObjetivo}
               idObjetivo={item.idObjetivo}
@@ -181,10 +205,11 @@ const ObjetivoAhorro = () => {
               montoActual={item.monto_actual}
               meta={item.monto_objetivo}
               fechaLimite={item.fecha_limite ? new Date(item.fecha_limite).toLocaleDateString() : "Sin fecha"}
-              onEliminar={eliminarObjetivo} // ✅ Se pasa aquí
+              onEliminar={handleEliminarObjetivo} // <-- Correcto ahora
             />
           ))
         )}
+
       </ScrollView>
 
       {/* Bottom Sheet */}
