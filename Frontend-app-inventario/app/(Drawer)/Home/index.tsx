@@ -28,7 +28,7 @@ const screenWidth = Dimensions.get("window").width;
 
 
 const HomeScreen = () => {
-  
+
   const isDarkMode = useColorScheme() === "dark";
   const chartConfig = useMemo(() => ({
     backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
@@ -50,7 +50,7 @@ const HomeScreen = () => {
       fontWeight: "bold",
       fill: "#5e94c2",
     },
-  }), [isDarkMode]); 
+  }), [isDarkMode]);
 
   useExitApp();
 
@@ -58,21 +58,37 @@ const HomeScreen = () => {
   const [refreshingActive, setRefreshingActive] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const { loading, datos, error } = usehookCuentas();
-  const { datosTop, loadingTop, errorTop } = usehookTransacciones();
+  const { loading, datos, error, fetchData } = usehookCuentas();
+  const { datosTop, loadingTop, errorTop, fetchData: fechtransacciones } = usehookTransacciones();
+  const { loading: loadingGastos, chartData, error: errorGastos, refetch } = usehookGastos('usuario_id');
 
-  // Usamos el hook de gastos, pasando el usuario_id
-  const { loading: loadingGastos, chartData, error: errorGastos } = usehookGastos('usuario_id');
+
 
   const handleHistory = () => {
     setModalVisible(true);
     setRefreshingActive(true);
     setTimeout(() => setRefreshingActive(false), 3000);
   };
+  const onRefresh = async () => {
+    setRefreshingActive(true);
+    try {
+      await Promise.all([
+        fetchData(),
+        fechtransacciones(),
+        refetch(),
+      ]);
+    } catch (error) {
+      console.error("Error al refrescar datos", error);
+    } finally {
+      setRefreshingActive(false);
+    }
+  };
 
   return (
     <ScrollView
-      refreshControl={<RefreshControl refreshing={refreshingActive} />}
+      refreshControl={
+        <RefreshControl refreshing={refreshingActive} onRefresh={onRefresh} />
+      }
       className="flex-1 dark:bg-slate-900"
     >
       <View className="gap-4 flex-1">
@@ -83,8 +99,8 @@ const HomeScreen = () => {
         {/* Accesos rápidos */}
         <View className="flex-row py-2 px-2 justify-evenly">
           <CustomCardHome fondo="buy" title={t("language.buy")} icons="shoppingcart" iconSize={25} iconColor="#008000" ruta="gastos" />
-          <CustomCardHome fondo="infoBold" title={t("language.cuenta")}icons="creditcard" iconSize={25} iconColor="#ff9c2a" ruta="targetas" />
-          <CustomCardHome fondo="succes" title={t("language.categorie")}icons="appstore1" iconSize={25} iconColor="#9E9E9E" ruta="categorias" />
+          <CustomCardHome fondo="infoBold" title={t("language.cuenta")} icons="creditcard" iconSize={25} iconColor="#ff9c2a" ruta="targetas" />
+          <CustomCardHome fondo="succes" title={t("language.categorie")} icons="appstore1" iconSize={25} iconColor="#9E9E9E" ruta="categorias" />
           <CustomCardHome fondo="violet" title={t("language.met")} icons="rocket1" iconSize={25} iconColor="#efc7ea" ruta="objetivoAhorro" />
           <CustomCardHome fondo="primary" title={t("language.settings")} icons="solution1" iconSize={25} iconColor="#747bfa" ruta="ajustes" />
           <CustomCardHome fondo="infoRigth" title={t("language.app")} icons="info" iconSize={25} iconColor="#5A8FCA" ruta="acercade" />
@@ -159,7 +175,7 @@ const HomeScreen = () => {
           <Text className="text-amber-500 text-xl" onPress={handleHistory}>
             {t("titles.ver")}
           </Text>
-          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} usuario_id="usuario_id"/>
+          <HistorialModal visible={modalVisible} onClose={() => setModalVisible(false)} usuario_id="usuario_id" />
         </View>
       </View>
     </ScrollView>

@@ -36,17 +36,15 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
         setTexto('');
     };
     const handleEliminar = () => {
-        // Muestra la alerta de confirmación
-        console.log("paso");
-        
+
         Alert.alert(
             "¿Eliminar meta?",
             "¿Estás seguro de que deseas eliminar esta meta de ahorro?",
             [
                 { text: "Cancelar", style: "cancel" },
                 {
-                    text: "Eliminar", 
-                    style: "destructive", 
+                    text: "Eliminar",
+                    style: "destructive",
                     onPress: async () => {
                         // Aquí manejamos la eliminación y la respuesta asincrónica
                         try {
@@ -59,6 +57,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                                     type: "success",
                                 });
                                 onEliminar?.(idObjetivo); // Actualiza lista si se pasa esta función desde el padre
+                                
                             } else {
                                 // En caso de error
                                 showMessage({
@@ -79,7 +78,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
             ]
         );
     };
-    
+
 
     return (
         <View className="p-4 rounded-lg shadow-md border border-gray-200 m-2 bg-white dark:bg-slate-800 dark:border-gray-600">

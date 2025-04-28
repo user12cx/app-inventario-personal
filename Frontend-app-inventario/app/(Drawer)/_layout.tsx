@@ -1,5 +1,5 @@
 import 'react-native-reanimated';
-
+import FlashMessage from 'react-native-flash-message';
 import { Drawer } from 'expo-router/drawer';
 import CustomDrawerContent from '@/components/shared/CustomDrawerContent'; // Importa tu componente personalizado
 import { Ionicons } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ export default function Layout() {
           name="Home/index"
           options={{
             drawerLabel: t("language.title"),
-            title:t("language.panel"),
+            title: t("language.panel"),
             drawerIcon: ({ color, size }) => (
               <Ionicons name="home-outline" size={size} color={color} />
             )
@@ -106,7 +106,9 @@ export default function Layout() {
             ),
             title: t("language.app"),
           }}
+
         />
+        <FlashMessage position="top" />
 
       </Drawer>
     </>

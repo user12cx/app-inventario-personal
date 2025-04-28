@@ -24,7 +24,6 @@ import DateInput from '@/components/shared/DateInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Objecttype {
-  key: any;
   idObjetivo: number;
   id: number;
   usuario_id: number;
@@ -54,7 +53,7 @@ const ObjetivoAhorro = () => {
     agregarObjetivo,
     eliminarObjetivo,
     editarObjetivo,
-    loading: loadingObjetivos,
+    loadingObjetivos,
     error: errorObjetos
   } = usehookobjetivo();
 
@@ -79,6 +78,7 @@ const ObjetivoAhorro = () => {
 
   useEffect(() => {
     fetchData();
+    loadingObjetivos
   }, []);
 
 
@@ -145,8 +145,7 @@ const ObjetivoAhorro = () => {
     }
   };
 
-
-
+  
 
 
   return (
@@ -176,7 +175,7 @@ const ObjetivoAhorro = () => {
         ) : (
           datos.map((item) => (
             <CustomAhorro
-              key={item.id}
+              key={item.idObjetivo}
               idObjetivo={item.idObjetivo}
               title={item.nombre}
               montoActual={item.monto_actual}

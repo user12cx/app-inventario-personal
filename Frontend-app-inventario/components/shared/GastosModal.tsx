@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView } from "react-nativ
 import { Select } from "../select";
 import { useHookCategorias } from "@/hook/usehookCategorias";
 import { usehookCuentas } from "@/hook/usehookCuentas";
-import FlashMessage from "react-native-flash-message";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import mostrarMensaje from "@/alert/Mesage";
 import { RadioButton } from "react-native-paper";
 import DateInput from "./DateInput";
@@ -31,26 +31,57 @@ const GastosModal = () => {
     return <Text>{t("gastosModal.cargando")}</Text>;
   }
 
+
   const agregarGasto = async () => {
     if (!nombreGasto || !monto || !categoria || !tipoPago) {
-      mostrarMensaje(t("gastosModal.todosObligatorios"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+      showMessage({
+        message: t("gastosModal.todosObligatorios"),
+        type: "danger",
+        icon: "danger",
+        duration: 500,
+        floating: true,
+        position: "top",
+        backgroundColor: 'rgba(255, 186, 186, 1)', // fondo rosado suave
+        color: '#D8000C',                           // texto rojo
+        style: { borderRadius: 6, borderWidth: 1, borderColor: '#D8000C' },
+      });
       return;
     }
-
+  
     const montoFloat = parseFloat(monto);
     if (isNaN(montoFloat) || montoFloat <= 0) {
-      mostrarMensaje(t("gastosModal.montoInvalido"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 600);
+      showMessage({
+        message: t("gastosModal.montoInvalido"),
+        type: "danger",
+        icon: "danger",
+        duration: 600,
+        floating: true,
+        position: "top",
+        backgroundColor: 'rgba(255, 186, 186, 1)',
+        color: '#D8000C',
+        style: { borderRadius: 6, borderWidth: 1, borderColor: '#D8000C' },
+      });
       return;
     }
-
+  
     try {
       const usuario_id = await AsyncStorage.getItem("usuario_id");
-
+  
       if (!usuario_id) {
-        mostrarMensaje((t("gastosModal.usuarioNoEncontrado")), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+        showMessage({
+          message: t("gastosModal.usuarioNoEncontrado"),
+          type: "danger",
+          icon: "danger",
+          duration: 500,
+          floating: true,
+          position: "top",
+          backgroundColor: 'rgba(255, 186, 186, 1)',
+          color: '#D8000C',
+          style: { borderRadius: 6, borderWidth: 1, borderColor: '#D8000C' },
+        });
         return;
       }
-
+  
       const transaccion: NuevaTransaccion = {
         descripcion: nombreGasto,
         categoria_id: parseInt(categoria),
@@ -60,23 +91,48 @@ const GastosModal = () => {
         fecha: (usarFechaActual ? new Date() : fecha).toISOString().slice(0, 19),
         usuario_id: parseInt(usuario_id),
       };
-
+  
       const fueExitosa = await agregarTransaccion(transaccion);
-
+  
       if (fueExitosa) {
-        mostrarMensaje(t("gastosModal.agregadoCorrectamente"), "success", '#A5D6A7', '#2C6B2F', 500);
-        setNombreGasto("");
-        setMonto("");
-        setCategoria("");
-        setTipoPago("");
-        setUsarFechaActual(true);
-        setFecha(new Date());
+        showMessage({
+          message: t("gastosModal.agregadoCorrectamente"),
+          type: "info",
+          icon: "info",
+          duration: 1500,
+          floating: true,
+          position: "top",
+          backgroundColor: '#AED7F7', // azul claro
+          color: '#1565C0',            // azul oscuro
+          style: { borderRadius: 6, borderWidth: 1, borderColor: '#1565C0' },
+        });
+        CancelarAccion(); // <- aquí cancelas después de mostrar el mensaje
       } else {
-        mostrarMensaje(t("gastosModal.errorAgregar"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+        showMessage({
+          message: t("gastosModal.errorAgregar"),
+          type: "danger",
+          icon: "danger",
+          duration: 500,
+          floating: true,
+          position: "top",
+          backgroundColor: 'rgba(255, 186, 186, 1)',
+          color: '#D8000C',
+          style: { borderRadius: 6, borderWidth: 1, borderColor: '#D8000C' },
+        });
       }
-
+  
     } catch (error) {
-      mostrarMensaje(t("gastosModal.errorInesperado"), "danger", 'rgba(255, 186, 186, 1)', '#D8000C', 500);
+      showMessage({
+        message: t("gastosModal.errorInesperado"),
+        type: "danger",
+        icon: "danger",
+        duration: 500,
+        floating: true,
+        position: "top",
+        backgroundColor: 'rgba(255, 186, 186, 1)',
+        color: '#D8000C',
+        style: { borderRadius: 6, borderWidth: 1, borderColor: '#D8000C' },
+      });
     }
   };
 

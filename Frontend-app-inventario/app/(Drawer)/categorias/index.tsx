@@ -1,3 +1,4 @@
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 import React, { useRef, useMemo, useState } from 'react';
 import {
   View,
@@ -15,7 +16,6 @@ import {
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import ListCategorias from '../../../components/shared/Table';
 import { useHookCategorias } from '@/hook/usehookCategorias';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { AntDesign } from '@expo/vector-icons';
 import { t } from 'i18next';
 

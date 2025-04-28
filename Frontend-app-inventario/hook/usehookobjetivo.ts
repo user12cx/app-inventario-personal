@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 
 export const usehookobjetivo = () => {
   const [objetivos, setObjetivos] = useState<ObjetivoAhorro[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingObjetivos, setLoadingObjetivos] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   // Cargar objetivos desde la API
   const cargarObjetivos = async () => {
-    setLoading(true);
+    setLoadingObjetivos(true);
     setError(null); // Limpiar errores previos
     try {
       const response = await getObjetivosAhorro();
@@ -21,7 +21,7 @@ export const usehookobjetivo = () => {
       setError('Error al cargar objetivos');
       console.error(err);
     } finally {
-      setLoading(false);
+      setLoadingObjetivos(false);
     }
   };
 
@@ -34,7 +34,7 @@ export const usehookobjetivo = () => {
     usuario_id: number;
     cuenta_id: number;
   }) => {
-    setLoading(true);
+    setLoadingObjetivos(true);
     setError(null);
     try {
       const res = await gestionarMeta('agregar', undefined, data.nombre, data.fecha_limite, data.monto_objetivo, data.monto_actual, data.usuario_id, data.cuenta_id);
@@ -47,7 +47,7 @@ export const usehookobjetivo = () => {
       setError('Error al agregar el objetivo');
       console.error(err);
     } finally {
-      setLoading(false);
+      setLoadingObjetivos(false);
     }
   };
 
@@ -65,7 +65,7 @@ export const usehookobjetivo = () => {
       return;
     }
 
-    setLoading(true);
+    setLoadingObjetivos(true);
     setError(null);
     try {
       const res = await gestionarMeta('editar', idObjetivo, data.nombre, data.fecha_limite, data.monto_objetivo, data.monto_actual, data.usuario_id, data.cuenta_id);
@@ -78,14 +78,14 @@ export const usehookobjetivo = () => {
       setError('Error al editar el objetivo');
       console.error(err);
     } finally {
-      setLoading(false);
+      setLoadingObjetivos(false);
     }
   };
 
 
   // Eliminar un objetivo
   const eliminarObjetivo = async (idObjetivo: number) => {
-    setLoading(true);
+    setLoadingObjetivos(true);
     setError(null);
     try {
       const res = await gestionarMeta('eliminar', idObjetivo);
@@ -97,7 +97,7 @@ export const usehookobjetivo = () => {
       console.error(err);
       return { success: false, message: 'Error al eliminar el objetivo' }; // ✅ Retornamos error manejable
     } finally {
-      setLoading(false);
+      setLoadingObjetivos(false);
     }
   };
   
@@ -109,7 +109,7 @@ export const usehookobjetivo = () => {
 
   return {
     objetivos,
-    loading,
+    loadingObjetivos,
     error,
     cargarObjetivos,
     agregarObjetivo,
