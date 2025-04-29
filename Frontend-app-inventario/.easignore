@@ -1,0 +1,4 @@
+BackendReactNativeInventario/
+node_modules/
+.git/
+*.log

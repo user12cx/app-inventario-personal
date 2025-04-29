@@ -1,10 +1,12 @@
-import { View, Text, Linking, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import { View, Text, Linking, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import registerForPushNotificationsAsync from "@/app/notification/notify";
 
 const AcercaDe = () => {
   const { t } = useTranslation();
+
 
   return (
     <ScrollView className="flex-1 bg-white dark:bg-slate-900 p-5">
@@ -63,6 +65,7 @@ const AcercaDe = () => {
           <Text className="text-blue-500 underline">{t("about.viewDetails")}</Text>
         </TouchableOpacity>
       </View>
+
 
       {/* Pie de página */}
       <Text className="text-gray-500 dark:text-gray-400 text-center mt-5">
