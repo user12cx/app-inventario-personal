@@ -83,6 +83,7 @@ const ajustes = () => {
           {mostrarAjustes && <AjuesteScrenn />}
         </View>
 
+
         <Cerra_Sesion />
       </ScrollView>
     </>
