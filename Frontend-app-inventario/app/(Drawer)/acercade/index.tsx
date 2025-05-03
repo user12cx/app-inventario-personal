@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import registerForPushNotificationsAsync from "@/app/notification/notify";
-import { CartItemPlaceholder, CategoriaFicticia, MetaFicticia } from "@/components/ComponentsBlanck";
+import { CartItemPlaceholder, CategoriaFicticia, HistorialCompras, MetaFicticia } from "@/components/ComponentsBlanck";
 
 const AcercaDe = () => {
   const { t } = useTranslation();
@@ -70,6 +70,7 @@ const AcercaDe = () => {
         <CartItemPlaceholder/>
         <MetaFicticia/>
         <CategoriaFicticia/>
+        <HistorialCompras/>
 
       {/* Pie de página */}
       <Text className="text-gray-500 dark:text-gray-400 text-center mt-5">

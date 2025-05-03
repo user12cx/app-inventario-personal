@@ -8,6 +8,7 @@ import LanguageModal from '../../../components/shared/modalidioma';
 import Cerra_Sesion from '@/components/shared/Cerrar_sesion';
 import { t } from 'i18next';
 import { usehookUsuarios } from '@/hook/usehookUser';
+import { CartItemPlaceholder, CategoriaFicticia, MetaFicticia } from '@/components/ComponentsBlanck';
 
 const ajustes = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -82,7 +83,9 @@ const ajustes = () => {
           </TouchableOpacity>
           {mostrarAjustes && <AjuesteScrenn />}
         </View>
-
+        <CategoriaFicticia/>
+        <MetaFicticia/>
+        <CartItemPlaceholder/>
 
         <Cerra_Sesion />
       </ScrollView>

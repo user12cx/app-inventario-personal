@@ -30,6 +30,7 @@ const screenWidth = Dimensions.get("window").width;
 const HomeScreen = () => {
 
   const isDarkMode = useColorScheme() === "dark";
+  
   const chartConfig = useMemo(() => ({
     backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
     backgroundGradientFrom: isDarkMode ? "#0f172a" : "#F4F4F4",
