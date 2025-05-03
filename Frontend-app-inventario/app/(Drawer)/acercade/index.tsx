@@ -1,12 +1,13 @@
-import { View, Text, Linking, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import { View, Text, Linking, TouchableOpacity, ScrollView, TextInput, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import registerForPushNotificationsAsync from "@/app/notification/notify";
-import { CartItemPlaceholder, CategoriaFicticia, HistorialCompras, MetaFicticia } from "@/components/ComponentsBlanck";
+import { CartItemPlaceholder, CategoriaFicticia, Chardata, HistorialCompras, MetaFicticia } from "@/components/ComponentsBlanck";
 
 const AcercaDe = () => {
   const { t } = useTranslation();
+
 
 
   return (
@@ -67,10 +68,8 @@ const AcercaDe = () => {
         </TouchableOpacity>
       </View>
 
-        <CartItemPlaceholder/>
         <MetaFicticia/>
-        <CategoriaFicticia/>
-        <HistorialCompras/>
+   
 
       {/* Pie de página */}
       <Text className="text-gray-500 dark:text-gray-400 text-center mt-5">

@@ -5,6 +5,7 @@ import { registerUser } from '../../../service/loginService';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from 'react';
+import FlashMessage from 'react-native-flash-message';
 
 // ✅ Esquema de validación con Yup
 const RegisterSchema = Yup.object().shape({
@@ -39,7 +40,8 @@ const RegisterScreen = () => {
         }
       }}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting }) => 
+      (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
           <View className="flex-1 bg-[#ECF3FB]zz">
             <Image source={require("../../../assets/images/autentificacionlogin.png")} className="w-full" resizeMode="contain" />
@@ -93,7 +95,7 @@ const RegisterScreen = () => {
               {isSubmitting ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text className="text-white text-center text-lg">Sign Up</Text>
+                <Text className="text-white text-center text-lg">Registrar</Text>
               )}
             </TouchableOpacity>
 
@@ -104,6 +106,9 @@ const RegisterScreen = () => {
               </Text>
             </Text>
           </View>
+
+          <FlashMessage position="top" />
+
         </ScrollView>
       )}
     </Formik>

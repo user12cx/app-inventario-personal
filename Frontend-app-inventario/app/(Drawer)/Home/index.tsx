@@ -20,6 +20,7 @@ import { usehookTransacciones } from "@/hook/usehookTransacciones";
 import { usehookGastos } from "@/hook/usehookgrafica";
 import useExitApp from "@/hook/useExitApp";
 import { t } from "i18next";
+import { CartItemPlaceholder, Chardata, HistorialCompras } from "@/components/ComponentsBlanck";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -30,7 +31,7 @@ const screenWidth = Dimensions.get("window").width;
 const HomeScreen = () => {
 
   const isDarkMode = useColorScheme() === "dark";
-  
+
   const chartConfig = useMemo(() => ({
     backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
     backgroundGradientFrom: isDarkMode ? "#0f172a" : "#F4F4F4",
@@ -110,11 +111,16 @@ const HomeScreen = () => {
 
         {/* Gráfico */}
         <View className="p-2">
-          <Text className="text-[20px] font-bold mb-2 text-neutral-600 dark:text-white">{t("language.history_gastos")}</Text>
+          <Text className="text-[20px] font-bold mb-2 text-neutral-600 dark:text-white">
+            {t("language.history_gastos")}
+          </Text>
+
           {loadingGastos ? (
             <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorGastos ? (
             <Text className="text-red-500">{errorGastos}</Text>
+          ) : chartData.datasets[0].data.length === 0 ? (
+            <Chardata />
           ) : (
             <LineChart
               data={chartData}
@@ -131,6 +137,7 @@ const HomeScreen = () => {
             />
           )}
         </View>
+
 
         {/* Cuentas disponibles */}
         <View>
@@ -153,7 +160,11 @@ const HomeScreen = () => {
                   />
                 ))
               ) : (
-                <Text>No hay cuentas disponibles.</Text>
+                <View className="flex-row gap-3">
+                  <CartItemPlaceholder />
+                  <CartItemPlaceholder />
+                </View>
+
               )}
             </View>
           </ScrollView>
@@ -161,15 +172,25 @@ const HomeScreen = () => {
 
         {/* Últimas acciones */}
         <View>
-          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">{t("language.history_accion")}</Text>
+          <Text className="text-[20px] ml-3 mb-3 text-neutral-600 dark:text-white">
+            {t("language.history_accion")}
+          </Text>
+
           {loadingTop ? (
             <ActivityIndicator size="large" color="#5A8FCA" />
           ) : errorTop ? (
             <Text className="text-center text-red-500">{errorTop}</Text>
+          ) : datosTop.length === 0 ? (
+            <>
+              <HistorialCompras />
+              <HistorialCompras />
+              <HistorialCompras />
+            </>
           ) : (
             <OrdenList data={datosTop} />
           )}
         </View>
+
 
         {/* Ver más */}
         <View className="justify-center items-center pb-4">

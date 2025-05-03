@@ -18,6 +18,7 @@ import ListCategorias from '../../../components/shared/Table';
 import { useHookCategorias } from '@/hook/usehookCategorias';
 import { AntDesign } from '@expo/vector-icons';
 import { t } from 'i18next';
+import { CategoriaFicticia } from '@/components/ComponentsBlanck';
 
 
 const Categorías = () => {
@@ -50,7 +51,7 @@ const Categorías = () => {
   };
   const handleGuardar = async () => {
     const result = await agregarCategoria(nombre);
-  
+
     if (result.success) {
       showMessage({
         message: result.message || 'Categoría agregada con éxito.',
@@ -67,7 +68,7 @@ const Categorías = () => {
       handleCloseSheet();
     } else {
       showMessage({
-        message:"Campos requeridos" ,
+        message: "Campos requeridos",
         type: 'danger',
         icon: 'info',
         duration: 800,
@@ -79,11 +80,11 @@ const Categorías = () => {
       });
     }
   };
-  
+
 
   const handleEliminarCategoria = async (categoriaId: number) => {
     const result = await eliminarCategoria(categoriaId);
-  
+
     if (result.success && result.message) {
       // Si la eliminación fue exitosa, mostrar mensaje de éxito
       showMessage({
@@ -112,7 +113,7 @@ const Categorías = () => {
       });
     }
   };
-  
+
 
   return (
     <>
@@ -137,12 +138,21 @@ const Categorías = () => {
                   <AntDesign name="addfile" size={24} color="white" />
                 </TouchableOpacity>
               </View>
+              {categorias.length > 0 ? (
+                <ListCategorias
+                  categorias={categorias}
+                  handleEliminar={handleEliminarCategoria}
+                  handleEditar={editarCategoria}
+                />
+              ) : (
+                <View>
+                  <CategoriaFicticia/>
+                  <Text className="text-center mt-4 text-neutral-500 dark:text-neutral-300">
+                    No hay categorías registradas aún.
+                  </Text>
+                </View>
 
-              <ListCategorias
-                categorias={categorias}
-                handleEliminar={handleEliminarCategoria}
-                handleEditar={editarCategoria}
-              />
+              )}
             </>
           )}
         </ScrollView>

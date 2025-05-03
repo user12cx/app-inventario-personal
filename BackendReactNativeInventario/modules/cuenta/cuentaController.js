@@ -18,7 +18,7 @@ const getCuenta = async (req, res) => {
         if (result.recordset.length > 0) {
             return res.status(200).json({ success: true, result: result.recordset });
         } else {
-            return res.status(404).json({ success: false, message: "No se encontraron cuentas para este usuario." });
+            return res.status(200).json({ success: true, message: "No se encontraron cuentas para este usuario." });
         }
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });

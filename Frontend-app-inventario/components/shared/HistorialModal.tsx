@@ -137,7 +137,12 @@ const HistorialModal: React.FC<HistorialModalProps> = ({ visible, onClose, usuar
                 {/* Cargando */}
                 {loading ? (
                     <ActivityIndicator size="large" color="#5A8FCA" className="mt-10" />
-                ) : (
+                ) : transacciones.length === 0 ? (
+                    <View className="items-center justify-center mt-10 px-4">
+                        <Text className="text-lg dark:text-white text-center">
+                           No hay Transacciones aun
+                        </Text>
+                    </View>) : (
                     <FlatList
                         data={transacciones}
                         keyExtractor={(item) => item.idTransaccion.toString()}

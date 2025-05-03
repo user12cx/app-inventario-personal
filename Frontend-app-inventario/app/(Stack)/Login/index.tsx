@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { loginUser } from "../../../service/loginService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TerminosYCondiciones from "../../../components/shared/terminesisCondiciones";
+import FlashMessage, { showMessage } from "react-native-flash-message";
 
 interface LoginValues {
   input: string;
@@ -14,6 +15,7 @@ interface LoginValues {
 }
 
 const LoginScreen = () => {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -40,7 +42,10 @@ const LoginScreen = () => {
 
   const handleSubmit = async (values: LoginValues, { setSubmitting, setErrors }: any) => {
     if (!acceptedTerms) {
-      Alert.alert("Debes aceptar los términos y condiciones.");
+      showMessage({
+        message: "debe Aseptar los Terminos y Condiciones",
+        type: "info",
+      });
       setSubmitting(false);
       return;
     }
@@ -54,9 +59,22 @@ const LoginScreen = () => {
       } else {
         throw new Error("Error en la autenticación.");
       }
-    } catch (error: any) {
+
+    }
+     catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || "Error al iniciar sesión";
-      setErrors({ general: errorMessage });
+      showMessage({
+        message: errorMessage,
+        type: 'danger',
+        icon: 'info',
+        duration: 800,
+        floating: true,
+        position: 'top',
+        backgroundColor: '#FFBABA',
+        color: '#D8000C',
+        style: { borderRadius: 6 },
+      });
+
     } finally {
       setSubmitting(false);
     }
@@ -87,7 +105,7 @@ const LoginScreen = () => {
 
               {/* Link para abrir términos y condiciones */}
               <TouchableOpacity className="flex-row items-center mt-3" onPress={() => setShowModal(true)}>
-              {acceptedTerms && <Check size={20} color="green" className="mr-2" />} 
+                {acceptedTerms && <Check size={20} color="green" className="mr-2" />}
                 <Text className="text-blue-500 text-center">Ver términos y condiciones</Text>
               </TouchableOpacity>
 
@@ -107,6 +125,7 @@ const LoginScreen = () => {
 
       {/* Modal de Términos y Condiciones */}
       <TerminosYCondiciones visible={showModal} onClose={() => setShowModal(false)} onAccept={handleAcceptTerms} />
+      <FlashMessage position="top" />
     </ScrollView>
   );
 };

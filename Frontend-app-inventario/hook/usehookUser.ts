@@ -15,7 +15,7 @@ export const usehookUsuarios = () => {
       if (response.success) {
         setUsuarios(response.data);
       } else {
-        setError("Error al obtener usuarios.");
+        setError("No se ayo el usuario reinicie.");
       }
     } catch (err) {
       setError("Ocurrió un error al listar los usuarios.");

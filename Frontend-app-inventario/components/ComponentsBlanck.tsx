@@ -1,15 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Dimensions, ActivityIndicator, useColorScheme } from 'react-native'
+import React, { useMemo } from 'react'
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { ProgressBar } from 'react-native-paper';
-
-export const ComponentsBlanck = () => {
-    return (
-        <View>
-            <Text>ComponentsBlanck</Text>
-        </View>
-    )
-}
+import { LineChart } from 'react-native-chart-kit';
 
 export const CartItemPlaceholder = () => {
     return (
@@ -92,7 +85,7 @@ export const HistorialCompras = () => {
             <View className="flex-1">
                 <Text className="text-xl font-bold text-gray-800 dark:text-gray-300">Arroz con pollo</Text>
                 <Text className="text-gray-500 text-base">
-                    Comida| Gasto | 12/12/2023
+                    Comida - Gasto - 12/12/2023
                 </Text>
             </View>
 
@@ -101,6 +94,76 @@ export const HistorialCompras = () => {
                 S/.120
             </Text>
         </View>
+
+    )
+}
+
+const screenWidth = Dimensions.get("window").width;
+
+const chartData = {
+  labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+  datasets: [
+    {
+      data: [450, 560, 300, 420, 690, 510],
+      strokeWidth: 2,
+    },
+  ],
+};
+
+export const Chardata =()=>{
+
+const isDarkMode = useColorScheme() === "dark";
+
+const chartConfig = useMemo(
+  () => ({
+    backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
+    backgroundGradientFrom: isDarkMode ? "#0f172a" : "#F4F4F4",
+    backgroundGradientTo: isDarkMode ? "#0f172a" : "#F4F4F4",
+    decimalPlaces: 2,
+    color: () => `#5e94c2`,
+    labelColor: () => `#5e94c2`,
+    style: {
+      borderRadius: 16,
+    },
+    propsForDots: {
+      r: "6",
+      strokeWidth: "2",
+      stroke: "#fff",
+    },
+    propsForLabels: {
+      fontSize: 9,
+      fontWeight: "bold",
+      fill: "#5e94c2",
+    },
+  }),
+  [isDarkMode]
+);
+
+const loadingGastos = false;
+const errorGastos = null;
+
+    return (
+        <View className="p-2">
+        {loadingGastos ? (
+          <ActivityIndicator size="large" color="#5A8FCA" />
+        ) : errorGastos ? (
+          <Text className="text-red-500">{errorGastos}</Text>
+        ) : (
+          <LineChart
+            data={chartData}
+            width={screenWidth - 20}
+            height={200}
+            yAxisLabel="$ "
+            yAxisInterval={1}
+            chartConfig={chartConfig}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
+        )}
+      </View>
 
     )
 }

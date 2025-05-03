@@ -83,10 +83,6 @@ const ajustes = () => {
           </TouchableOpacity>
           {mostrarAjustes && <AjuesteScrenn />}
         </View>
-        <CategoriaFicticia/>
-        <MetaFicticia/>
-        <CartItemPlaceholder/>
-
         <Cerra_Sesion />
       </ScrollView>
     </>

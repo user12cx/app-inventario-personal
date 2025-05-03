@@ -48,7 +48,7 @@ const validateRegister = [
     body("usuario")
         .trim()
         .notEmpty().withMessage("El usuario Login es obligatorio")
-        .isLength({ min: 5 }).withMessage("El usuario debe tener al menos 5 caracteres"),
+        .isLength({ min: 3 }).withMessage("El usuario debe tener al menos 3 caracteres"),
     body("email")
         .trim()
         .isEmail().withMessage("Correo inválido"),

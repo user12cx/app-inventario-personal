@@ -94,25 +94,33 @@ const Index = () => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={Array.isArray(datos) ? datos : []}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => handleOpenSheetCuentas(item)}
-              className="p-4 mb-2 shadow-xl m-2 bg-gray-100 dark:bg-slate-800"
-            >
-              <View className="flex-row justify-between">
-                <Text className="text-xl dark:text-white">{item.nombre}</Text>
-                <Text className="text-green-500 text-base">{`$ ${item.saldo}`}</Text>
-              </View>
-              <Text className="text-amber-500">{item.estado}</Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.idCuenta.toString()}
-          refreshControl={
-            <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
-          }
-        />
+        {Array.isArray(datos) && datos.length === 0 ? (
+          <View className="items-center justify-center mt-10 px-4">
+            <Text className="text-lg  dark:text-white text-center">
+              No hay tarjetas disponibles. Presiona el botón "+" para agregar una nueva tarjeta.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={Array.isArray(datos) ? datos : []}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleOpenSheetCuentas(item)}
+                className="p-4 mb-2 shadow-xl m-2 bg-gray-100 dark:bg-slate-800"
+              >
+                <View className="flex-row justify-between">
+                  <Text className="text-xl dark:text-white">{item.nombre}</Text>
+                  <Text className="text-green-500 text-base">{`$ ${item.saldo}`}</Text>
+                </View>
+                <Text className="text-amber-500">{item.estado}</Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) => item.idCuenta.toString()}
+            refreshControl={
+              <RefreshControl refreshing={refreshingActive} onRefresh={handleRefresh} />
+            }
+          />
+        )}
       </View>
 
       {showModal && (

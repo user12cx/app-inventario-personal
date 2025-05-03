@@ -15,8 +15,7 @@ export const loginUser = async (input: string, password: string): Promise<LoginR
     const response = await instance.post<LoginResponse>("/login/login", { input, password });
     return response.data;
   } catch (error: any) {
-    console.error("Error al iniciar sesión:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Error al iniciar sesión");
+    throw Error(error.response?.data?.message || "Error al iniciar sesión");
   }
 };
 
@@ -30,10 +29,10 @@ interface RegisterResponse {
   message: string;
 }
 
-export const registerUser = async (nombre: string, email: string, password: string): Promise<RegisterResponse> => {
+export const registerUser = async (usuario: string, email: string, password: string): Promise<RegisterResponse> => {
   try {
     const response = await instance.post<RegisterResponse>("/register/register", {
-      nombre,
+      usuario,
       email,
       password,
     });

@@ -24,7 +24,7 @@ const login = async (req, res) => {
 
         // Si no encuentra el usuario
         if (result.recordset.length === 0) {
-            return res.status(401).json({ success: false, message: "Usuario no encontrado" });
+            return res.status(400).send({ success: false, message: "Usuario no encontrado" });
         }
 
         const user = result.recordset[0];
