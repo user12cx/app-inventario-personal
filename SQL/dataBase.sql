@@ -4,14 +4,13 @@ USE SystemaGestionPersonal;
 
 CREATE TABLE Usuarios (
 	idUser INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-	usuario VARCHAR(20),
+	usuario VARCHAR(20) not null,
 	name VARCHAR(70) NOT NULL,
-	apellidos VARCHAR(100) NOT NULL,
+	apellidos VARCHAR(100) null,
 	email VARCHAR(100) NOT NULL,
 	password VARCHAR(255) NOT NULL,
-	telefono INT,
-	ocupacion VARCHAR(50),
-	fotoPerfil VARBINARY(MAX),
+	telefono INT null,
+	ocupacion VARCHAR(50) null,
 	fecha_registro DATETIME DEFAULT GETDATE()
 );
 
