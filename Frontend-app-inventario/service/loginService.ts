@@ -1,12 +1,16 @@
 import { instance } from "./api";
 
-interface LoginResponse { 
+interface LoginResponse {
   success: boolean;
   token: string;
   user: {
     idUser: number;
     email: string;
-    nombre: string;
+    usuario: string;
+    name: string;
+    apellidos: string;
+    telefono: string;
+    ocupacion: string;
   };
 }
 

@@ -8,6 +8,7 @@ import { loginUser } from "../../../service/loginService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TerminosYCondiciones from "../../../components/shared/terminesisCondiciones";
 import FlashMessage, { showMessage } from "react-native-flash-message";
+import { useAuth } from "@/context/authContexto";
 
 interface LoginValues {
   input: string;
@@ -15,10 +16,11 @@ interface LoginValues {
 }
 
 const LoginScreen = () => {
-  
+
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const { userInfo, setuserInfo } = useAuth()
 
   useEffect(() => {
     checkTermsAccepted();
@@ -46,22 +48,38 @@ const LoginScreen = () => {
         message: "debe Aseptar los Terminos y Condiciones",
         type: "info",
       });
+
       setSubmitting(false);
       return;
     }
 
     try {
       const data = await loginUser(values.input, values.password);
+          
       if (data.success && data.user) {
         await AsyncStorage.setItem("usuario_id", data.user.idUser.toString());
+        await AsyncStorage.setItem("user_info", JSON.stringify(data.user));
+
         Alert.alert("Inicio de sesión exitoso", `Bienvenido, ${data.user.usuario}`);
+        console.log("Usuario guardado en AsyncStorage:", data.user); // Log para verificar el guardado
+
+        setuserInfo({
+          idUser: data.user.idUser,
+          email: data.user.email,
+          usuario: data.user.usuario,
+          name: data.user.name,
+          apellidos: data.user.apellidos || "Incognito", // Se asegura que no quede vacío si no está presente
+          telefono: data.user.telefono || " Incognito",    // Igualmente, el teléfono es opcional
+          ocupacion: data.user.ocupacion || "Incognito", // De igual forma para ocupación
+        });
+
         router.push("/(Drawer)/Home");
       } else {
         throw new Error("Error en la autenticación.");
       }
 
     }
-     catch (error: any) {
+    catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || "Error al iniciar sesión";
       showMessage({
         message: errorMessage,

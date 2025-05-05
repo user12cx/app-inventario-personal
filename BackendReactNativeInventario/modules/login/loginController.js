@@ -12,13 +12,16 @@ const login = async (req, res) => {
         }
 
         const { input, password } = req.body;  // Ahora 'input' puede ser email o nombre
+        console.log("Body recibido:", req.body);
         const pool = await poolPromise;
+
 
         // Ejecutar el procedimiento almacenado
         const result = await pool
             .request()
             .input("input", sql.NVarChar, input)
-            .query("EXEC loginUsuario @input");
+            .input("password", sql.NVarChar, password)
+            .execute("loginUsuario");
 
         console.log("Resultado de la consulta:", result.recordset);
 
@@ -29,18 +32,34 @@ const login = async (req, res) => {
 
         const user = result.recordset[0];
 
-        // Comparar la contraseña encriptada con bcrypt
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ success: false, message: "Contraseña incorrecta" });
         }
+
+
+
+        // Comparar la contraseña encriptada con bcrypt
 
         // Generar Token JWT
         const token = jwt.sign({ idUser: user.idUser, email: user.email }, "secreto123", {
             expiresIn: "2h",
         });
 
-        return res.json({ success: true, token, user: { idUser: user.idUser, email: user.email, usuario: user.usuario } });
+        return res.json({
+            success: true,
+            token,
+            user: {
+                idUser: user.idUser,
+                email: user.email,
+                usuario: user.usuario,
+                name: user.name,
+                apellidos: user.apellidos,
+                telefono: user.telefono,
+                ocupacion: user.ocupacion,
+                fecha_registro: user.fecha_registro
+            }
+        });
 
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });

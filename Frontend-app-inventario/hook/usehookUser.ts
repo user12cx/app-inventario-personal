@@ -2,6 +2,7 @@ import { gestionarUsuario, GestionarUsuarioResponse, listarUsuarios, Usuario } f
 import { useEffect, useState, useCallback } from "react";
 
 export const usehookUsuarios = () => {
+  
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

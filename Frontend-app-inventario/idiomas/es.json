@@ -11,7 +11,7 @@
     "cuenta": "Cuentas",
     "app": "App",
     "history_gastos": "Gastos Mensuales",
-    "history_target": "Cuentas Disponibles",
+    "history_target": "Activos Disponibles",
     "history_accion": "Ultimas Acciones",
     "panel": "Panel de control"
   },
@@ -50,9 +50,9 @@
     "errorInesperado": "Error inesperado"
   },
   "titles": {
-    "tarjetas_dis": "Tarjetas Disponibles",
-    "categorias_dis": "categorias Disponibles",
-    "cuentas_dis": "Cuentas Disponibles",
+    "tarjetas_dis": "Activos Disponibles",
+    "categorias_dis": "Categorias Disponibles",
+    "cuentas_dis": "Activos Disponibles",
     "metas_dis": "Metas Actuales",
     "history": "Historial de Transacciónes",
     "ver": "Ver Más +",

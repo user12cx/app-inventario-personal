@@ -10,7 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, View } from "react-native";
 
 const Index = () => {
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkLoginStatus = async () => {
@@ -30,7 +30,7 @@ const Index = () => {
                 console.error("Error al verificar el estado de inicio de sesión", error);
                 router.push("/(Stack)/Login"); // Si ocurre un error, redirige al Login
             } finally {
-                setLoading(false); 
+                setLoading(false);
             }
         };
 
@@ -46,11 +46,12 @@ const Index = () => {
     }
 
     return (
-        <BottomSheetModalProvider>
-            <AuthProvider>
-                <MainLayout />
-            </AuthProvider>
-        </BottomSheetModalProvider>
+            <BottomSheetModalProvider>
+                <AuthProvider>
+                    <MainLayout />
+                </AuthProvider>
+            </BottomSheetModalProvider>
+
     );
 };
 
