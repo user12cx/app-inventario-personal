@@ -67,8 +67,6 @@ const AcercaDe = () => {
           <Text className="text-blue-500 underline">{t("about.viewDetails")}</Text>
         </TouchableOpacity>
       </View>
-
-        <MetaFicticia/>
    
 
       {/* Pie de página */}

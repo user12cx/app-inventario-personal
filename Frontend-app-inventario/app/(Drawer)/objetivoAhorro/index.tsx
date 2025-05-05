@@ -22,6 +22,7 @@ import { Select } from '@/components/select';
 import { usehookobjetivo } from '@/hook/usehookobjetivo';
 import DateInput from '@/components/shared/DateInput';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MetaFicticia } from '@/components/ComponentsBlanck';
 
 interface Objecttype {
   idObjetivo: number;
@@ -67,7 +68,11 @@ const ObjetivoAhorro = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await getObjetivosAhorro();
+      const id = await AsyncStorage.getItem("usuario_id");
+      if (!id) throw new Error("Usuario no autenticado");
+      
+      const usuario_id = parseInt(id);
+      const response = await getObjetivosAhorro(usuario_id); // <-- ahora pasas el ID
       setdatos(response.result);
     } catch (error) {
       seterror(error);
@@ -75,6 +80,7 @@ const ObjetivoAhorro = () => {
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -196,8 +202,10 @@ const ObjetivoAhorro = () => {
           <ActivityIndicator size="large" color="#0000ff" className="mt-4" />
         ) : error ? (
           <Text className="text-red-500 text-center mt-4">Error al cargar objetivos</Text>
-        ) : (
-          datos.map((item) => (  
+        ) : datos.length === 0 ? (
+           <MetaFicticia/>
+        ):(
+          datos.map((item) => (
             <CustomAhorro
               key={item.idObjetivo}
               idObjetivo={item.idObjetivo}

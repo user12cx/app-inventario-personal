@@ -3,7 +3,15 @@ const { sql, poolPromise } = require("../../config/conexion");
 const getObjetivos = async (req, res) => {
   try {
     const pool = await poolPromise;
-    const result = await pool.request().query("EXEC getObjetivosFuturos");
+    const usuario_id = req.query.usuario_id || req.body.usuario_id; // Obtener el usuario desde la petición
+    
+    if (!usuario_id) {
+      return res.status(400).send({ success: false, error: "El usuario_id es requerido" });
+  }
+  const result = await pool.request()
+  .input("usuario_id", sql.Int, usuario_id) // Pasar el usuario como parámetro
+  .execute("getObjetivosFuturos"); // Ejecutar el procedimiento almacenado
+
 
     return res.status(200).json({ success: true, result: result.recordset });
   } catch (error) {

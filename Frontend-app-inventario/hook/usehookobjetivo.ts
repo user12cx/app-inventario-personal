@@ -1,4 +1,5 @@
 import { gestionarMeta, getObjetivosAhorro, ObjetivoAhorro } from '@/service/objetivoService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
 export const usehookobjetivo = () => {
@@ -9,23 +10,31 @@ export const usehookobjetivo = () => {
 
   // Cargar objetivos desde la API
   const cargarObjetivos = async () => {
-    setLoadingObjetivos(true);
-    setError(null); // Limpiar errores previos
-    setSuccessMessage(null); // Limpiar mensaje de éxito previo
     try {
-      const response = await getObjetivosAhorro();
-      if (response.success && response.data) {
-        setObjetivos(response.data);
-      } else {
-        setError(response.message || 'Error desconocido al obtener los objetivos');
+      setLoadingObjetivos(true);
+      const usuarioIdStr = await AsyncStorage.getItem("usuario_id");
+      if (!usuarioIdStr) {
+        setError("No se encontró el ID de usuario.");
+        return;
       }
-    } catch (err: any) {
-      setError('Error al cargar objetivos');
+  
+      const usuario_id = parseInt(usuarioIdStr, 10);
+      const response = await getObjetivosAhorro(usuario_id);
+  
+      if (response.success && Array.isArray(response.result)) {
+        setObjetivos(response.result);
+        setError(null);
+      } else {
+        setError(response.message || "No se pudieron obtener los objetivos.");
+      }
+    } catch (err) {
       console.error(err);
+      setError("Error al obtener los objetivos.");
     } finally {
       setLoadingObjetivos(false);
     }
   };
+  
 
   // Agregar un nuevo objetivo
   const agregarObjetivo = async (data: {

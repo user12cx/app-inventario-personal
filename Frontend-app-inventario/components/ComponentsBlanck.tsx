@@ -21,6 +21,8 @@ export const CartItemPlaceholder = () => {
     );
 };
 
+
+
 export const MetaFicticia = () => {
     const progresoFicticio = 0.4;
 
@@ -78,7 +80,7 @@ export const HistorialCompras = () => {
         <View className="flex-row items-center p-4 dark:border-gray-700">
             {/* Icono */}
             <View className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mr-4 dark:bg-gray-700">
-                <FontAwesome name="shopping-cart" size={20} color={ "#FF3B30" } />
+                <FontAwesome name="shopping-cart" size={20} color={"#FF3B30"} />
             </View>
 
             {/* Información */}
@@ -101,69 +103,89 @@ export const HistorialCompras = () => {
 const screenWidth = Dimensions.get("window").width;
 
 const chartData = {
-  labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-  datasets: [
-    {
-      data: [450, 560, 300, 420, 690, 510],
-      strokeWidth: 2,
-    },
-  ],
+    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+    datasets: [
+        {
+            data: [450, 560, 300, 420, 690, 510],
+            strokeWidth: 2,
+        },
+    ],
 };
 
-export const Chardata =()=>{
+export const Chardata = () => {
 
-const isDarkMode = useColorScheme() === "dark";
+    const isDarkMode = useColorScheme() === "dark";
 
-const chartConfig = useMemo(
-  () => ({
-    backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
-    backgroundGradientFrom: isDarkMode ? "#0f172a" : "#F4F4F4",
-    backgroundGradientTo: isDarkMode ? "#0f172a" : "#F4F4F4",
-    decimalPlaces: 2,
-    color: () => `#5e94c2`,
-    labelColor: () => `#5e94c2`,
-    style: {
-      borderRadius: 16,
-    },
-    propsForDots: {
-      r: "6",
-      strokeWidth: "2",
-      stroke: "#fff",
-    },
-    propsForLabels: {
-      fontSize: 9,
-      fontWeight: "bold",
-      fill: "#5e94c2",
-    },
-  }),
-  [isDarkMode]
-);
+    const chartConfig = useMemo(
+        () => ({
+            backgroundColor: isDarkMode ? "#0f172a" : "#F4F4F4",
+            backgroundGradientFrom: isDarkMode ? "#0f172a" : "#F4F4F4",
+            backgroundGradientTo: isDarkMode ? "#0f172a" : "#F4F4F4",
+            decimalPlaces: 2,
+            color: () => `#5e94c2`,
+            labelColor: () => `#5e94c2`,
+            style: {
+                borderRadius: 16,
+            },
+            propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#fff",
+            },
+            propsForLabels: {
+                fontSize: 9,
+                fontWeight: "bold",
+                fill: "#5e94c2",
+            },
+        }),
+        [isDarkMode]
+    );
 
-const loadingGastos = false;
-const errorGastos = null;
+    const loadingGastos = false;
+    const errorGastos = null;
 
     return (
         <View className="p-2">
-        {loadingGastos ? (
-          <ActivityIndicator size="large" color="#5A8FCA" />
-        ) : errorGastos ? (
-          <Text className="text-red-500">{errorGastos}</Text>
-        ) : (
-          <LineChart
-            data={chartData}
-            width={screenWidth - 20}
-            height={200}
-            yAxisLabel="$ "
-            yAxisInterval={1}
-            chartConfig={chartConfig}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
-        )}
-      </View>
+            {loadingGastos ? (
+                <ActivityIndicator size="large" color="#5A8FCA" />
+            ) : errorGastos ? (
+                <Text className="text-red-500">{errorGastos}</Text>
+            ) : (
+                <LineChart
+                    data={chartData}
+                    width={screenWidth - 20}
+                    height={200}
+                    yAxisLabel="$ "
+                    yAxisInterval={1}
+                    chartConfig={chartConfig}
+                    bezier
+                    style={{
+                        marginVertical: 8,
+                        borderRadius: 16,
+                    }}
+                />
+            )}
+        </View>
 
     )
-}
+};
+
+export const TransaccionBlanck = () => {
+    return (
+
+        <View>
+            <TouchableOpacity
+                className="p-4 mb-2 shadow-xl m-2 bg-gray-100 dark:bg-slate-800"
+            >
+                <View className="flex-row justify-between">
+                    <Text className="text-xl dark:text-white">Lemon Card</Text>
+                    <Text className="text-green-500 text-base">$ 1200.00</Text>
+                </View>
+                <Text className="text-amber-500">Activa</Text>
+            </TouchableOpacity>
+        </View>
+
+
+    );
+
+};

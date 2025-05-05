@@ -5,7 +5,7 @@ const { getObjetivos, gestionarMetasFuturo } = require("../modules/objetivoAhorr
 const router = express.Router();
 
 // Ruta para obtener categorías desde SQL Server
-router.get("/getObjetivo", getObjetivos);
+router.get("/getObjetivos", getObjetivos);
 
 router.post("/gestionarMetasFuturo", gestionarMetasFuturo);
 

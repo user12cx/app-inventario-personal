@@ -22,9 +22,11 @@ export interface GetObjetivosAhorroResponse {
   result: any;
   error?: string;
 }
-export const getObjetivosAhorro = async (): Promise<GetObjetivosAhorroResponse> => {
+export const getObjetivosAhorro = async (usuario_id:number): Promise<GetObjetivosAhorroResponse> => {
   try {
-    const response = await instance.get<GetObjetivosAhorroResponse>('objetivos/getObjetivo');
+    const response = await instance.get<GetObjetivosAhorroResponse>('getObjetivos/getObjetivos',{
+      params:{usuario_id}
+    });
     return response.data;
   } catch (error) {
     console.log('Error al cargar los objetivos de ahorro', error);

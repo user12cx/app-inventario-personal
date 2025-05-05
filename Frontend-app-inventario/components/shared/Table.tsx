@@ -16,7 +16,6 @@ interface ListCategoriasProps {
 const ListCategorias: React.FC<ListCategoriasProps> = ({ categorias, handleEliminar, handleEditar }) => {
   const [editandoId, setEditandoId] = useState<number | null>(null); // Controla qué categoría está siendo editada
   const [nuevoNombre, setNuevoNombre] = useState<string>(''); // Almacena el nuevo nombre
-  const [isEditing, setIsEditing] = useState(false);
 
   const manejarEdicion = (id: number, nombre: string) => {
     setEditandoId(id);  // Activa el modo de edición

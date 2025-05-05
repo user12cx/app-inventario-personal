@@ -5,6 +5,7 @@ import { usehookCuentas } from '@/hook/usehookCuentas';
 import { AntDesign } from '@expo/vector-icons';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { t } from 'i18next';
+import { TransaccionBlanck } from "@/components/ComponentsBlanck";
 
 const Index = () => {
   const isDarkMode = useColorScheme() === "dark";
@@ -95,8 +96,10 @@ const Index = () => {
         </View>
 
         {Array.isArray(datos) && datos.length === 0 ? (
-          <View className="items-center justify-center mt-10 px-4">
-            <Text className="text-lg  dark:text-white text-center">
+          <View className="  mt-10 px-2">
+            <TransaccionBlanck />
+
+            <Text className="text-lg  dark:text-white ">
               No hay tarjetas disponibles. Presiona el botón "+" para agregar una nueva tarjeta.
             </Text>
           </View>

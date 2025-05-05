@@ -15,7 +15,7 @@ app.use(cors({
 // Importar rutas
 const categoriaRouter = require("./routers/categoriaRouter");
 const cuentaRouter = require("./routers/cuentaRouter");
-const objetivoRouter = require("./routers/objetivoRouter");
+const getObjetivos = require("./routers/objetivoRouter");
 const login = require("./routers/loginRouter");
 const register = require("./routers/loginRouter");
 const getTopGastos = require("./routers/transaccionesRouter");
@@ -36,7 +36,7 @@ app.use("/api/gestionarCategorias", gestionarCategorias);
 app.use("/api/cuentas", cuentaRouter);
 app.use("/api/gestionarCuentas", gestionarCuentas);
 
-app.use("/api/objetivos", objetivoRouter);
+app.use("/api/getObjetivos", getObjetivos);
 app.use("/api/gestionarMetasFuturo", gestionarMetasFuturo);
 
 app.use("/api/getGastosPorMes", getGastosPorMes);
