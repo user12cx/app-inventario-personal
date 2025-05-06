@@ -4,10 +4,11 @@
     "slug": "app-inventario",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logoCarga.jpg",
+    "icon": "./assets/images/loginss.png",
     "scheme": "myapp",
+    "resizeMode": "contain",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "black",
+    "backgroundColor": "#5A8FCA",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
@@ -47,6 +48,11 @@
       "eas": {
         "projectId": "078eafcc-3bec-4549-b844-2d906e8a757d"
       }
+    },
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#5A8FCA",
+      "image": "./assets/images/splash-icon.png" 
     }
   }
 }

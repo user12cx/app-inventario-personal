@@ -5,11 +5,15 @@ import MainLayout from '@/components/MainLayout';
 import AuthProvider from '@/context/authContexto';
 // import "../locales/i18n"; // Asegúrate de que la ruta sea correcta
 import 'react-native-reanimated';
-import { router } from "expo-router";
+import { router, SplashScreen } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, View } from "react-native";
+import AnimatedSplash from '@/components/ui/AnimatedSplash';
 
 const Index = () => {
+
+    SplashScreen.preventAutoHideAsync();
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -39,9 +43,7 @@ const Index = () => {
 
     if (loading) {
         return (
-            <View className="flex-1 justify-center items-center">
-                <ActivityIndicator size="large" color="#5A8FCA" />
-            </View>
+          <AnimatedSplash />
         );
     }
 
