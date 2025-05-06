@@ -4,7 +4,7 @@
     "slug": "app-inventario",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/loginss.png",
+    "icon": "./assets/images/ssq.png",
     "scheme": "myapp",
     "resizeMode": "contain",
     "userInterfaceStyle": "automatic",
