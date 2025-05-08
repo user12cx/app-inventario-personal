@@ -7,6 +7,7 @@ export const usehookobjetivo = () => {
   const [loadingObjetivos, setLoadingObjetivos] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);  // Estado para mensajes de éxito
+  const [refreshingObjetivos, setRefreshinObjetivos] = useState<boolean>(false);
 
   // Cargar objetivos desde la API
   const cargarObjetivos = async () => {
@@ -17,10 +18,10 @@ export const usehookobjetivo = () => {
         setError("No se encontró el ID de usuario.");
         return;
       }
-  
+
       const usuario_id = parseInt(usuarioIdStr, 10);
       const response = await getObjetivosAhorro(usuario_id);
-  
+
       if (response.success && Array.isArray(response.result)) {
         setObjetivos(response.result);
         setError(null);
@@ -34,7 +35,7 @@ export const usehookobjetivo = () => {
       setLoadingObjetivos(false);
     }
   };
-  
+
 
   // Agregar un nuevo objetivo
   const agregarObjetivo = async (data: {
@@ -127,14 +128,23 @@ export const usehookobjetivo = () => {
     cargarObjetivos();
   }, []);
 
+  const onRefreshObjetivos = async () => {
+    setRefreshinObjetivos(true)
+    await cargarObjetivos();
+    setRefreshinObjetivos(false)
+
+  }
+
   return {
     objetivos,
     loadingObjetivos,
     error,
+    refreshingObjetivos,
     successMessage,  // Devolvemos el mensaje de éxito
     cargarObjetivos,
     agregarObjetivo,
     editarObjetivo,
     eliminarObjetivo,
+    onRefreshObjetivos
   };
 };

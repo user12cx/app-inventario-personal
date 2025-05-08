@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
-  useColorScheme
+  useColorScheme,
+  RefreshControl
 } from 'react-native';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomAhorro from '@/components/shared/CustomAhorro';
@@ -54,7 +55,9 @@ const ObjetivoAhorro = () => {
     agregarObjetivo,
     eliminarObjetivo,
     editarObjetivo,
+    refreshingObjetivos,
     cargarObjetivos,
+    onRefreshObjetivos,
     error: errorObjetos
   } = usehookobjetivo();
 
@@ -70,9 +73,9 @@ const ObjetivoAhorro = () => {
       setLoading(true);
       const id = await AsyncStorage.getItem("usuario_id");
       if (!id) throw new Error("Usuario no autenticado");
-      
+
       const usuario_id = parseInt(id);
-      const response = await getObjetivosAhorro(usuario_id); // <-- ahora pasas el ID
+      const response = await getObjetivosAhorro(usuario_id);
       setdatos(response.result);
     } catch (error) {
       seterror(error);
@@ -80,11 +83,12 @@ const ObjetivoAhorro = () => {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
+    cargarObjetivos()
     fetchData();
-    cargarObjetivos(); // Cargar objetivos al inicio
+    onRefreshObjetivos();
   }, []);
 
 
@@ -159,8 +163,8 @@ const ObjetivoAhorro = () => {
           message: "Meta eliminada exitosamente",
           type: "success",
         });
-        // Aquí recargas los datos, o filtras localmente si quieres
-        cargarObjetivos(); // <-- Recarga de datos (si tienes una función que lo hace)
+        onRefreshObjetivos(); // ✅ Usar la función de refresco
+        fetchData();
       } else {
         showMessage({
           message: response.message || "No se pudo eliminar la meta.",
@@ -179,17 +183,20 @@ const ObjetivoAhorro = () => {
 
 
 
+
   return (
     <>
-      <ScrollView className="flex-1 dark:bg-slate-900">
+      <ScrollView className="flex-1 dark:bg-slate-900"
+        refreshControl={<RefreshControl refreshing={refreshingObjetivos} onRefresh={onRefreshObjetivos} />}
 
+      >
         {showModal && (
           <TouchableWithoutFeedback onPress={handleCloseSheet}>
             <View style={{ flex: 1, position: 'absolute', zIndex: 10, top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.3)' }} />
           </TouchableWithoutFeedback>
         )}
 
-        <View className="flex-row justify-between p-4 items-center">
+        <View className="flex-row justify-between p-5 items-center">
           <Text className="text-xl font-semibold mb-4 dark:text-white">{t("titles.metas_dis")}</Text>
           <TouchableOpacity
             className="bg-[#5A8FCA] w-12 h-12 rounded-full flex items-center justify-center"
@@ -203,8 +210,8 @@ const ObjetivoAhorro = () => {
         ) : error ? (
           <Text className="text-red-500 text-center mt-4">Error al cargar objetivos</Text>
         ) : datos.length === 0 ? (
-           <MetaFicticia/>
-        ):(
+          <MetaFicticia />
+        ) : (
           datos.map((item) => (
             <CustomAhorro
               key={item.idObjetivo}
@@ -227,7 +234,7 @@ const ObjetivoAhorro = () => {
         enablePanDownToClose={true}
         onClose={() => setShowModal(false)}
         backgroundStyle={{
-          backgroundColor: isDarkMode ? "#1e293b" : "#ffffff",
+          backgroundColor: isDarkMode ? "#1e293b" : "#ffff",
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
         }}
@@ -246,34 +253,39 @@ const ObjetivoAhorro = () => {
                 placeholder="Nombre del objetivo"
                 value={nombre}
                 onChangeText={setNombre}
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
+                className="border border-[#5A8FCA] rounded px-3 p-4 mb-6 dark:text-white"
               />
 
-              <TextInput
-                placeholder="Obtenido"
-                value={montoActual}
-                onChangeText={setMontoActual}
-                keyboardType="numeric"
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
-              />
-              <TextInput
-                placeholder="Meta"
-                value={montoEstimado}
-                onChangeText={setMontoEstimado}
-                keyboardType="numeric"
-                className="border border-[#5A8FCA] rounded px-3 p-4 mb-3 dark:text-white"
-              />
-              <View className='p-2'>
+              <View className=' flex-row  gap-4'>
+                <TextInput
+                  placeholder="Obtenido"
+                  value={montoActual}
+                  onChangeText={setMontoActual}
+                  keyboardType="numeric"
+                  className=" flex-1 border border-[#5A8FCA] rounded px-3 p-4  dark:text-white"
+                />
+                <TextInput
+                  placeholder="Meta"
+                  value={montoEstimado}
+                  onChangeText={setMontoEstimado}
+                  keyboardType="numeric"
+                  className=" flex-1 border border-[#5A8FCA] rounded px-3 p-4  dark:text-white"
+                />
+
+              </View>
+
+
+              <View className='mb-6'>
                 <DateInput
                   fecha={fecha}
                   setFecha={setFecha}
                   usarFechaActual={usarFechaActual}
                   setUsarFechaActual={setUsarFechaActual}
                 />
+
               </View>
 
-
-              <View className='border border-[#5A8FCA] rounded px-3  mb-3 dark:text-white'>
+              <View className='border border-[#5A8FCA] rounded px-2  mb-6 dark:text-white'>
                 <Select
                   placeholder={{ label: 'Cuenta a Enlazar', value: null }}
                   items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}

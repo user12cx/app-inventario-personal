@@ -6,6 +6,7 @@ import { usehookobjetivo } from '@/hook/usehookobjetivo';
 import { showMessage } from 'react-native-flash-message';
 import { usehookCuentas } from '@/hook/usehookCuentas';
 import { Select } from '../select';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface MetasItems {
     title: string;
@@ -40,18 +41,27 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
         }
 
         try {
+
+            const usuarioIdString = await AsyncStorage.getItem('usuario_id');
+            const usuario_id = usuarioIdString ? parseInt(usuarioIdString) : null;
+
+            if (!usuario_id) {
+                showMessage({ message: "Usuario no encontrado", type: "danger" });
+                return;
+            }
+
             if (editando) {
                 await editarObjetivo(idObjetivo, {
                     nombre: title,
                     fecha_limite: fechaLimite,
                     monto_objetivo: meta,
-                    monto_actual: nuevoMonto, // Actualiza el monto_actual
-                    usuario_id: 1, // <-- Cambia esto si es dinámico en tu app
+                    monto_actual: nuevoMonto,
+                    usuario_id,
                     cuenta_id: Number(tipoPago),
                 });
                 showMessage({ message: "Meta actualizada exitosamente", type: "success" });
             } else {
-                console.log("Agregar dinero, lógica aún no implementada"); 
+                console.log("Agregar dinero, lógica aún no implementada");
                 // Aquí deberías hacer lógica para sumar dinero si quieres manejarlo distinto.
             }
         } catch (error) {
@@ -110,7 +120,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
             <Text className="text-2xl font-bold font-sans text-[#5A8FCA]">{title}</Text>
 
             <View className='flex-row gap-3'>
-                <View className='w-[350px]'>
+                <View className='w-[340px]'>
                     <View className="mt-2 flex-row justify-between gap-1">
                         <Text className="text-gray-600 text-base font-sans dark:text-gray-400">
                             OBTENIDO: <Text className="font-bold font-sans text-lime-600">$ {montoActual}</Text>
@@ -119,7 +129,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                             META: <Text className="font-bold font-sans text-red-600">$ {meta}</Text>
                         </Text>
                         <Text className="text-gray-600 text-base font-sans dark:text-gray-400">
-                            LÍMITE: <Text className="font-bold font-sans text-gray-800">{fechaLimite}</Text>
+                            LÍMITE: <Text className="font-bold font-sans text-gray-500">{fechaLimite}</Text>
                         </Text>
                     </View>
 
@@ -143,35 +153,40 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
 
                     {/* Mostrar input y select */}
                     {mostrarInput && (
-                        <View className="gap-2 flex-col mb-2 mt-4">
-                            <TextInput
-                                placeholder="Nuevo monto..."
-                                value={texto}
-                                onChangeText={setTexto}
-                                className="border border-[#5A8FCA] rounded px-2 py-1 w-full dark:bg-slate-800 dark:text-white"
-                                keyboardType="numeric"
-                            />
+                        <View className="gap-2 mb-2 mt-4">
 
-                            <Select
-                                placeholder={{ label: 'Cuenta a Enlazar', value: null }}
-                                items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
-                                value={tipoPago}
-                                onValueChange={setTipoPago}
-                            />
+                            <View className='flex-row gap-4'>
+                                <TextInput
+                                    placeholder="$ ..."
+                                    value={texto}
+                                    onChangeText={setTexto}
+                                    className="border border-[#5A8FCA] rounded px-2 py-4 w-[140px] dark:bg-slate-800 dark:text-white"
+                                    keyboardType="numeric"
+                                />
+                                <View className='border border-[#5A8FCA] rounded dark:bg-slate-800 dark:text-white w-[200px]'>
+                                    <Select
+                                        placeholder={{ label: 'Cuenta a Enlazar', value: null }}
+                                        items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}
+                                        value={tipoPago}
+                                        onValueChange={setTipoPago}
+                                    />
+                                </View>
 
-                            <View className="flex-row justify-end gap-2 mt-2">
+                            </View>
+
+                            <View className="flex-row justify-end gap-2 mt-4">
                                 <TouchableOpacity
                                     onPress={handleAceptar}
-                                    className="bg-green-200 p-2 rounded-full"
+                                    className="bg-green-200 p-2 rounded-md"
                                 >
-                                    <Feather name="check" size={20} color="green" />
+                                    <Text>Aseptar</Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
                                     onPress={handleCancelar}
-                                    className="bg-gray-200 p-2 rounded-full"
+                                    className="bg-gray-200 p-2 rounded-md"
                                 >
-                                    <Feather name="x" size={20} color="black" />
+                                    <Text>Cancelar</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
