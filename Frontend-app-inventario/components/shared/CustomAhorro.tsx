@@ -7,6 +7,7 @@ import { showMessage } from 'react-native-flash-message';
 import { usehookCuentas } from '@/hook/usehookCuentas';
 import { Select } from '../select';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getObjetivosAhorro } from '@/service/objetivoService';
 
 interface MetasItems {
     title: string;
@@ -15,6 +16,7 @@ interface MetasItems {
     meta: number;
     fechaLimite: string;
     onEliminar?: (id: number) => void;
+    handleAceptar:(Function)
 }
 
 const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLimite, idObjetivo, onEliminar }) => {
@@ -24,7 +26,7 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
     const [tipoPago, setTipoPago] = useState("");
     const [editando, setEditando] = useState(false); // <-- NUEVO estado para saber si estás editando
 
-    const { eliminarObjetivo, editarObjetivo } = usehookobjetivo();
+    const { eliminarObjetivo, editarObjetivo,refreshingObjetivos,onRefreshObjetivos, cargarObjetivos} = usehookobjetivo();
     const { datos: cuentas, loading: loadingCuentas } = usehookCuentas();
 
     const handleAceptar = async () => {
@@ -59,10 +61,14 @@ const CustomAhorro: React.FC<MetasItems> = ({ title, montoActual, meta, fechaLim
                     usuario_id,
                     cuenta_id: Number(tipoPago),
                 });
+                await cargarObjetivos();
+                onRefreshObjetivos();
+                refreshingObjetivos
                 showMessage({ message: "Meta actualizada exitosamente", type: "success" });
+                
             } else {
-                console.log("Agregar dinero, lógica aún no implementada");
-                // Aquí deberías hacer lógica para sumar dinero si quieres manejarlo distinto.
+                console.error(Error.arguments);
+                
             }
         } catch (error) {
             console.error(error);

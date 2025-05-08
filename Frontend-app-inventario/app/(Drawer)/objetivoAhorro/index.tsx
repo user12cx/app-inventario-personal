@@ -104,56 +104,58 @@ const ObjetivoAhorro = () => {
 
   const handleGuardar = async () => {
     if (!nombre || !montoActual || !montoEstimado || !tipoPago) {
-      showMessage({
-        message: 'Completa todos los campos',
-        type: 'warning',
-        backgroundColor: '#FFF3CD',
-        color: '#856404',
-      });
-      return;
+        showMessage({
+            message: 'Completa todos los campos',
+            type: 'warning',
+            backgroundColor: '#FFF3CD',
+            color: '#856404',
+        });
+        return;
     }
 
     try {
-      const id = await AsyncStorage.getItem("usuario_id");
-      if (!id) throw new Error("Usuario no autenticado");
+        const id = await AsyncStorage.getItem("usuario_id");
+        if (!id) throw new Error("Usuario no autenticado");
 
-      const usuario_id = parseInt(id);
+        const usuario_id = parseInt(id);
+        const fechaLimite = usarFechaActual ? new Date().toISOString() : fecha.toISOString();
 
-      await agregarObjetivo({
-        nombre,
-        fecha_limite: usarFechaActual ? new Date().toISOString() : fecha.toISOString(),
-        monto_actual: parseFloat(montoActual),
-        monto_objetivo: parseFloat(montoEstimado),
-        usuario_id,
-        cuenta_id: parseInt(tipoPago),
-      });
+        await agregarObjetivo({
+            nombre,
+            fecha_limite: fechaLimite,
+            monto_actual: parseFloat(montoActual),
+            monto_objetivo: parseFloat(montoEstimado),
+            usuario_id,
+            cuenta_id: parseInt(tipoPago),
+        });
 
-      showMessage({
-        message: 'Objetivo agregado correctamente',
-        type: 'success',
-        backgroundColor: '#D4EDDA',
-        color: '#155724',
-      });
+        showMessage({
+            message: 'Objetivo agregado correctamente',
+            type: 'success',
+            backgroundColor: '#D4EDDA',
+            color: '#155724',
+        });
 
-      // Limpiar y cerrar
-      handleCloseSheet();
-      setNombre('');
-      setMontoActual('');
-      setMontoEstimado('');
-      setTipoPago('');
-      setUsarFechaActual(true);
-      setFecha(new Date());
-      fetchData(); // Recargar datos
+        // Limpiar y cerrar
+        handleCloseSheet();
+        setNombre('');
+        setMontoActual('');
+        setMontoEstimado('');
+        setTipoPago('');
+        setUsarFechaActual(true);
+        setFecha(new Date());
+        fetchData(); // Recargar datos
     } catch (err) {
-      console.error(err);
-      showMessage({
-        message: 'Error al guardar objetivo',
-        type: 'danger',
-        backgroundColor: '#F8D7DA',
-        color: '#721C24',
-      });
+        console.error(err);
+        showMessage({
+            message: 'Error al guardar objetivo',
+            type: 'danger',
+            backgroundColor: '#F8D7DA',
+            color: '#721C24',
+        });
     }
-  };
+};
+
 
   const handleEliminarObjetivo = async (idObjetivo: number) => {
     try {
@@ -221,6 +223,7 @@ const ObjetivoAhorro = () => {
               meta={item.monto_objetivo}
               fechaLimite={item.fecha_limite ? new Date(item.fecha_limite).toLocaleDateString() : "Sin fecha"}
               onEliminar={handleEliminarObjetivo} // <-- Correcto ahora
+              handleAceptar={fetchData}
             />
           ))
         )}

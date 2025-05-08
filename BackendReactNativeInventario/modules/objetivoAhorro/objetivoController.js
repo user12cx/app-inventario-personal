@@ -1,6 +1,7 @@
 const { sql, poolPromise } = require("../../config/conexion");
 
 // Función reutilizable para obtener el saldo de una cuenta
+// Función reutilizable para obtener el saldo de una cuenta
 const getSaldoCuenta = async (pool, cuenta_id) => {
   const result = await pool.request()
     .input("cuenta_id", sql.Int, cuenta_id)
@@ -45,7 +46,7 @@ const gestionarMetasFuturo = async (req, res) => {
       return res.status(400).json({ success: false, message: "Tipo de operación no válido" });
     }
 
-    // Validar campos comunes
+    // Validar campos necesarios según el tipo
     if (tipo === "agregar" && (!cuenta_id || monto_actual == null)) {
       return res.status(400).json({ success: false, message: "cuenta_id y monto_actual son requeridos para agregar" });
     }
@@ -58,7 +59,7 @@ const gestionarMetasFuturo = async (req, res) => {
       return res.status(400).json({ success: false, message: "idObjetivo requerido para eliminar" });
     }
 
-    // Verificar saldo suficiente en agregar/editar
+    // Verificar saldo suficiente para agregar o editar
     if (["agregar", "editar"].includes(tipo)) {
       const saldoDisponible = await getSaldoCuenta(pool, cuenta_id);
       if (saldoDisponible < monto_actual) {
@@ -66,12 +67,12 @@ const gestionarMetasFuturo = async (req, res) => {
       }
     }
 
-    // Ejecutar procedimiento almacenado
+    // Ejecutar el procedimiento almacenado
     const request = pool.request()
       .input("tipo", sql.VarChar, tipo)
       .input("idObjetivo", sql.Int, idObjetivo || null)
       .input("nombre", sql.VarChar, nombre || null)
-      .input("fecha_limite", sql.Date, fecha_limite ? fecha_limite.split("T")[0] : null)
+      .input("fecha_limite", sql.Date, fecha_limite && !isNaN(Date.parse(fecha_limite)) ? new Date(fecha_limite) : null)
       .input("monto_objetivo", sql.Decimal(10, 2), monto_objetivo ?? null)
       .input("monto_actual", sql.Decimal(10, 2), monto_actual ?? null)
       .input("usuario_id", sql.Int, usuario_id || null)
@@ -79,9 +80,22 @@ const gestionarMetasFuturo = async (req, res) => {
 
     const result = await request.execute("sp_objetivos_tipo");
 
+    // Obtener cuenta_id si no se envió (por ejemplo, al eliminar)
+    let cuentaFinal = cuenta_id;
+    if (!cuentaFinal && idObjetivo) {
+      const cuentaQuery = await pool.request()
+        .input("idObjetivo", sql.Int, idObjetivo)
+        .query("SELECT cuenta_id FROM ObjetivosAhorro WHERE idObjetivo = @idObjetivo");
+      cuentaFinal = cuentaQuery.recordset[0]?.cuenta_id;
+    }
+
+    // Obtener el nuevo saldo actualizado
+    const nuevoSaldo = cuentaFinal ? await getSaldoCuenta(pool, cuentaFinal) : null;
+
     return res.status(200).json({
       success: true,
       message: `Objetivo ${tipo} exitosamente`,
+      saldo_actualizado: nuevoSaldo,
       result: result.recordset,
     });
 

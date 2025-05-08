@@ -174,10 +174,10 @@ const GastosModal = () => {
         />
       </View>
 
-      <View style={{ marginTop: 13 }}>
+      <View style={{ marginTop: 15 }}>
         <Text className="text-xl text-gray-500 font-bold dark:text-white">{t("gastosModal.monto")}</Text>
       </View>
-      <View style={{ marginTop: 13 }}>
+      <View style={{ marginTop: 15 }}>
         <TextInput
           className="bg-white p-4 px-4 border border-gray-200 rounded-lg dark:bg-slate-800 dark:text-white dark:border-gray-600"
           placeholder={t("gastosModal.montoPlaceholder")}
@@ -194,7 +194,7 @@ const GastosModal = () => {
         setUsarFechaActual={setUsarFechaActual}
       />
 
-      <View style={{ marginTop: 13 }}>
+      <View style={{ marginTop: 15 }}>
         <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.categoria")}</Text>
         <Select
           items={categorias.map((cat) => ({ label: cat.nombre, value: cat.idCategoria }))}
@@ -203,7 +203,7 @@ const GastosModal = () => {
         />
       </View>
 
-      <View style={{ marginTop: 13 }}>
+      <View style={{ marginTop: 15 }}>
         <Text className="text-xl text-gray-500 font-bold mb-4 dark:text-white">{t("gastosModal.tipoPago")}</Text>
         <Select
           items={cuentas.map((cuenta) => ({ label: cuenta.nombre, value: cuenta.idCuenta }))}

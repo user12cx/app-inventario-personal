@@ -67,10 +67,10 @@ export const usehookobjetivo = () => {
 
   // Editar un objetivo existente
   const editarObjetivo = async (idObjetivo: number, data: {
-    nombre: string;
-    fecha_limite: string;
+    nombre?: string;
+    fecha_limite?: string;
     monto_objetivo: number;
-    monto_actual: number;
+    monto_actual?: number;
     usuario_id: number;
     cuenta_id: number;
   }) => {
