@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://192.168.45.212:7000/api'; // Asegúrate de que la URL sea correcta
+// Reemplaza con la URL pública de tu backend en Azure
+const API_URL = 'https://192.168.45.212:7000/api'; // ip de la red a la que te conectes
 
 export const instance = axios.create({
     baseURL: API_URL,
-    withCredentials:true,
-    
+    withCredentials: false, // Esto sigue funcionando si tu backend usa autenticación de cookies o sesiones
 });
-
- 

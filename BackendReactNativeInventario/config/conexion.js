@@ -8,7 +8,7 @@ const dbConfig = {
     port: parseInt(process.env.DB_PORT,), // 🔍 Asegúrate de que sea un número
     database: process.env.DB_NAME,
     options: {
-        encrypt: true, // Si usas Azure, cambia a true
+        encrypt: false, // Si usas Azure, cambia a true
         trustServerCertificate: false
     },
     connectionTimeout: 30000, // Aumentar tiempo de espera (en milisegundos)
